@@ -1,0 +1,50 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+Codapli-Lemac/dist
+Codapli-Lemac/dist-server
+Codapli-Lemac/tmp
+Codapli-Lemac/out-tsc
+
+# dependencies
+Codapli-Lemac/node_modules
+Codapli-LemacAPI/node_modules
+
+# IDEs and editors
+Codapli-Lemac/.idea
+Codapli-Lemac/.project
+Codapli-Lemac/.classpath
+Codapli-Lemac/.c9/
+Codapli-Lemac/*.launch
+Codapli-Lemac/.settings/
+Codapli-Lemac/*.sublime-workspace
+
+# IDE - VSCode
+Codapli-Lemac/.vscode/*
+Codapli-Lemac/!.vscode/settings.json
+Codapli-Lemac/!.vscode/tasks.json
+Codapli-Lemac/!.vscode/launch.json
+Codapli-Lemac/!.vscode/extensions.json
+
+Codapli-LemacAPI/.vscode/*
+Codapli-LemacAPI/!.vscode/settings.json
+Codapli-LemacAPI/!.vscode/tasks.json
+Codapli-LemacAPI/!.vscode/launch.json
+Codapli-LemacAPI/!.vscode/extensions.json
+
+# misc
+Codapli-Lemac/.sass-cache
+Codapli-Lemac/connect.lock
+Codapli-Lemac/coverage
+Codapli-Lemac/libpeerconnection.log
+Codapli-Lemac/npm-debug.log
+Codapli-Lemac/testem.log
+Codapli-Lemac/typings
+
+# e2e
+Codapli-Lemac/e2e/*.js
+Codapli-Lemac/e2e/*.map
+
+# System Files
+Codapli-Lemac/.DS_Store
+Codapli-Lemac/Thumbs.db
