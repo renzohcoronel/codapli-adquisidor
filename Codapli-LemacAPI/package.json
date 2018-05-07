@@ -9,6 +9,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "sqlite3": "^4.0.0",
+    "state-machine": "^1.0.3"
+  },
+  "devDependencies": {
+    "javascript-state-machine": "^3.0.1",
+    "serialport": "^6.2.0"
   }
 }

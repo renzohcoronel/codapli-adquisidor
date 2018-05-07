@@ -7,11 +7,13 @@
 
 #define DOUT  A1
 #define CLK  A0
+#define TIME_TO_REPEAT 1000
 
-enum Estado {
-  DETENIDO,TRABAJANDO, CONFIGURACION
-  
-} estado;
+#define STOPPED 100
+#define WORKING 101
+#define SETTINGS 102
+
+int estado = STOPPED;
 
 HX711 celda(DOUT,CLK);
 LDVT ldvt0(A2);
@@ -35,39 +37,53 @@ void loop() {
   if(Serial.available()){
     StaticJsonBuffer<200> jsonBuffer;
     JsonObject& jsonData = jsonBuffer.parse(Serial);
+       
+    estado = jsonData["estado"];
     
-    int estado = jsonData["estado"];
+    }
     
     switch(estado){
-      case TRABAJANDO:
+      case WORKING:
 
             celda.tare();
-            while(estado == TRABAJANDO){
+            while(estado == WORKING){
                   if(Serial.available()){
                       StaticJsonBuffer<200> jsonBuffer;
                       JsonObject& jsonData = jsonBuffer.parse(Serial);
+                      if (jsonData.success()) {
+                        estado = jsonData["estado"];
+                      } else {
 
-                      estado = jsonData["estado"];
+                         StaticJsonBuffer<250> jsonBuffer;
+                        JsonObject& root = jsonBuffer.createObject();
+                        root["error"] = "Error parsing JSON in configuration";
+                        root.printTo(Serial);  
+                        Serial.println();
+                      
+                      }
                   
                   } else {
                         StaticJsonBuffer<250> jsonBuffer;
                         JsonObject& root = jsonBuffer.createObject();
-                        root["estado"] = TRABAJANDO;
+                        root["estado"] = WORKING;
                         root["celda"] = celda.get_units(5);
                         root["ldvt0"] = ldvt0.getValue();
                         root["ldvt1"] = ldvt1.getValue();
                         
                         root.printTo(Serial);
-                        delay(1000);     
+                        Serial.println();
+                        
+                        
+                          
                     
                   }
-                
+                delay(TIME_TO_REPEAT);
             }
-
+          
           break;
-      case CONFIGURACION:
+      case SETTINGS:
                   celda.set_scale();
-                  while(estado == CONFIGURACION){
+                  while(estado == SETTINGS){
                   if(Serial.available()){
                       StaticJsonBuffer<200> jsonBuffer;
                       JsonObject& jsonData = jsonBuffer.parse(Serial);
@@ -85,13 +101,14 @@ void loop() {
                         setting.setCalibration_factor_celda(calibration_factor_celda);
                         setting.setCalibration_factor_ldvt0(calibration_factor_ldvt0);
                         setting.setCalibration_factor_ldvt1(calibration_factor_ldvt1);
-                        
+                        EEPROM.put(0,setting);
                       } else {
                         
                         StaticJsonBuffer<250> jsonBuffer;
                         JsonObject& root = jsonBuffer.createObject();
                         root["error"] = "Error parsing JSON in configuration";
                         root.printTo(Serial);  
+                        Serial.println();
                       
                       }
                  
@@ -99,24 +116,33 @@ void loop() {
                         StaticJsonBuffer<250> jsonBuffer;
                         JsonObject& root = jsonBuffer.createObject();
 
-                        root["estado"] = CONFIGURACION;
+                        root["estado"] = SETTINGS;
                         root["celda"] = celda.get_units();
                         root["calibration_factor_celda"] = setting.getCalibration_factor_celda();
                         root["ldvt0"] = ldvt0.getValue();
                         root["calibration_factor_ldvt0"] = setting.getCalibration_factor_ldvt0();
                         root["ldvt1"] = ldvt1.getValue();
                         root["calibration_factor_ldvt1"] = setting.getCalibration_factor_ldvt1();
-                        root.printTo(Serial);                  
+                        root.printTo(Serial);
+                        Serial.println();                
                     
                   }                        
-                  delay(200);            
+            delay(TIME_TO_REPEAT);
             }
-          EEPROM.put(0,setting);
+         
           break;
       default:
-          estado=DETENIDO;
+          estado=STOPPED;
+            StaticJsonBuffer<250> jsonBuffer;
+            JsonObject& root = jsonBuffer.createObject();
+            root["estado"] = STOPPED;       
+            root.printTo(Serial);
+            Serial.println();
+            delay(TIME_TO_REPEAT);
           break;
    
-      }
-  }
+      }  
+  
+
+
 }
