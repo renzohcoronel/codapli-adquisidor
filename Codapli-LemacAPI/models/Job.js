@@ -1,11 +1,12 @@
+
+
 var Job = function() {
-    this.id = null;
     this.fecha = null;
     this.desplazamientImpueso = 0;
     this.tipoMuestra ='';
     this.temperaturaEnsayo = 0;
+    this.pathFile ='',
+    this.registrando = false;
 }
 
-var job = new Job();
-
-module.exports = job;
+module.exports = Job;

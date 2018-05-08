@@ -9,8 +9,8 @@ router.get('/jobs', jobsController.jobs_get);
 router.get('/job', jobsController.job_get);
 router.post('/job', jobsController.job_post);
 router.get('/job/values', jobsController.jobs_get_values);
-router.get('/job/start', jobsController.jobs_start);
-router.get('/job/stop', jobsController.jobs_stop);
+router.post('/job/start', jobsController.jobs_start);
+router.post('/job/stop', jobsController.jobs_stop);
 
 
 router.get('/settings', settingController.settings_get);
