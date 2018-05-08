@@ -7,6 +7,7 @@ var Job = function() {
     this.temperaturaEnsayo = 0;
     this.pathFile ='',
     this.registrando = false;
+    this.values = [];
 }
 
 module.exports = Job;

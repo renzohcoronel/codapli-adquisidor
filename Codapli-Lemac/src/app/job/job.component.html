@@ -1,29 +1,44 @@
 <div class="container">
-   <div class="col-md-12">
-     <div class="row">
-       <h4>
-         Nuevo Ensayo
-       </h4>
-     </div>
-     <div class="row">
-    
-            <form>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Email address</label>
-                  <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                  <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Password</label>
-                  <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                </div>
-                <div class="form-check">
-                  <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                  <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </form>
-        
-     </div>
-   </div>
+  <div class="col-md-12">
+    <div class="row">
+      <h4>
+        Nuevo Ensayo
+      </h4>
+    </div>
+    <div class="row">
+
+      <form [formGroup]="formGroup" (submit)="submit(formGroup.value)">
+        <div class="form-group">
+          <label for="desplazamientImpueso">Desplazamiento Impuesto</label>
+          <input type="text" class="form-control" id="desplazamientImpueso" formControlName="desplazamientImpueso">
+          <div class="alert alert-danger" *ngIf="formGroup.get('desplazamientImpueso').invalid && formGroup.get('desplazamientImpueso').dirty">
+              "Debe ingresar este valor"
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="tipoMuestra">Tipo de Muestra</label>
+          <input type="text" class="form-control" id="tipoMuestra" formControlName="tipoMuestra">
+          <div class="alert alert-danger" *ngIf="formGroup.get('tipoMuestra').invalid && formGroup.get('tipoMuestra').dirty">
+              "Debe ingresar este valor"
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="temperaturaEnsayo">Temperatura (°C)</label>
+          <input type="text" class="form-control" id="temperaturaEnsayo" formControlName="temperaturaEnsayo">
+          <div class="alert alert-danger" *ngIf="formGroup.get('temperaturaEnsayo').invalid && formGroup.get('temperaturaEnsayo').dirty">
+              "Debe ingresar este valor"
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+              <button type="submit" class="btn btn-primary" [disabled]="!formGroup.valid">Crear Ensayo</button>
+            </div>
+            <div class="col-md-4">
+                <a class="btn btn-primary active" role="button" aria-pressed="true" (click)="cancel()">Cancelar</a>
+              </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
 </div>
