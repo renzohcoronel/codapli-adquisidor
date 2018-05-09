@@ -2,14 +2,20 @@ var fs = require('fs');
 var os = require('os');
 var serialConnector = require('./../Serial/SerialPort');
 var Job = require('./../models/Job');
-
+var socket = require('./../socket').io();
 var serial;
 var bufferReader = '';
-var ensayo;
+var ensayo = null;
 var file;
 
+
+socket.on('connect', function(data) {
+    console.log("Client connected");
+});
 exports.job_post = function (req, res) {
-    if (ensayo !== null) {
+    console.log('post job');
+    if (ensayo === null) {
+        console.log('new job -->');
         ensayo = new Job();
         ensayo.pathFile = './ensayos/Ensayo_' + new Date().toISOString();
         ensayo.fecha = new Date();
@@ -18,6 +24,7 @@ exports.job_post = function (req, res) {
         ensayo.temperaturaEnsayo = req.body.temperaturaEnsayo;
         ensayo.registrando = false;
         openFile();
+        res.send(JSON.stringify(ensayo));
     } else {
         res.send(JSON.stringify(ensayo));
     }
@@ -58,14 +65,13 @@ exports.jobs_start = function (req, res) {
     serial.on('close', () => console.log("closed port"));
     ensayo.registrando = true;
 
-    res.send(JSON.stringify({ "message": "registrando" }))
+    res.send(JSON.stringify({ "message": "Register values" }));
 }
 
 exports.jobs_stop = function (req, res) {
     closeFile();
     serial.close();
-
-    res.send("Close")
+    res.send(JSON.stringify({ "message": "Closed Job" }))
 }
 
 function openFile() {
@@ -92,12 +98,16 @@ function readDataSerial(data) {
     bufferReader = answers.pop();
     if (answers.length > 0) {
         try {
-            let values = JSON.parse(file, answers[0]);
+            console.log(answers[0]);
+            let values = JSON.parse(answers[0]);
             if (values.tipo === 'datos') {
-                let csv = `${ensayo.fecha},${ensayo.desplazamientImpueso},${ensayo.tipoMuestra},${ensayo.temperaturaEnsayo}
-                ,${values.celda},${values.ldvt0},${values.ldvt1}${os.EOL}`;
+                const timeMuestra = new Date().toTimeString();
+                let csv = `${ensayo.fecha.toISOString()},${ensayo.desplazamientImpueso},${ensayo.tipoMuestra},${ensayo.temperaturaEnsayo}
+                ,${values.celda},${values.ldvt0},${values.ldvt1},${timeMuestra}${os.EOL}`;
                 fs.writeSync(file, csv);
                 ensayo.values.push(values);
+                values.time = timeMuestra;
+                socket.emit('arduino:data',values);
             }
         } catch (error) {
             console.log("error parse json " + error.message);

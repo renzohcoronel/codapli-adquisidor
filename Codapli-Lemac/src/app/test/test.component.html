@@ -9,26 +9,29 @@
   </div>
   <div class="row p-3">
     <div class="col-md-12">
+        <div class="row">
+           Fecha: {{job.fecha | date : 'dd/MM/yyyy'}}
+        </div>
       <div class="row">
-        Valor 1
+          Desplazamiento Impuesto: {{job.desplazamientImpueso}}
       </div>
       <div class="row">
-        valor 2
+        Tipo de Muestra: {{job.tipoMuestra}}
       </div>
       <div class="row">
-        valor 3
+        Temperatura (°C): {{job.temperaturaEnsayo}}
       </div>
     </div>
   </div>
   
   <div class="row p-3 mx-auto text-center">
-    <div class="col-md-4 mx-auto">
-      <button type="button" class="btn btn-primary">Comenzar</button>
+    <div class="col-md-4 p-1">
+      <button type="button" class="btn btn-primary" [disabled]="isStartJob" (click)="startJob()">Comenzar</button>
     </div>
-    <div class="col-md-4">
-      <button type="button" class="btn btn-primary">Detener</button>
+    <div class="col-md-4 p-1">
+      <button type="button" class="btn btn-primary" (click)="stopJob()">Detener</button>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 p-1">
       <button type="button" class="btn btn-primary">Volver</button>
     </div>
   </div>
