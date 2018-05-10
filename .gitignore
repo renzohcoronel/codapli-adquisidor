@@ -33,6 +33,7 @@ Codapli-LemacAPI/!.vscode/settings.json
 Codapli-LemacAPI/!.vscode/tasks.json
 Codapli-LemacAPI/!.vscode/launch.json
 Codapli-LemacAPI/!.vscode/extensions.json
+Codapli-LemacAPI/ensayos/*
 
 # misc
 Codapli-Lemac/.sass-cache
@@ -50,3 +51,4 @@ Codapli-Lemac/e2e/*.map
 # System Files
 Codapli-Lemac/.DS_Store
 Codapli-Lemac/Thumbs.db
+

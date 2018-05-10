@@ -63,13 +63,13 @@ export class TestComponent implements OnInit {
           backgroundColor: '#ffff',
           borderColor: 'blue',
           fill: false,
-          data: [1, 2.2, 2.4, 4, 3.2, 1.2],
+          data: this.lvdt0,
         }, {
           label: 'lvdt1',
           backgroundColor: '#ffff',
           borderColor: 'black',
           fill: false,
-          data: this.lvdt0,
+          data: this.lvdt1,
         }]
       },
       options: {
