@@ -12,6 +12,7 @@ var file;
 socket.on('connect', function(data) {
     console.log("Client connected");
 });
+
 exports.job_post = function (req, res) {
     console.log('post job');
     if (ensayo === null) {
@@ -55,17 +56,22 @@ exports.jobs_get_values = function (req, res) {
     if (ensayo !== null) {
         res.send(JSON.stringify(ensayo));
     } else {
-        res.send(JSON.stringify(`'message':' not Ensayo avaireable'`));
+        res.status(500).send(JSON.stringify(`'message':' not Ensayo avaireable'`));
     }
 }
 
 exports.jobs_start = function (req, res) {
-    serial = serialConnector.getPortSerial();
-    serial.on('data', readDataSerial);
-    serial.on('close', () => console.log("closed port"));
-    ensayo.registrando = true;
-
-    res.send(JSON.stringify({ "message": "Register values" }));
+    try {
+        serial = serialConnector.getPortSerial();
+        serial.on('data', readDataSerial);
+        serial.on('close', () => console.log("closed port"));
+        ensayo.registrando = true;
+    
+        res.send(JSON.stringify({ "message": "Register values" }));
+        
+    } catch (error) {
+        res.status(500).send(JSON.stringify({ "message": "Register values" }));
+    }
 }
 
 exports.jobs_stop = function (req, res) {

@@ -8,7 +8,7 @@ module.exports.getPortSerial = function () {
         baudRate: 115200
     }, (err) => {
         if (err) {
-            console.log('No se pudo abrir el puerto ' + pathPort + " error:" + err.messageZ);
+            throw 'No se pudo abrir el puerto ';
         } else {
             console.log('Puerto Abierto ' + pathPort );
         }

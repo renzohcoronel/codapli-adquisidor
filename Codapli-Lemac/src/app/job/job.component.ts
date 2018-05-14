@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ViewContainerData } from '@angular/core/src/view';
 import { Location } from '@angular/common';
 import { JobsService } from '../services/jobs.service';
 import { Router } from '@angular/router';

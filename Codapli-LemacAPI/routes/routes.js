@@ -13,6 +13,8 @@ router.post('/job/start', jobsController.jobs_start);
 router.post('/job/stop', jobsController.jobs_stop);
 
 
+router.get('/init/settings', settingController.initSerial);
+router.get('/close/settings', settingController.closeSerial);
 router.get('/settings', settingController.settings_get);
 router.post('/settings/tare', settingController.settings_post_tare);
 router.post('/settings/set_scale', settingController.settings_post_scale);
