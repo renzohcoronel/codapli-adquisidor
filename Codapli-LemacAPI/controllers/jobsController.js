@@ -3,6 +3,7 @@ var os = require('os');
 var serialConnector = require('./../Serial/SerialPort');
 var Job = require('./../models/Job');
 var socket = require('./../socket').io();
+const path = require('path');
 var serial;
 var bufferReader = '';
 var ensayo = null;
@@ -121,4 +122,35 @@ function readDataSerial(data) {
 
 
     }
+}
+
+exports.removeFileJob = (req, res) => {
+    
+    const filePath =`./ensayos/${req.params.file}`;
+    console.log('Remove file --> ', filePath);
+    fs.exists(filePath, function(exists) {
+        if(exists) {
+          console.log('File exists. Deleting now ...');
+          fs.unlink(filePath);
+          res.send(JSON.stringify({ "message": "File remove" }));
+        } else {
+            res.status(500).send(JSON.stringify({ "message": "File not exitst" }));
+        }
+      });
+}
+
+exports.downloadFile = (req, res) => {
+
+    var file = req.params.file;
+    var fileLocation = path.join('./ensayos',file);
+    console.log(fileLocation);
+    fs.exists(fileLocation, function(exists) {
+        if(exists) {
+          console.log('File exists. Download now ...');    
+          res.download(fileLocation, file);   
+        } else {
+            res.status(500).send(JSON.stringify({ "message": "File not exitst" }));
+        }
+      });
+
 }

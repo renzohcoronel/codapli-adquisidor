@@ -6,6 +6,8 @@ var jobsController = require('./../controllers/jobsController.js')
 var settingController = require('./../controllers/settingsController.js')
 
 router.get('/jobs', jobsController.jobs_get);
+router.delete('/job/:file', jobsController.removeFileJob);
+router.get('/job/download/:file', jobsController.downloadFile);
 router.get('/job', jobsController.job_get);
 router.post('/job', jobsController.job_post);
 router.get('/job/values', jobsController.jobs_get_values);

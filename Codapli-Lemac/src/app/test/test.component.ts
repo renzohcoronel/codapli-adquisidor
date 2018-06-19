@@ -4,11 +4,50 @@ import * as socketIo from 'socket.io-client';
 import { JobComponent } from '../job/job.component';
 import { JobsService } from '../services/jobs.service';
 import { isUndefined } from 'util';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-test',
-  templateUrl: './test.component.html',
-  styleUrls: ['./test.component.css']
+  template: 
+  `
+  <div class="container">
+  <div class="row align-items-center">
+    <div class="col-md-12">
+      <div [hidden]="!chart">
+        <canvas #canvas>{{ chart }}</canvas>
+      </div>
+
+    </div>
+  </div>
+  <div class="row p-3">
+    <div class="col-md-12">
+        <div class="row">
+           Fecha: {{job.fecha | date : 'dd/MM/yyyy'}}
+        </div>
+      <div class="row">
+          Desplazamiento Impuesto: {{job.desplazamientImpueso}}
+      </div>
+      <div class="row">
+        Tipo de Muestra: {{job.tipoMuestra}}
+      </div>
+      <div class="row">
+        Temperatura (°C): {{job.temperaturaEnsayo}}
+      </div>
+    </div>
+  </div>
+  
+  <div class="row p-3 mx-auto text-center">
+    <div class="col-md-4 p-1">
+      <button type="button" class="btn btn-primary" [disabled]="isStartJob" (click)="startJob()">Comenzar</button>
+    </div>
+    <div class="col-md-4 p-1">
+      <button type="button" class="btn btn-primary" (click)="stopJob()">Detener</button>
+    </div>
+  </div>
+
+</div>
+  
+  `
 })
 export class TestComponent implements OnInit {
 
@@ -25,7 +64,7 @@ export class TestComponent implements OnInit {
 
 
 
-  constructor(private jobService: JobsService) {
+  constructor(private jobService: JobsService, private router: Router) {
   }
 
   ngOnInit() {
@@ -109,6 +148,7 @@ export class TestComponent implements OnInit {
     this.jobService.stopJob$().subscribe(response => {
       console.log(response);
       this.isStartJob = false;
+      this.router.navigate(['jobs']);
     });
   }
 

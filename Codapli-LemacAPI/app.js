@@ -30,4 +30,8 @@ app.use('/api', router);
 
 
 //--------------------------------------------------
-server.listen(5001);
+const port = 5001
+
+server.listen(port, function(){
+    console.log('Server is running Port:',port);
+});
