@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   selector: 'app-test',
   template: 
   `
-  <div class="container">
+  <div class="container pb-5">
   <div class="row align-items-center">
     <div class="col-md-12">
       <div [hidden]="!chart">

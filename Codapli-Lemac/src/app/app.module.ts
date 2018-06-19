@@ -15,6 +15,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import { TestComponent } from './test/test.component';
 import { SettingsService } from './services/settings.service';
+import { FooterModule } from './footer/footer.module';
 
 
 @NgModule({
@@ -25,7 +26,7 @@ import { SettingsService } from './services/settings.service';
     MenuBarComponent,
     JobComponent,
     SettingComponent,
-    TestComponent
+    TestComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,7 +34,8 @@ import { SettingsService } from './services/settings.service';
     HttpClientModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    Ng4LoadingSpinnerModule.forRoot()
+    Ng4LoadingSpinnerModule.forRoot(),
+    FooterModule
   ],
   providers: [JobsService,SettingsService],
   bootstrap: [AppComponent],
