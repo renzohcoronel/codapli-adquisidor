@@ -28,6 +28,8 @@ exports.settings_get = function (req, res) {
     serial.write(JSON.stringify({
         "estado": 101
      }));
+
+     res.send(JSON.stringify({'message':'write estado:101'}));
 }
 
 exports.settings_post = function (req, res) {

@@ -14,12 +14,14 @@ router.get('/job/values', jobsController.jobs_get_values);
 router.post('/job/start', jobsController.jobs_start);
 router.post('/job/stop', jobsController.jobs_stop);
 
-
+ 
 router.get('/init/settings', settingController.initSerial);
 router.get('/close/settings', settingController.closeSerial);
 router.get('/settings', settingController.settings_get);
+router.post('/settings', settingController.settings_post);
+
+
 router.post('/settings/tare', settingController.settings_post_tare);
 router.post('/settings/set_scale', settingController.settings_post_scale);
-router.post('/settings', settingController.settings_post);
 
 module.exports = router
