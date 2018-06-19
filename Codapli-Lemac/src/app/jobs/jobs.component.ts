@@ -28,14 +28,23 @@ import { JobsService } from '../services/jobs.service';
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let job of jobs">
+                  <tr *ngFor="let job of jobPage">
                     <td>{{job}}</td>
                     <td><a href="#" class="fa fa-eye" aria-hidden="true"></a>
                       <a  (click)="deleteJob(job)" href="#" class="fa fa-trash" aria-hidden="true"></a>
+                      <a  (click)="download(job)" href="#" class="fa fa-download" aria-hidden="true"></a>
                     </td>
                   </tr>
                 </tbody>
               </table>
+              <ngb-pagination class="d-flex justify-content-center" 
+                    [collectionSize]="jobs.length"
+                    [pageSize]= "pageSize"
+                    [page]= "page"
+                    size="sm"
+                    (pageChange)="pageChange($event)">
+              </ngb-pagination>
+
             </div>
           </div>
         </div>
@@ -45,16 +54,22 @@ import { JobsService } from '../services/jobs.service';
 export class JobsComponent implements OnInit {
 
   jobs: any[] = new Array();
+  jobPage:any[] = new Array();
+
+  page: number = 1;
+  pageSize: number = 10;
 
   constructor(private jobService: JobsService) { }
 
   ngOnInit() {
    this.refreshJobs();
+   
 
   }
   refreshJobs() {
     this.jobService.getJobsFiles$().subscribe(response => {
       this.jobs = response;
+      this.pageChange(1);
      });
   }
 
@@ -62,6 +77,14 @@ export class JobsComponent implements OnInit {
     this.jobService.deleteJob$(file).subscribe( response => {
         this.refreshJobs();
     });
+  }
+
+  download(file:String){
+
+  }
+
+  pageChange(page: number){
+    this.jobPage = this.jobs.slice((this.pageSize * (page - 1)), (this.pageSize * (page - 1)) + this.pageSize);
   }
 
 }

@@ -131,7 +131,7 @@ exports.removeFileJob = (req, res) => {
     fs.exists(filePath, function(exists) {
         if(exists) {
           console.log('File exists. Deleting now ...');
-          fs.unlink(filePath);
+          fs.unlinkSync(filePath);
           res.send(JSON.stringify({ "message": "File remove" }));
         } else {
             res.status(500).send(JSON.stringify({ "message": "File not exitst" }));

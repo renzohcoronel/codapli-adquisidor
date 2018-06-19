@@ -14,6 +14,7 @@ import { JobsService } from './services/jobs.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import { TestComponent } from './test/test.component';
+import { SettingsService } from './services/settings.service';
 
 
 @NgModule({
@@ -34,7 +35,7 @@ import { TestComponent } from './test/test.component';
     ReactiveFormsModule,
     Ng4LoadingSpinnerModule.forRoot()
   ],
-  providers: [JobsService],
+  providers: [JobsService,SettingsService],
   bootstrap: [AppComponent],
   exports: [JobsComponent, MenuBarComponent, JobComponent, SettingComponent, TestComponent]
 })
