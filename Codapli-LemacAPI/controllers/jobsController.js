@@ -20,13 +20,18 @@ exports.job_post = function (req, res) {
         console.log('new job -->');
         ensayo = new Job();
         ensayo.pathFile = './ensayos/Ensayo_' + new Date().toISOString();
-        ensayo.fecha = new Date();
+        ensayo.fecha = new Date().toLocaleDateString();
         ensayo.desplazamientImpueso = req.body.desplazamientImpueso;
         ensayo.tipoMuestra = req.body.tipoMuestra;
         ensayo.temperaturaEnsayo = req.body.temperaturaEnsayo;
         ensayo.registrando = false;
-        openFile();
-        res.send(JSON.stringify(ensayo));
+        try {
+            openFile();
+            res.send(JSON.stringify(ensayo));
+            
+        } catch (error) {
+            res.status(500).send(error);
+        }
     } else {
         res.send(JSON.stringify(ensayo));
     }
@@ -38,7 +43,7 @@ exports.job_get = function (req, res) {
     if (ensayo !== null) {
         res.send(JSON.stringify(ensayo));
     } else {
-        res.send(JSON.stringify("{'message': 'Not ensayo avaireable'}"))
+        res.status(500).send({message: 'No hay ensayo activo cree uno nuevo'});
     }
 }
 
@@ -54,38 +59,49 @@ exports.jobs_get = function (req, res) {
 }
 
 exports.jobs_get_values = function (req, res) {
-    if (ensayo !== null) {
-        res.send(JSON.stringify(ensayo));
-    } else {
-        res.status(500).send(JSON.stringify(`'message':' not Ensayo avaireable'`));
-    }
+    /**
+     * Hay que reeimplementar esta endpoint
+     * La idea es utilizarlo para reconstruir (leer) desde un archivo
+     * para mostrar el ensayo realizado
+     *  
+     */
+    // if (ensayo !== null) {
+    //     res.send(JSON.stringify(ensayo));
+    // } else {
+    //     res.status(500).send({message:' No hay archivo de ensayo'});
+    // }
 }
 
 exports.jobs_start = function (req, res) {
-    try {
-        serial = serialConnector.getPortSerial();
+
+    serialConnector.getPortSerial().then(response =>{
+        serial = response;
         serial.on('data', readDataSerial);
-        serial.on('close', () => console.log("closed port"));
+        serial.on('close', () => console.log("closed port"));          
         ensayo.registrando = true;
+        res.send({ message: "Register values" });
+    }).catch(error => {
+        console.log('Error al abrir el puerto');
+        ensayo.registrando = false;
+        res.status(500).send({ message: error.message });
     
-        res.send(JSON.stringify({ "message": "Register values" }));
-        
-    } catch (error) {
-        res.status(500).send(JSON.stringify({ "message": "Register values" }));
-    }
+    });
 }
 
 exports.jobs_stop = function (req, res) {
     closeFile();
     serial.close();
-    res.send(JSON.stringify({ "message": "Closed Job" }))
+    res.send({ message: "Closed Job" });
 }
 
+/* Funciones para abrir y cerrar el archivo 
+    Recordar que se abre un solo archivo y si este no esta se crea
+*/
 function openFile() {
     console.log("open file " + ensayo.pathFile);
     fs.open(ensayo.pathFile, 'w+', (err, fd) => {
         if (err) {
-            console.log(err.message)
+            throw new Error('Error open file', ensayo.pathFile);
         } else {
             file = fd;
         }
@@ -97,7 +113,7 @@ function closeFile() {
     fs.closeSync(file);
     ensayo = null;
 }
-
+//-------------------------------------------------------------------
 
 function readDataSerial(data) {
     bufferReader += data;
@@ -109,7 +125,7 @@ function readDataSerial(data) {
             let values = JSON.parse(answers[0]);
             if (values.tipo === 'datos') {
                 const timeMuestra = new Date().toTimeString();
-                let csv = `${ensayo.fecha.toISOString()},${ensayo.desplazamientImpueso},${ensayo.tipoMuestra},${ensayo.temperaturaEnsayo}
+                let csv = `${ensayo.fecha},${ensayo.desplazamientImpueso},${ensayo.tipoMuestra},${ensayo.temperaturaEnsayo}
                 ,${values.celda},${values.ldvt0},${values.ldvt1},${timeMuestra}${os.EOL}`;
                 fs.writeSync(file, csv);
                 ensayo.values.push(values);
@@ -132,13 +148,17 @@ exports.removeFileJob = (req, res) => {
         if(exists) {
           console.log('File exists. Deleting now ...');
           fs.unlinkSync(filePath);
-          res.send(JSON.stringify({ "message": "File remove" }));
+          res.send(JSON.stringify({ message: "File remove" }));
         } else {
-            res.status(500).send(JSON.stringify({ "message": "File not exitst" }));
+            res.status(500).send(JSON.stringify({ message: "File not exitst" }));
         }
       });
 }
 
+/**
+ * Falta implementar el metodo en el front para descargar el archivo
+ * Basicamente responde con un atachment en la respuesta http
+ */
 exports.downloadFile = (req, res) => {
 
     var file = req.params.file;
@@ -149,7 +169,7 @@ exports.downloadFile = (req, res) => {
           console.log('File exists. Download now ...');    
           res.download(fileLocation, file);   
         } else {
-            res.status(500).send(JSON.stringify({ "message": "File not exitst" }));
+            res.status(500).send({ message: "File not exitst" });
         }
       });
 

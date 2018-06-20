@@ -16,6 +16,8 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import { TestComponent } from './test/test.component';
 import { SettingsService } from './services/settings.service';
 import { FooterModule } from './footer/footer.module';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -35,9 +37,11 @@ import { FooterModule } from './footer/footer.module';
     AppRoutingModule,
     ReactiveFormsModule,
     Ng4LoadingSpinnerModule.forRoot(),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
     FooterModule
   ],
-  providers: [JobsService,SettingsService],
+  providers: [JobsService,SettingsService, ToastrService],
   bootstrap: [AppComponent],
   exports: [JobsComponent, MenuBarComponent, JobComponent, SettingComponent, TestComponent]
 })

@@ -5,6 +5,7 @@ import { JobsService } from '../services/jobs.service';
 import { Router } from '@angular/router';
 import * as socketIo from 'socket.io-client';
 import { SettingsService } from '../services/settings.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-setting',
@@ -79,6 +80,7 @@ export class SettingComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
     private location: Location,
+    private toastService: ToastrService,
     private jobService: JobsService,
     private settingService: SettingsService,
     private router: Router) {
@@ -99,7 +101,8 @@ export class SettingComponent implements OnInit {
       response => {
         console.log(response);
       }, error => {
-        console.log(error);
+        console.log('Error al iniciar el serial',error);
+        this.toastService.error(error.error.message);
       }
     )
 

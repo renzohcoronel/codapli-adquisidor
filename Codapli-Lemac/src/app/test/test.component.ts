@@ -5,6 +5,7 @@ import { JobComponent } from '../job/job.component';
 import { JobsService } from '../services/jobs.service';
 import { isUndefined } from 'util';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-test',
@@ -38,10 +39,13 @@ import { Router } from '@angular/router';
   
   <div class="row p-3 mx-auto text-center">
     <div class="col-md-4 p-1">
-      <button type="button" class="btn btn-primary" [disabled]="isStartJob" (click)="startJob()">Comenzar</button>
+      <button type="button" class="btn btn-primary" [disabled]="!(isStartJob||canStartJob)" (click)="startJob()">Comenzar</button>
     </div>
     <div class="col-md-4 p-1">
-      <button type="button" class="btn btn-primary" (click)="stopJob()">Detener</button>
+      <button type="button" class="btn btn-primary" [disabled]="!isStartJob" (click)="stopJob()">Detener</button>
+    </div>
+    <div class="col-md-4 p-1">
+      <button type="button" class="btn btn-primary" [disabled]="isStartJob" (click)="back()">Volver</button>
     </div>
   </div>
 
@@ -56,6 +60,7 @@ export class TestComponent implements OnInit {
   socket: any;
   job: any = { registrando: false };
   isStartJob: Boolean = false;
+  canStartJob:Boolean = true;
 
   times: Date[] = new Array();
   celda: Number[] = new Array();
@@ -64,7 +69,9 @@ export class TestComponent implements OnInit {
 
 
 
-  constructor(private jobService: JobsService, private router: Router) {
+  constructor(private jobService: JobsService,
+     private router: Router,
+     private toastService: ToastrService) {
   }
 
   ngOnInit() {
@@ -72,8 +79,11 @@ export class TestComponent implements OnInit {
     console.log(this.times === null ? true : false);
 
     this.jobService.getJob$().subscribe(response => {
-      console.log(response);
       this.job = response;
+    }, er => {
+      console.log('Error getJob', er, this.canStartJob, this.isStartJob);
+      this.canStartJob=false;
+      this.toastService.error(er.error.message);
     });
 
 
@@ -141,6 +151,8 @@ export class TestComponent implements OnInit {
     this.jobService.startJob$().subscribe(response => {
       console.log(response);
       this.isStartJob = true;
+    }, er =>{
+      console.log("Error startJob",er);
     });
   }
 
@@ -148,8 +160,12 @@ export class TestComponent implements OnInit {
     this.jobService.stopJob$().subscribe(response => {
       console.log(response);
       this.isStartJob = false;
-      this.router.navigate(['jobs']);
+    }, er =>{
+      console.log("Error stopJob",er);
     });
   }
 
+  back(){
+    this.router.navigate(['/jobs']);
+  }
 }
