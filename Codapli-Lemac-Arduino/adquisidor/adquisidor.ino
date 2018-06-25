@@ -72,14 +72,9 @@ void loop() {
               }
         case TARE:
               {
-                
+               celda.tare(); 
                break; 
                }
-        case SET_SCALE:
-          {
-                
-         break; 
-         }
         default:
             break;
       }
