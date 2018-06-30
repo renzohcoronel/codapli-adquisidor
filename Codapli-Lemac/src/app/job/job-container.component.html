@@ -5,9 +5,9 @@
       <mat-horizontal-stepper [linear]="true" #stepper>
         <mat-step [stepControl]="ensayoTipoFromGroup">
           <ng-template matStepLabel>Tipo de Ensayo</ng-template>
-          <app-job-type-selection [fromGroup]="ensayoTipoFromGroup"></app-job-type-selection>
-          <div class="row mt-4">
-            <div class="col-md-2">
+          <app-job-type-selection (typeSelected)="setFormulario($event)" [fromGroup]="ensayoTipoFromGroup"></app-job-type-selection>
+          <div class="row mt-5 text-right">
+              <div class="col-md-12">
               <button mat-button matStepperNext class="btn btn-primary">Siguiente</button>
             </div>
           </div>
@@ -24,26 +24,23 @@
               </ng-container>
             </div>
           </div>
-          <div>
+          <div class="row mt-5 text-right">
+              <div class="col-md-12">
             <button mat-button matStepperPrevious class="btn btn-primary">Atras</button>
             <button mat-button matStepperNext class="btn btn-primary">Siguiente</button>
+          </div>
           </div>
 
         </mat-step>
         <mat-step [stepControl]="settingFormGroup">
           <ng-template matStepLabel>Configuracion del equipo</ng-template>
-          <div>
-            <button mat-button matStepperPrevious class="btn btn-primary">Atras</button>
-            <button mat-button matStepperNext class="btn btn-primary">Siguiente</button>
-          </div>
+          <app-job-settings></app-job-settings>
+          <div class="row mt-5 text-right">
+            <div class="col-md-12">
 
-        </mat-step>
-        <mat-step>
-          <ng-template matStepLabel>Confirmacion</ng-template>
-
-          <div>
-            <button mat-button matStepperPrevious class="btn btn-primary">Atras</button>
-            <button mat-button matStepperNext class="btn btn-primary">Comenzar</button>
+              <button mat-button matStepperPrevious class="btn btn-primary">Atras</button>
+              <button mat-button (click)="Run()" class="btn btn-warning">Comenzar</button>
+            </div>
           </div>
 
         </mat-step>

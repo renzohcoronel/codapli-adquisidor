@@ -1,0 +1,13 @@
+<div class="row">
+    <div class="col-md-6">
+      <form [formGroup]="formGroup">
+        <div class="form-group">
+          <label for="timeMuestra">Muestras</label>
+          <input type="text" class="form-control" id="timeMuestra" formControlName="celda">
+          <div class="alert alert-danger" *ngIf="formGroup.get('timeMuestra').invalid && formGroup.get('timeMuestra').dirty">
+            "Debe ingresar este valor"
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>

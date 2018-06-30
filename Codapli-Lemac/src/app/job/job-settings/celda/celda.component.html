@@ -1,0 +1,13 @@
+<div class="row">
+  <div class="col-md-6">
+    <form [formGroup]="formGroup">
+      <div class="form-group">
+        <label for="celda">Celda</label>
+        <input type="text" class="form-control" id="celda" formControlName="celda">
+        <div class="alert alert-danger" *ngIf="formGroup.get('celda').invalid && formGroup.get('celda').dirty">
+          "Debe ingresar este valor"
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
