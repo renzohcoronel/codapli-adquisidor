@@ -54,9 +54,9 @@ exports.job_post = function (req, res) {
                 ensayo.muestra = req.body.muestra;
 
                 break;
-                default:
-                    console.log('Error al crear el ensayo')
-                    break;
+            default:
+                console.log('Error al crear el ensayo')
+                break;
         }
         //----------------------------------------------------------------
 
@@ -76,7 +76,8 @@ exports.job_post = function (req, res) {
 
 exports.job_get = function (req, res) {
     if (ensayo !== null) {
-        res.send(JSON.stringify(ensayo));
+        console.log("GET_JOB --> response");
+        res.send(ensayo);
     } else {
         res.status(500).send({ message: 'No hay ensayo activo cree uno nuevo' });
     }
@@ -114,7 +115,7 @@ exports.jobs_start = function (req, res) {
         serial.on('data', readDataSerial);
         serial.on('close', () => console.log("closed port"));
         ensayo.registrando = true;
-        res.send({ message: "Register values" });
+        res.send({ message: "Registrando Valores" });
     }).catch(error => {
         console.log(error);
         ensayo.registrando = false;
@@ -126,8 +127,8 @@ exports.jobs_start = function (req, res) {
 
 exports.jobs_stop = function (req, res) {
     closeFile();
-    serial.close();
-    res.send({ message: "Closed Job" });
+    serial? serial.close(): serial;
+    res.send({ message: "Ensayo terminado" });
 }
 
 /* Funciones para abrir y cerrar el archivo 
@@ -140,16 +141,20 @@ function openFile() {
             throw new Error('Error open file', ensayo.pathFile);
         } else {
             file = fd;
+            let firstLine;
             let header;
             //Para no almacenar siempre todos los datos en el primer registro vasmoa almacenar los datos del trabajo
             switch (ensayo.tipoEnsayo) {
                 case 'APERTURA_Y_CIERRE':
+                    firstLine = `fecha | tipo | dimensiones | material | temperatura | recorridoPlaca${os.EOL}`;
                     header = `${ensayo.fecha},${ensayo.tipoEnsayo},${ensayo.dimensiones},${ensayo.material},${ensayo.temperatura},${ensayo.recorridoPlaca}${os.EOL}`;
                     break;
                 case 'MODULO_RIGIDEZ':
-                    header = `${ensayo.fecha},${ensayo.tipoEnsayo},${ensayo.material},${ensayo.frecuencia},${ensayo.dimensiones},${ensayo.carga},${ensayo.muestra},${ensayo.temperatura},${os.EOL}`;
+                    firstLine = `fecha | tipo | dimensiones | temperatura | frecuencia | carga | material | muestra${os.EOL}`;
+                    header = `${ensayo.fecha},${ensayo.tipoEnsayo},${ensayo.dimensiones},${ensayo.temperatura},${ensayo.frecuencia},${ensayo.carga},${ensayo.material},${ensayo.muestra}${os.EOL}`;
                     break;
                 case 'SEMI_PROBETA':
+                    firstLine = `fecha | tipo | muestra | material | diametro | espesor | ranura | ${os.EOL}`;
                     header = `${ensayo.fecha},${ensayo.tipoEnsayo},${ensayo.muestra},${ensayo.material},${ensayo.diametro},${ensayo.espesor},${ensayo.ranura}${os.EOL}`;
                     break;
 
@@ -157,6 +162,7 @@ function openFile() {
                     header = 'with out header error';
                     break;
             }
+            fs.writeSync(file, firstLine);
             fs.writeSync(file, header);
         }
     });
@@ -164,8 +170,10 @@ function openFile() {
 
 
 function closeFile() {
-    fs.closeSync(file);
-    ensayo = null;
+    if(file){
+        fs.closeSync(file);
+        ensayo = null;
+    } 
 }
 //-------------------------------------------------------------------
 

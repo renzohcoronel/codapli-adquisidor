@@ -30,16 +30,22 @@ export class ExperimentComponent implements OnInit {
 
 
   constructor(private jobService: JobsService,
-     private router: Router,
-     private toastService: ToastrService) {
+    private router: Router,
+    private toastService: ToastrService) {
   }
 
   ngOnInit() {
 
-    console.log(this.times === null ? true : false);
-
     this.jobService.getJob$().subscribe(response => {
       this.job = response;
+
+          this.jobService.startJob$().subscribe(response => {
+            this.toastService.info(response.message);
+          }, er => {
+            console.log('Error Start Job', er);
+            this.toastService.error(er.error.message);
+          });
+
     }, er => {
       console.log('Error getJob', er);
       this.toastService.error(er.error.message);
@@ -52,7 +58,7 @@ export class ExperimentComponent implements OnInit {
       this.celda.push(data.celda);
       this.lvdt0.push(data.ldvt0);
       this.lvdt1.push(data.lvdt1);
-      
+
     }.bind(this));
 
     this.forceChart = new Chart(this.force.nativeElement.getContext('2d'), {
@@ -84,19 +90,19 @@ export class ExperimentComponent implements OnInit {
           xAxes: [{
             display: true,
             time: {
-            unit: 'hour',
-            unitStepSize: 0.1,
-            round: 'hour',
-            tooltipFormat: "h:mm:ss a",
-            displayFormats: {
-              hour: 'h:mm A'
-            },
-            scaleLabel: {
-              display: true,
-              labelString: "Time",
-              fontColor: "red"
+              unit: 'hour',
+              unitStepSize: 0.1,
+              round: 'hour',
+              tooltipFormat: "h:mm:ss a",
+              displayFormats: {
+                hour: 'h:mm A'
+              },
+              scaleLabel: {
+                display: true,
+                labelString: "Time",
+                fontColor: "red"
+              }
             }
-          }
           }],
           yAxes: [{
             display: true
@@ -140,19 +146,19 @@ export class ExperimentComponent implements OnInit {
           xAxes: [{
             display: true,
             time: {
-            unit: 'hour',
-            unitStepSize: 0.1,
-            round: 'hour',
-            tooltipFormat: "h:mm:ss a",
-            displayFormats: {
-              hour: 'h:mm A'
-            },
-            scaleLabel: {
-              display: true,
-              labelString: "Time",
-              fontColor: "red"
+              unit: 'hour',
+              unitStepSize: 0.1,
+              round: 'hour',
+              tooltipFormat: "h:mm:ss a",
+              displayFormats: {
+                hour: 'h:mm A'
+              },
+              scaleLabel: {
+                display: true,
+                labelString: "Time",
+                fontColor: "red"
+              }
             }
-          }
           }],
           yAxes: [{
             display: true
@@ -163,6 +169,14 @@ export class ExperimentComponent implements OnInit {
 
     this.forceChart.update();
     this.displacementChart.update();
+  }
+
+  detener() {
+    this.jobService.stopJob$().subscribe(response => {
+      console.log("Stop Job", response);
+      this.toastService.info(response.message);
+      this.router.navigate(['jobs'])
+    });
   }
 
 }

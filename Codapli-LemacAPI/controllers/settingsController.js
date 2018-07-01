@@ -11,8 +11,6 @@ var bufferReader = '';
  * para leer los datos cargados en el dispositivo y poder enviar datos nuevos
  * 
  * */
-
-
 exports.initSerial = (req, res) => {
         serialConnector.getPortSerial().then(response =>{
             serial = response;

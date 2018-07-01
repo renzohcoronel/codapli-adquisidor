@@ -14,9 +14,6 @@ import { JobsService } from '../services/jobs.service';
             <div class="col-md-1">
               <button type="button" class="btn btn-sm btn-primary" [routerLink]="['/job']">Nuevo</button>
             </div>
-            <div class="col-md-2">
-              <button type="button" class="btn btn-sm btn-primary" [routerLink]="['/settings']">Configuracion</button>
-            </div>
           </div>
           <div class="row mt-2">
             <div class="col-md-12">

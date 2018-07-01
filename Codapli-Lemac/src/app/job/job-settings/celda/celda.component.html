@@ -3,10 +3,11 @@
     <form [formGroup]="formGroup">
       <div class="form-group">
         <label for="celda">Celda</label>
-        <input type="text" class="form-control" id="celda" formControlName="celda">
-        <div class="alert alert-danger" *ngIf="formGroup.get('celda').invalid && formGroup.get('celda').dirty">
-          "Debe ingresar este valor"
-        </div>
+          <select class="form-control" id="celda" formControlName="celda" class="custom-select">
+              <option [ngValue]="500">500Kg</option>
+              <option [ngValue]="1000">1000Kg</option>
+              <option [ngValue]="2000">2000Kg</option>
+            </select>
       </div>
     </form>
   </div>
