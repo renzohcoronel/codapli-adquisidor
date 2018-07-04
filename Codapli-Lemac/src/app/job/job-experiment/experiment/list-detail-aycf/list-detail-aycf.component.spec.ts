@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SettingComponent } from './setting.component';
+import { ListDetailAycfComponent } from './list-detail-aycf.component';
 
-describe('SettingComponent', () => {
-  let component: SettingComponent;
-  let fixture: ComponentFixture<SettingComponent>;
+describe('ListDetailAycfComponent', () => {
+  let component: ListDetailAycfComponent;
+  let fixture: ComponentFixture<ListDetailAycfComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SettingComponent ]
+      declarations: [ ListDetailAycfComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SettingComponent);
+    fixture = TestBed.createComponent(ListDetailAycfComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
