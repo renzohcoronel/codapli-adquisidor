@@ -18,8 +18,6 @@ public:
     int getCalibration_factor_ldvt0();
     void setCalibration_factor_ldvt1(int value);
     int getCalibration_factor_ldvt1();
-    
-    
 };
 
 #endif

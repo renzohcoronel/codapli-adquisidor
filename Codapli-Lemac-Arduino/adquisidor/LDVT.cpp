@@ -14,3 +14,4 @@ void LDVT::setConst(int ctte){
 float LDVT::getValue() {
   return analogRead(pinAnalog)*constante / 5 ;
 };
+  
