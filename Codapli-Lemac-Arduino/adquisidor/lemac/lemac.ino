@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 #include <HX711.h>
+#include "Configuracion.h";
 
 void setup() {
   Serial.begin(115200);   
