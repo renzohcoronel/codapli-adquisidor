@@ -2,18 +2,21 @@
 #include <ArduinoJson.h>
 #include <HX711.h>
 #include "Setting.h";
-
+// Define constantes
 #define SET_LDVTS 200
 #define SET_CELDA 300
 #define SET_TARA 301
 #define SET_TMUESTREO 400
 #define CODAPLIERROR 500
+#define CODAPLIOK 500
+// instanciacion de Objetos y demas variables
 
+Setting *setting;
 
 
 void setup() {
   Serial.begin(115200);   
-
+  setting = new Setting();
 }
 
 void loop() {
@@ -27,16 +30,40 @@ void loop() {
       int code = jsonData["code"];
       
       switch(code){               
-        case SET_LDVTS:
-                    Serial.println("Mensaje de Set lvdts");
-     
+        case SET_LDVTS:{
+                     int lvdt0 = jsonData["lvdt0"];
+                     int lvdt1 = jsonData["lvdt1"];                    
+                     
+                    float m0 = setting->getMultiplicadorLvdt(lvdt0);
+                    float m1 = setting->getMultiplicadorLvdt(lvdt1);
+                    
+                    //creacion de objeto JSON
+                    JsonObject& root1 = jsonBuffer.createObject();
+                    root1["code"] = CODAPLIOK;
+                    root1["lvdt0_multiplicador"] = m0;
+                    root1["lvdt1_multiplicador"] = m1;
+                    root1.printTo(Serial);
+                    Serial.println();
+               
                 break;
-                
+        } 
       
         case SET_CELDA:
-             Serial.println("Mensaje de Set Celda");
-              break;
-
+             {
+                     int celda0 = jsonData["celda0"];                                      
+                     
+                    float c0 = setting->getMultiplicadorCelda(celda0);
+                   
+                    
+                    //creacion de objeto JSON
+                    JsonObject& root1 = jsonBuffer.createObject();
+                    root1["code"] = CODAPLIOK;
+                    root1["celda0_multiplicador"] = c0;
+                    root1.printTo(Serial);
+                    Serial.println();
+               
+                break;
+        }
         case SET_TARA:
              Serial.println("Mensaje de Set Tara");
               break;
