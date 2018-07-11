@@ -1,12 +1,12 @@
-class Lvdt{
+class SettingItem{
 
-      public:
+      private:
       int identificador;
       float multiplicador;
 
-      private:
+      public:
       
-      void Lvdt(int id , float m);
+      SettingItem(int, float);
       int getIdentificador();
       float getMultiplicador();
 

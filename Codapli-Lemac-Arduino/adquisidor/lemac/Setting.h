@@ -1,15 +1,14 @@
-#include "Celda.h"
-#include "Lvdt.h"
+#include "SettingItem.h"
 
-class Setting {}
-      public
+class Setting {
+      private:
     
-      Celda celdas[3] = {new Celda(500,10),new Celda(1000,10),new Celda(2000,10)}
-      Lvdt lvdts[3] = {new Lvdt(10,10),new Lvdt(20,10),new Lvdt(25,10)}
+      SettingItem celdas[3] = {{500,10},{1000,10},{2000,10}};
+      SettingItem lvdts[3] = {{15,10},{20,10},{25,10}};
 
-      private
+      public :
         
-      void Setting();
+      Setting();
       float getMultiplicadorCelda(int c);
       float getMultiplicadorLvdt(int id);
 };
