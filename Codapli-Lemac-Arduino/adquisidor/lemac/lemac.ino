@@ -3,6 +3,14 @@
 #include <HX711.h>
 #include "Setting.h";
 
+#define SET_LDVTS 200
+#define SET_CELDA 300
+#define SET_TARA 301
+#define SET_TMUESTREO 400
+#define CODAPLIERROR 500
+
+
+
 void setup() {
   Serial.begin(115200);   
 
@@ -16,20 +24,36 @@ void loop() {
     JsonObject& jsonData = jsonBuffer.parse(Serial);  
     
     if (jsonData.success()) {
-      int estado = jsonData["estado"];
-      switch(estado){               
-        case 100: 
-                {         
+      int code = jsonData["code"];
+      
+      switch(code){               
+        case SET_LDVTS:
+                    Serial.println("Mensaje de Set lvdts");
      
                 break;
-                }
+                
       
-        case 200:{
-             
+        case SET_CELDA:
+             Serial.println("Mensaje de Set Celda");
               break;
-              }  
+
+        case SET_TARA:
+             Serial.println("Mensaje de Set Tara");
+              break;
+
+       case SET_TMUESTREO:
+             Serial.println("Mensaje de Set Tiempo Muestreo");
+              break;
+
         default:
-            break;
+          JsonObject& root = jsonBuffer.createObject();
+          root["code"] = CODAPLIERROR;
+          root["message"] = "El code del mensaje es incorrecto";
+          root.printTo(Serial);
+          Serial.println();
+            
+        break;
+                   
       }
     } else {
       Serial.println("Json Parser error");
@@ -45,8 +69,7 @@ void loop() {
   root["ldvt0"] = ldvt0.getValue();
   root["ldvt1"] = ldvt1.getValue();             
   root.printTo(Serial);*/
-  Serial.println();
-  delay(1000);
+  delay(100);
   
 
 }
