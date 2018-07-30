@@ -52,3 +52,6 @@ Codapli-Lemac/e2e/*.map
 Codapli-Lemac/.DS_Store
 Codapli-Lemac/Thumbs.db
 
+codapli-lemac.code-workspace
+package-lock.json
+
