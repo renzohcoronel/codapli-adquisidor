@@ -20,12 +20,12 @@ router.post('/job/stop', jobsController.jobs_stop);
 router.get('/init/settings', settingController.initSerial);
 router.get('/close/settings', settingController.closeSerial);
 
-router.get('/settings', settingController.settings_get);
-router.post('/settings', settingController.settings_post);
 
-//Sin implementar
-router.post('/settings/tare', settingController.settings_post_tare);
-router.post('/settings/set_scale', settingController.settings_post_scale);
+router.post('/settings/lvdts', settingController.settings_set_lvdts);
+router.post('/settings/celda', settingController.settings_set_celda);
+router.post('/settings/tara', settingController.settings_set_tara);
+router.post('/settings/time_muestreo', settingController.settings_set_time_muestreo);
+
 
 module.exports = router
 

@@ -2,6 +2,7 @@ var serial = require('./../Serial/SerialPort');
 var serialConnector = require('./../Serial/SerialPort');
 var setting = require('./../models/Setting');
 var socket = require('./../socket').io();
+var code_message = require('./../models/code_message');
 
 var serial;
 var bufferReader = '';
@@ -32,34 +33,43 @@ exports.closeSerial = (req, res) => {
 
 //--------------------------------------------------------------------------------------
 
-// Lee los datos de configuracion cargados actualmente
-exports.settings_get = function (req, res) {
+// Setea los datos de los LVDTs en arduino
+exports.settings_set_lvdts = async function (request, response) {
+    
     serial.write(JSON.stringify({
-        "estado": 101
+        code: code_message.SET_LDVTS,
+        lvdt0: request.body.lvdt0,
+        lvdt1: request.body.lvdt1
+    }));
+
+    response.send({message:`message code sent: ${code_message.SET_LDVTS}`});
+}
+
+exports.settings_set_celda = function (request, response) {
+    serial.write(JSON.stringify({
+        estado: 101
      }));
 
      res.send(JSON.stringify({'message':'write estado:101'}));
 }
-// Envia para cargar los nuevos datos de configuracion del equipo
-exports.settings_post = function (req, res) {
-   serial.write(JSON.stringify({
-      "estado": 100,
-      "calibration_factor_celda": req.body.calibration_factor_celda,
-      "calibration_factor_ldvt0": req.body.calibration_factor_ldvt0,
-      "calibration_factor_ldvt1": req.body.calibration_factor_ldvt1
-   }));
-   res.send(JSON.stringify({"message": "writed message"}));
+
+exports.settings_set_tara = function (request, response) {
+    serial.write(JSON.stringify({
+        code: code_message.SET_TARA
+     }));
+
+     res.send(JSON.stringify({'message':'write estado:101'}));
+}
+exports.settings_set_time_muestreo = function (request, response) {
+    serial.write(JSON.stringify({
+        estado: 101
+     }));
+
+     res.send(JSON.stringify({'message':'write estado:101'}));
 }
 
-// Falta implementar la tara de la celda de cargar
-// Este metodo se deberia correr al iniciar la lectura del ensayo
-exports.settings_post_tare = function (req, res) {
-    res.send("oks")
-}
-// Seria para setear el pamaetro de escala para la celda de carga
-exports.settings_post_scale = function (req, res) {
-    res.send("oks")
-}
+
+//--------------------------------------------------------
 
 
 function readDataSerial(data) {
