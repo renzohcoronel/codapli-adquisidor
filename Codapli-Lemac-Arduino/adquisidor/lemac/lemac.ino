@@ -20,6 +20,8 @@ HX711 celda(2, 3);
 Lvdt *lvdt0;
 Lvdt *lvdt1;
 
+int TIME_VALUE = 1000;
+
 
 void setup() {
   Serial.begin(115200);   
@@ -93,6 +95,7 @@ void loop() {
 
        case SET_TMUESTREO:
              Serial.println("Mensaje de Set Tiempo Muestreo");
+             TIME_VALUE = jsonData["time"];     
               break;
 
         default:
@@ -119,7 +122,7 @@ void loop() {
   root["ldvt0"] = lvdt0->getValue();
   root["ldvt1"] = lvdt1->getValue();             
   root.printTo(Serial);
-  delay(1000);
+  delay(TIME_VALUE);
   
 
 }
