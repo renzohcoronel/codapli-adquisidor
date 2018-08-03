@@ -21,12 +21,16 @@ import { JobsService } from '../services/jobs.service';
                 <thead>
                   <tr>
                     <th scope="col">Ensayos</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Tipo</th>
                     <th scope="col"></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let job of jobPage">
-                    <td>{{job}}</td>
+                    <td>{{job.name}}</td>
+                    <td>{{job.date}}</td>
+                    <td>{{job.tipo}}</td>
                     <td><a href="#" class="fa fa-eye" aria-hidden="true"></a>
                       <a  (click)="deleteJob(job)" href="#" class="fa fa-trash" aria-hidden="true"></a>
                       <a  (click)="download(job)" href="#" class="fa fa-download" aria-hidden="true"></a>
@@ -70,8 +74,8 @@ export class JobsComponent implements OnInit {
      });
   }
 
-  deleteJob(file:String) {
-    this.jobService.deleteJob$(file).subscribe( response => {
+  deleteJob(job:any) {
+    this.jobService.deleteJob$(job.file).subscribe( response => {
         this.refreshJobs();
     });
   }

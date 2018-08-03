@@ -16,10 +16,19 @@ export class SettingsService {
     return this.http.get(`api/close/settings`);
   }
 
-  setSettings(settings:Setting):Observable<any> {
-    console.log('sending post job');
+  Setlvdts$(settings:any):Observable<any> {
     const header = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<any>(`api/settings`, settings, { headers: header });
+    return this.http.post<any>(`api/settings/lvdts`, settings, { headers: header });
+  }
+
+  SetCelda$(settings:any):Observable<any> {
+    const header = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<any>(`api/settings/celda`, settings, { headers: header });
+  }
+
+  SetTara$():Observable<any> {
+    const header = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<any>(`api/settings/tara`, {}, { headers: header });
   }
 
   getSettings():Observable<Setting> {

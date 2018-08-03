@@ -77,36 +77,41 @@ export class ExperimentComponent implements OnInit {
         }]
       },
       options: {
-				responsive: true,
-				title: {
-					display: true,
-					text: 'Chart.js Line Chart'
-				},
-				tooltips: {
-					mode: 'index',
-					intersect: false,
-				},
-				hover: {
-					mode: 'nearest',
-					intersect: true
-				},
-				scales: {
-					xAxes: [{
-						display: true,
-						scaleLabel: {
-							display: true,
-							labelString: 'Month'
-						}
-					}],
-					yAxes: [{
-						display: true,
-						scaleLabel: {
-							display: true,
-							labelString: 'Value'
-						}
-					}]
-				}
-			}
+        responsive: true,
+        legend: {
+          display: true
+        },
+        tooltips: {
+          mode: 'index',
+          intersect: false,
+        },
+        hover: {
+          mode: 'nearest',
+          intersect: true
+        },
+        scales: {
+          xAxes: [{
+            display: true,
+            time: {
+            unit: 'hour',
+            unitStepSize: 0.1,
+            round: 'hour',
+            tooltipFormat: "h:mm:ss a",
+            displayFormats: {
+              hour: 'h:mm A'
+            },
+            scaleLabel: {
+              display: true,
+              labelString: "Time",
+              fontColor: "red"
+            }
+          }
+          }],
+          yAxes: [{
+            display: true
+          }]
+        }
+      }
     });
 
     this.displacementChart = new Chart(this.displacement.nativeElement.getContext('2d'), {
@@ -128,36 +133,41 @@ export class ExperimentComponent implements OnInit {
         }]
       },
       options: {
-				responsive: true,
-				title: {
-					display: true,
-					text: 'Chart.js Line Chart'
-				},
-				tooltips: {
-					mode: 'index',
-					intersect: false,
-				},
-				hover: {
-					mode: 'nearest',
-					intersect: true
-				},
-				scales: {
-					xAxes: [{
-						display: true,
-						scaleLabel: {
-							display: true,
-							labelString: 'Month'
-						}
-					}],
-					yAxes: [{
-						display: true,
-						scaleLabel: {
-							display: true,
-							labelString: 'Value'
-						}
-					}]
-				}
-			}
+        responsive: true,
+        legend: {
+          display: true
+        },
+        tooltips: {
+          mode: 'index',
+          intersect: false,
+        },
+        hover: {
+          mode: 'nearest',
+          intersect: true
+        },
+        scales: {
+          xAxes: [{
+            display: true,
+            time: {
+            unit: 'hour',
+            unitStepSize: 0.1,
+            round: 'hour',
+            tooltipFormat: "h:mm:ss a",
+            displayFormats: {
+              hour: 'h:mm A'
+            },
+            scaleLabel: {
+              display: true,
+              labelString: "Time",
+              fontColor: "red"
+            }
+          }
+          }],
+          yAxes: [{
+            display: true
+          }]
+        }
+      }
     });
 
     this.forceChart.update();

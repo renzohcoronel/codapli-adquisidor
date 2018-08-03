@@ -22,7 +22,7 @@ exports.job_post = function (req, res) {
         ensayo = new Job();
         //Datos utiles para comenzar con el ensayo
         date = new Date().toISOString();
-        ensayo.pathFile = './ensayos/Ensayo-' + date + '-' + req.body.tipoEnsayo;
+        ensayo.pathFile = './ensayos/EnsayoLemac-' + date + '-' + req.body.tipoEnsayo+'.csv';
         ensayo.fecha = date;
         ensayo.registrando = false;
         //Informacion propiamente del ensayo
@@ -88,7 +88,8 @@ exports.jobs_get = function (req, res) {
 
     let jobs = new Array();
     fs.readdirSync(`./ensayos/`).forEach(file => {
-        jobs.push(file);
+        const fileSplit = file.split('-');
+        jobs.push({ file: file, name: fileSplit[0], date: fileSplit[1], tipo: fileSplit[2]});
     });
     res.send(JSON.stringify(jobs));
 
