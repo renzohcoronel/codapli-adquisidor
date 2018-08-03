@@ -10,8 +10,8 @@ module.exports.getPortSerial = function () {
     
     return new Promise( (resolve, reject) => {
 
-        // var pathPort = '/dev/ttyACM0';
-        var pathPort = '/dev/pts/9';
+        var pathPort = '/dev/ttyACM0';
+        // var pathPort = '/dev/pts/9';
         var bufferReader = '';
         const Readline = SerialPort.parsers.Readline;
         const parser = new Readline();

@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 #include <HX711.h>
+#include <SoftwareSerial.h>
 #include "Setting.h";
 #include "Lvdt.h";
 
@@ -13,21 +14,24 @@
 #define SET_TMUESTREO 400
 #define CODAPLIERROR 500
 #define CODAPLIOK 500
+#define DATA_SENSOR 700
 
 // instanciacion de Objetos y demas variables
 Setting *setting;
-HX711 celda(2, 3);
+HX711 celda(A1, A0);
 Lvdt *lvdt0;
 Lvdt *lvdt1;
 
 int TIME_VALUE = 1000;
 
+SoftwareSerial serialDebug(10, 11); //10:RX; 11:TX 
 
 void setup() {
+  serialDebug.begin(115200);
   Serial.begin(115200);   
   setting = new Setting();
-  lvdt0 = new Lvdt(A4);
-  lvdt1 = new Lvdt(A5);
+  lvdt0 = new Lvdt(A2);
+  lvdt1 = new Lvdt(A3);
 }
 
 void loop() {
@@ -39,7 +43,7 @@ void loop() {
     
     if (jsonData.success()) {
       int code = jsonData["code"];
-      
+      serialDebug.println("Recibi un codigo");
       switch(code){               
         case SET_LDVTS:{
                      int _lvdt0 = jsonData["lvdt0"];
@@ -116,13 +120,15 @@ void loop() {
 
   StaticJsonBuffer<250> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();
-  root["tipo"] = "datos";
+  root["code"] = DATA_SENSOR;
   float celda_value = celda.get_units(20);
   root["celda"] = !isnan(celda_value) && !isinf(celda_value) ? celda_value: 0.0f;
   root["ldvt0"] = lvdt0->getValue();
   root["ldvt1"] = lvdt1->getValue();             
   root.printTo(Serial);
+  Serial.println();
   delay(TIME_VALUE);
+  serialDebug.println("Anda todo");
   
 
 }

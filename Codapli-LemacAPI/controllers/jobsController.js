@@ -3,6 +3,7 @@ var os = require('os');
 var serialConnector = require('./../Serial/SerialPort');
 var Job = require('./../models/Job');
 var socket = require('./../socket').io();
+var code_message = require('./../models/code_message');
 const path = require('path');
 var serial;
 var bufferReader = '';
@@ -183,9 +184,9 @@ function readDataSerial(data) {
     bufferReader = answers.pop();
     if (answers.length > 0) {
         try {
-            console.log("Data Parser --> ", answers[0]);
+            console.log(answers[0]);
             let values = JSON.parse(answers[0]);
-            if (values.tipo === 'datos') {
+            if (values.code === code_message.DATA_SENSOR) {
                 const timeMuestra = new Date().toTimeString();
                 //Ahora solamente guardamos los valores de los sensores
                 // ya en la cabecera guardamos los datos del ensayo

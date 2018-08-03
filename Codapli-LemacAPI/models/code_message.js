@@ -4,7 +4,8 @@ var Code_Message = {
      SET_TARA : 301,
      SET_TMUESTREO : 400,
      CODAPLIERROR : 500,
-     CODAPLIOK  : 500
+     CODAPLIOK  : 500,
+     DATA_SENSOR : 700
 }
 
 module.exports = Code_Message;

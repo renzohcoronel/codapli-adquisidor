@@ -5,7 +5,7 @@ Lvdt::Lvdt(){
 
 Lvdt::Lvdt(int pin){
   pinAnalog = pin;
-  constante=0.0048828125;
+  constante=1;
 };
 
 Lvdt::Lvdt(int pin, float cte ){
@@ -18,6 +18,7 @@ void Lvdt::setConstante(float c){
 };
  
 float Lvdt::getValue() {
-  return analogRead(pinAnalog)*constante;
+  return analogRead(pinAnalog);
+  //return ((analogRead(pinAnalog)*1024)/5)*constante; //Falta Vin
 };
 

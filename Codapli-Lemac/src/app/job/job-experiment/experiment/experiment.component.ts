@@ -54,10 +54,13 @@ export class ExperimentComponent implements OnInit {
 
     this.socket = socketIo(`http://localhost:5001`);
     this.socket.on('arduino:data', function (data) {
+      console.log(data);
       this.times.push(data.time);
       this.celda.push(data.celda);
       this.lvdt0.push(data.ldvt0);
       this.lvdt1.push(data.lvdt1);
+      this.forceChart.update();
+      this.displacementChart.update();
 
     }.bind(this));
 
@@ -74,41 +77,36 @@ export class ExperimentComponent implements OnInit {
         }]
       },
       options: {
-        responsive: true,
-        legend: {
-          display: true
-        },
-        tooltips: {
-          mode: 'index',
-          intersect: false,
-        },
-        hover: {
-          mode: 'nearest',
-          intersect: true
-        },
-        scales: {
-          xAxes: [{
-            display: true,
-            time: {
-              unit: 'hour',
-              unitStepSize: 0.1,
-              round: 'hour',
-              tooltipFormat: "h:mm:ss a",
-              displayFormats: {
-                hour: 'h:mm A'
-              },
-              scaleLabel: {
-                display: true,
-                labelString: "Time",
-                fontColor: "red"
-              }
-            }
-          }],
-          yAxes: [{
-            display: true
-          }]
-        }
-      }
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Line Chart'
+				},
+				tooltips: {
+					mode: 'index',
+					intersect: false,
+				},
+				hover: {
+					mode: 'nearest',
+					intersect: true
+				},
+				scales: {
+					xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Month'
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Value'
+						}
+					}]
+				}
+			}
     });
 
     this.displacementChart = new Chart(this.displacement.nativeElement.getContext('2d'), {
@@ -119,52 +117,47 @@ export class ExperimentComponent implements OnInit {
           label: 'ldvt0',
           backgroundColor: '#ffff',
           borderColor: 'blue',
-          fill: false,
+          fill: true,
           data: this.lvdt0,
         }, {
           label: 'lvdt1',
           backgroundColor: '#ffff',
           borderColor: 'black',
-          fill: false,
+          fill: true,
           data: this.lvdt1,
         }]
       },
       options: {
-        responsive: true,
-        legend: {
-          display: true
-        },
-        tooltips: {
-          mode: 'index',
-          intersect: false,
-        },
-        hover: {
-          mode: 'nearest',
-          intersect: true
-        },
-        scales: {
-          xAxes: [{
-            display: true,
-            time: {
-              unit: 'hour',
-              unitStepSize: 0.1,
-              round: 'hour',
-              tooltipFormat: "h:mm:ss a",
-              displayFormats: {
-                hour: 'h:mm A'
-              },
-              scaleLabel: {
-                display: true,
-                labelString: "Time",
-                fontColor: "red"
-              }
-            }
-          }],
-          yAxes: [{
-            display: true
-          }]
-        }
-      }
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Line Chart'
+				},
+				tooltips: {
+					mode: 'index',
+					intersect: false,
+				},
+				hover: {
+					mode: 'nearest',
+					intersect: true
+				},
+				scales: {
+					xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Month'
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Value'
+						}
+					}]
+				}
+			}
     });
 
     this.forceChart.update();

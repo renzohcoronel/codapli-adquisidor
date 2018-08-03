@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { JobsService } from '../services/jobs.service';
 import { Job } from '../models/job';
 import { Router } from '@angular/router';
+import { SettingsService } from '../services/settings.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-job-container',
@@ -15,30 +17,30 @@ export class JobContainerComponent implements OnInit {
   settingFormGroup: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
+    private toastService: ToastrService,
     private jobService: JobsService,
+    private settingsService:SettingsService,
     private router:Router) {
 
     this.ensayoTipoFromGroup = this.formBuilder.group({
       tipoEnsayo: [null, Validators.required],
 
     });
-
-    // this.ensayoFormGroup = this.formBuilder.group({
-    //   frecuencia: [""],
-    //   desplazamiento: [""],
-    //   material: [""],
-    //   diametro: [""],
-    //   espesor: [""],
-    //   ranura: [""],
-    //   carga: [""],
-    //   dimensiones: [""],
-    //   muestra: [""],
-    //   temperatura: [""],
-    //   recorridoPlaca: [""],
-    // });
   }
 
   ngOnInit() {
+    this.settingsService.initSerialSetting().subscribe(banana => {
+      console.log(banana);
+    }, error => {
+      console.log(error);
+      this.toastService.error(error.error.message);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.settingsService.closeSerialSetting().subscribe(response => {
+      console.log(response);
+    })
   }
 
   setFormulario($event: string) {
