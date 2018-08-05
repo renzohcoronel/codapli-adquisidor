@@ -187,7 +187,7 @@ function readDataSerial(data) {
         try {
             console.log(answers[0]);
             let values = JSON.parse(answers[0]);
-            if (values.code === code_message.DATA_SENSOR) {
+            if (values.code === code_message.DATA_SENSOR_WORK) {
                 const timeMuestra = new Date().toTimeString();
                 //Ahora solamente guardamos los valores de los sensores
                 // ya en la cabecera guardamos los datos del ensayo

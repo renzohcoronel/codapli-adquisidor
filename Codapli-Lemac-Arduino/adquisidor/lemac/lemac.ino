@@ -14,7 +14,8 @@
 #define SET_TMUESTREO 400
 #define CODAPLIERROR 500
 #define CODAPLIOK 500
-#define DATA_SENSOR 700
+#define DATA_SENSOR_WORK 700
+#define DATA_SENSOR_SETTINGS 800
 
 // instanciacion de Objetos y demas variables
 Setting *setting;
@@ -22,7 +23,13 @@ HX711 celda(A1, A0);
 Lvdt *lvdt0;
 Lvdt *lvdt1;
 
-int TIME_VALUE = 1000;
+// Para manejar el TIME_VALUE que enviamos desde JS
+unsigned long  INTERVAL_WORK = 1000;
+unsigned long previousMillisWork;
+
+unsigned long  INTERVAL_SETTINGS = 1000;
+unsigned long previousMillisSettings;
+//--------------------------------
 
 SoftwareSerial serialDebug(10, 11); //10:RX; 11:TX 
 
@@ -32,6 +39,10 @@ void setup() {
   setting = new Setting();
   lvdt0 = new Lvdt(A2);
   lvdt1 = new Lvdt(A3);
+
+  // Capturar el primer millis
+   previousMillisSettings = millis();
+   previousMillisWork = previousMillisSettings;
 }
 
 void loop() {
@@ -73,7 +84,7 @@ void loop() {
 
                     celda.set_scale(_scale);
                     celda.tare(20);
-                    
+                   
                     //creacion de objeto JSON
                     JsonObject& root1 = jsonBuffer.createObject();
                     root1["code"] = CODAPLIOK;
@@ -99,7 +110,7 @@ void loop() {
 
        case SET_TMUESTREO:
              Serial.println("Mensaje de Set Tiempo Muestreo");
-             TIME_VALUE = jsonData["time"];     
+             INTERVAL_WORK = jsonData["time"];     
               break;
 
         default:
@@ -116,19 +127,43 @@ void loop() {
       Serial.println("Json Parser error");
  
       }
-  }  
+  } 
 
-  StaticJsonBuffer<250> jsonBuffer;
-  JsonObject& root = jsonBuffer.createObject();
-  root["code"] = DATA_SENSOR;
-  float celda_value = celda.get_units(20);
-  root["celda"] = !isnan(celda_value) && !isinf(celda_value) ? celda_value: 0.0f;
-  root["ldvt0"] = lvdt0->getValue();
-  root["ldvt1"] = lvdt1->getValue();             
-  root.printTo(Serial);
-  Serial.println();
-  delay(TIME_VALUE);
-  serialDebug.println("Anda todo");
+  //Vamos a usar esta manera para que no sea un event bloqueando con delay
+  // El primero es para enviar el mensaje de lectura de sensores cuando se encuentre 
+  // trabajando y registrando el equipo
+   unsigned long currentMillis = millis();
+   if ((unsigned long)(currentMillis - previousMillisWork) >= INTERVAL_WORK)
+   {
+      StaticJsonBuffer<250> jsonBuffer;
+      JsonObject& root = jsonBuffer.createObject();
+      root["code"] = DATA_SENSOR_WORK;
+      float celda_value = celda.get_units(20);
+      root["celda"] = !isnan(celda_value) && !isinf(celda_value) ? celda_value: 0.0f;
+      root["ldvt0"] = lvdt0->getValue();
+      root["ldvt1"] = lvdt1->getValue();             
+      root.printTo(Serial);
+      Serial.println();
+      
+      previousMillisWork = millis();
+   }
+
+  //El segundo es para cuando nos encontramos en settings tener siempre datos actualizados.
+   if ((unsigned long)(currentMillis - previousMillisSettings) >= INTERVAL_SETTINGS)
+   {
+      StaticJsonBuffer<250> jsonBuffer;
+      JsonObject& root = jsonBuffer.createObject();
+      root["code"] = DATA_SENSOR_SETTINGS;
+      float celda_value = celda.get_units(20);
+      root["celda"] = !isnan(celda_value) && !isinf(celda_value) ? celda_value: 0.0f;
+      root["ldvt0"] = lvdt0->getValue();
+      root["ldvt1"] = lvdt1->getValue();             
+      root.printTo(Serial);
+      Serial.println();
+      
+      previousMillisSettings = millis();
+   }
+  
   
 
 }

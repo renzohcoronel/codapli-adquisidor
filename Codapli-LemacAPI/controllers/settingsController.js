@@ -87,7 +87,7 @@ function readDataSerial(data) {
         try {
             console.log(answers[0]);
             let values = JSON.parse(answers[0]);
-            if (values.code !== code_message.DATA_SENSOR) {
+            if (values.code !== code_message.DATA_SENSOR_SETTINGS) {
                 socket.emit('arduino:setting', values);
             }
         } catch (error) {
