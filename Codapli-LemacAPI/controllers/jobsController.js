@@ -97,17 +97,7 @@ exports.jobs_get = function (req, res) {
 }
 
 exports.jobs_get_values = function (req, res) {
-    /**
-     * Hay que reeimplementar esta endpoint
-     * La idea es utilizarlo para reconstruir (leer) desde un archivo
-     * para mostrar el ensayo realizado
-     *  
-     */
-    // if (ensayo !== null) {
-    //     res.send(JSON.stringify(ensayo));
-    // } else {
-    //     res.status(500).send({message:' No hay archivo de ensayo'});
-    // }
+        
 }
 
 exports.jobs_start = function (req, res) {
