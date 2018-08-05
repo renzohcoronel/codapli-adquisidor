@@ -31,6 +31,11 @@ export class SettingsService {
     return this.http.post<any>(`api/settings/tara`, {}, { headers: header });
   }
 
+  SetInterval$(interval:any):Observable<any> {
+    const header = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<any>(`api/settings/interval`, {time:interval}, { headers: header });
+  }
+  
   getSettings():Observable<Setting> {
     return this.http.get<Setting>(`api/settings`);
   }

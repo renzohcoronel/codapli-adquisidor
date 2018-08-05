@@ -53,7 +53,7 @@ export class ExperimentComponent implements OnInit {
 
 
     this.socket = socketIo(`http://localhost:5001`);
-    this.socket.on('arduino:data', function (data) {
+    this.socket.on('arduino:data_work', function (data) {
       console.log(data);
       this.times.push(data.time);
       this.celda.push(data.celda);

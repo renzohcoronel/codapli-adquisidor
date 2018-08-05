@@ -195,7 +195,7 @@ function readDataSerial(data) {
                 fs.writeSync(file, registro);
                 ensayo.values.push(values);
                 values.time = timeMuestra;
-                socket.emit('arduino:data', values);
+                socket.emit('arduino:data_work', values);
             }
         } catch (error) {
             console.log("error parse json " + error.message);

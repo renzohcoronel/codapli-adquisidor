@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import * as socketIo from 'socket.io-client';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-lecturas',
@@ -7,28 +6,13 @@ import * as socketIo from 'socket.io-client';
   styleUrls: ['./lecturas.component.css']
 })
 export class LecturasComponent implements OnInit {
-
-  socket: any;
-  celda:any;
-  lvdt0:any;
-  lvdt1:any;
+  @Input() celda:any;
+  @Input() lvdt0:any;
+  @Input() lvdt1:any;
   constructor() { }
 
   ngOnInit() {
 
-    this.socket = socketIo(`http://localhost:5001`);
-    this.socket.on('arduino:data', function (data) {
-      
-      this.celda = data.celda;
-      this.lvdt0 = data.ldvt0;
-      this.lvdt1 = data.lvdt1;
-
-    }.bind(this));
-    this.socket.on('arduino:settings', function (data) {
-      
-      console.log(data);
-
-    }.bind(this));
+   
   }
-
 }

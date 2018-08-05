@@ -3,7 +3,11 @@
     <mat-card>
       <mat-card-title>Lecturas Actuales</mat-card-title>
       <mat-card-content>
-        <app-lecturas></app-lecturas>
+        <app-lecturas
+        [celda]="celda"
+        [lvdt0]="lvdt0"
+        [lvdt1]="lvdt1"
+        ></app-lecturas>
       </mat-card-content>
     </mat-card>
   </div>
@@ -49,7 +53,7 @@
       <mat-card-actions>
         <div class="row text-center">
           <div class="col-md-12">
-            <button class="btn btn-secondary">Setear</button>
+            <button class="btn btn-secondary" (click)="setIntervalWork()">Setear</button>
           </div>
         </div>
       </mat-card-actions>
