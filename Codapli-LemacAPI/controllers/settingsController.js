@@ -35,12 +35,12 @@ exports.closeSerial = (req, res) => {
 
 // Setea los datos de los LVDTs en arduino
 exports.settings_set_lvdts = async function (request, response) {
-    
-    serial.write(JSON.stringify({
+    const json = JSON.stringify({
         code: code_message.SET_LDVTS,
-        lvdt0: request.body.lvdt0,
-        lvdt1: request.body.lvdt1
-    }));
+        lvdt0: request.body.lvdt0.value,
+        lvdt1: request.body.lvdt1.value
+    })
+    serial.write(json);
 
     response.send({message:`message code sent: ${code_message.SET_LDVTS}`});
 }
@@ -52,6 +52,7 @@ exports.settings_set_celda = function (request, response) {
         code: code_message.SET_CELDA,
         celda: request.body.celda
      }));
+     serial.flush();
 
      response.send({message:`message code sent: ${code_message.SET_CELDA}`});
 }
@@ -67,10 +68,12 @@ exports.settings_set_tara = function (request, response) {
 
 //Setea el tiempo de muestreo de datos en arduino
 exports.settings_set_time_muestreo = function (request, response) {
-    serial.write(JSON.stringify({
-        code: code_message.SET_TMUESTREO,
-        time: request.body.time
-     }));
+    const json = JSON.stringify({
+            code: code_message.SET_TMUESTREO,
+            time: request.body.time
+         });
+    serial.write(json);
+    serial.flush();
 
      response.send({message:`message code sent: ${code_message.SET_TMUESTREO}`});
 }

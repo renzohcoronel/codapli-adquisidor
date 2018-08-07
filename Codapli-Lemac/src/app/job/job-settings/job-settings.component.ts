@@ -66,20 +66,20 @@ export class JobSettingsComponent implements OnInit {
     }
 
     this.settingsService.Setlvdts$(setting).subscribe(response => {
-      console.log(response);
+      console.log("Response LVDT",response);
     });
 
   }
 
   setCelda() {
     this.settingsService.SetCelda$({ celda: this.formGroup.value.celda }).subscribe(response => {
-      console.log(response);
+      console.log("Response CELDA",response);
     });
   }
 
   setTara() {
     this.settingsService.SetTara$().subscribe(response => {
-      console.log(response);
+      console.log("Response TARA",response);
     })
   }
 

@@ -37,6 +37,7 @@ SoftwareSerial serialDebug(10, 11); //10:RX; 11:TX
 void setup() {
   serialDebug.begin(115200);
   Serial.begin(115200);   
+  Serial.println("Setup...>");
   setting = new Setting();
   lvdt0 = new Lvdt(A2);
   lvdt1 = new Lvdt(A3);
@@ -109,11 +110,15 @@ void loop() {
           }
              
 
-       case SET_TMUESTREO:
-             Serial.println("Mensaje de Set Tiempo Muestreo");
-             INTERVAL_WORK = jsonData["time"];     
+       case SET_TMUESTREO:{
+             INTERVAL_WORK = setting->getIntervalo(jsonData["time"]);
+             JsonObject& root1 = jsonBuffer.createObject();
+             root1["code"] = CODAPLIOK;
+             root1["time"] = INTERVAL_WORK;
+             root1.printTo(Serial);
+             Serial.println();
               break;
-
+       }
         default:
           JsonObject& root = jsonBuffer.createObject();
           root["code"] = CODAPLIERROR;
@@ -125,7 +130,11 @@ void loop() {
                    
       }
     } else {
-      Serial.println("Json Parser error");
+          JsonObject& root = jsonBuffer.createObject();
+          root["code"] = CODAPLIERROR;
+          root["message"] = "JSON PARSER error";
+          root.printTo(Serial);
+          Serial.println();
  
       }
   } 
@@ -139,10 +148,11 @@ void loop() {
       StaticJsonBuffer<250> jsonBuffer;
       JsonObject& root = jsonBuffer.createObject();
       root["code"] = DATA_SENSOR_WORK;
-      float celda_value = celda.get_units(20);
+      float celda_value = celda.get_units();
       root["celda"] = !isnan(celda_value) && !isinf(celda_value) ? celda_value: 0.0f;
       root["ldvt0"] = lvdt0->getValue();
-      root["ldvt1"] = lvdt1->getValue();             
+      root["ldvt1"] = lvdt1->getValue();     
+      root["intervalo"]=INTERVAL_WORK;        
       root.printTo(Serial);
       Serial.println();
       
@@ -155,10 +165,12 @@ void loop() {
       StaticJsonBuffer<250> jsonBuffer;
       JsonObject& root = jsonBuffer.createObject();
       root["code"] = DATA_SENSOR_SETTINGS;
-      float celda_value = celda.get_units(20);
+      float celda_value = celda.get_units();
       root["celda"] = !isnan(celda_value) && !isinf(celda_value) ? celda_value: 0.0f;
       root["ldvt0"] = lvdt0->getValue();
-      root["ldvt1"] = lvdt1->getValue();             
+      root["ldvt1"] = lvdt1->getValue();
+      root["intervalo"]=INTERVAL_SETTINGS;
+      root["intervalo_work"]=INTERVAL_WORK;            
       root.printTo(Serial);
       Serial.println();
       

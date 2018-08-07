@@ -28,3 +28,7 @@ float Setting::getMultiplicadorLvdt(int id){
   }
   return -1;
 }
+
+unsigned long Setting::getIntervalo(int pos){
+  return intervals[pos];
+  }
