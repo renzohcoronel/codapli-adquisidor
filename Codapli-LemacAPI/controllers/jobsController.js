@@ -1,11 +1,10 @@
 var fs = require('fs');
 var os = require('os');
-var serialConnector = require('./../Serial/SerialPort');
 var Job = require('./../models/Job');
 var socket = require('./../socket').io();
 var code_message = require('./../models/code_message');
 const path = require('path');
-var serial;
+var port = require('./../app.js');
 var bufferReader = '';
 var ensayo = null;
 var file;
@@ -22,7 +21,7 @@ exports.job_post = function (req, res) {
         ensayo = new Job();
         //Datos utiles para comenzar con el ensayo
         date = new Date().toISOString();
-        ensayo.pathFile = './ensayos/EnsayoLemac-' + date + '-' + req.body.tipoEnsayo+'.csv';
+        ensayo.pathFile = './ensayos/EnsayoLemac-' + date + '-' + req.body.tipoEnsayo + '.csv';
         ensayo.fecha = date;
         ensayo.registrando = false;
         //Informacion propiamente del ensayo
@@ -89,7 +88,7 @@ exports.jobs_get = function (req, res) {
     let jobs = new Array();
     fs.readdirSync(`./ensayos/`).forEach(file => {
         const fileSplit = file.split('-');
-        jobs.push({ file: file, name: fileSplit[0], date: fileSplit[1], tipo: fileSplit[2]});
+        jobs.push({ file: file, name: fileSplit[0], date: fileSplit[1], tipo: fileSplit[2] });
     });
     res.send(JSON.stringify(jobs));
 
@@ -97,29 +96,21 @@ exports.jobs_get = function (req, res) {
 }
 
 exports.jobs_get_values = function (req, res) {
-        
+
+    fs.readFileSync(req.body.file, 'utf8');
+
 }
 
 exports.jobs_start = function (req, res) {
     console.log("Post start Job");
-    serialConnector.getPortSerial().then(response => {
-        serial = response;
-        serial.on('data', readDataSerial);
-        serial.on('close', () => console.log("closed port"));
-        ensayo.registrando = true;
-        res.send({ message: "Registrando Valores" });
-    }).catch(error => {
-        console.log(error);
-        ensayo.registrando = false;
-
-        res.status(500).send({ message: error.message });
-
-    });
+    port.Serial.on('data', readDataSerial);
+    ensayo.registrando = true;
+    res.send({ message: "Registrando Valores" });
 }
 
 exports.jobs_stop = function (req, res) {
     closeFile();
-    serial? serial.close(): serial;
+    port.Serial.removeListener('data', readDataSerial);
     res.send({ message: "Ensayo terminado" });
 }
 
@@ -162,10 +153,10 @@ function openFile() {
 
 
 function closeFile() {
-    if(file){
+    if (file) {
         fs.closeSync(file);
         ensayo = null;
-    } 
+    }
 }
 //-------------------------------------------------------------------
 

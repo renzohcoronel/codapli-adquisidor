@@ -1,10 +1,8 @@
-var serial = require('./../Serial/SerialPort');
-var serialConnector = require('./../Serial/SerialPort');
 var setting = require('./../models/Setting');
 var socket = require('./../socket').io();
 var code_message = require('./../models/code_message');
 
-var serial;
+var port = require('./../app.js');
 var bufferReader = '';
 /**
  *  CODAPLI - Manejamos la comunicacion del arduino
@@ -13,22 +11,13 @@ var bufferReader = '';
  * 
  * */
 exports.initSerial = (req, res) => {
-        serialConnector.getPortSerial().then(response =>{
-            serial = response;
-            serial.on('data', readDataSerial);
-            serial.on('close', () => console.log("closed port"));          
-            res.send(JSON.stringify({ "message": "open serial port" }));
-        }).catch(error => {
-            console.log('Error al abrir el puerto');
-            res.status(500).send(JSON.stringify({ "message": error.message }));
-        
-        });
-
+    port.Serial.on('data', readDataSerial);
+    res.send({ message: "Leyendo valores" });
 }
 
 exports.closeSerial = (req, res) => {
-    serial.close();
-    res.send(JSON.stringify({ "message": "close serial port" }))
+    port.Serial.removeListener('data', readDataSerial);
+    res.send({ message: "Removido lectura" });
 }
 
 //--------------------------------------------------------------------------------------
@@ -41,25 +30,22 @@ exports.settings_set_lvdts = async function (request, response) {
         lvdt1: request.body.lvdt1.value
     })
     serial.write(json);
-
     response.send({message:`message code sent: ${code_message.SET_LDVTS}`});
 }
 
 
 //Setea los datos de la CELDA en arduino
 exports.settings_set_celda = function (request, response) {
-    serial.write(JSON.stringify({
+    port.Serial.write(JSON.stringify({
         code: code_message.SET_CELDA,
         celda: request.body.celda
      }));
-     serial.flush();
-
      response.send({message:`message code sent: ${code_message.SET_CELDA}`});
 }
 
 //Setea la TARA en arduino
 exports.settings_set_tara = function (request, response) {
-    serial.write(JSON.stringify({
+    port.Serial.write(JSON.stringify({
         code: code_message.SET_TARA
      }));
 
@@ -72,10 +58,8 @@ exports.settings_set_time_muestreo = function (request, response) {
             code: code_message.SET_TMUESTREO,
             time: request.body.time
          });
-    serial.write(json);
-    serial.flush();
-
-     response.send({message:`message code sent: ${code_message.SET_TMUESTREO}`});
+    port.Serial.write(json);
+    response.send({message:`message code sent: ${code_message.SET_TMUESTREO}`});
 }
 
 
