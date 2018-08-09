@@ -28,6 +28,8 @@ app.use((req, res, next) => {
 });
 app.use('/api', router);
 
+app.use('/', express.static(__dirname + '/public'));
+
 
 
 //--------------------------------------------------
