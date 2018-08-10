@@ -62,17 +62,20 @@ void loop() {
                      int _lvdt0 = jsonData["lvdt0"];
                      int _lvdt1 = jsonData["lvdt1"];                    
                      
-                    float m0 = setting->getMultiplicadorLvdt(_lvdt0);
-                    float m1 = setting->getMultiplicadorLvdt(_lvdt1);
+                    //float m0 = setting->getMultiplicadorLvdt(_lvdt0);
+                    //float m1 = setting->getMultiplicadorLvdt(_lvdt1);
 
-                    lvdt0->setConstante(m0);
-                    lvdt1->setConstante(m1);
+                    //lvdt0->setConstante(m0);
+                    //lvdt1->setConstante(m1);
+
+                    lvdt0->setTipo(_lvdt0);
+                    lvdt1->setTipo(_lvdt1);
                     
                     //creacion de objeto JSON
                     JsonObject& root1 = jsonBuffer.createObject();
                     root1["code"] = CODAPLIOK;
-                    root1["lvdt0_multiplicador"] = m0;
-                    root1["lvdt1_multiplicador"] = m1;
+                    root1["lvdt0_tipo"] = _lvdt0;
+                    root1["lvdt1_tipo"] = _lvdt1;
                     root1.printTo(Serial);
                     Serial.println();
                

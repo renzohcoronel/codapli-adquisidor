@@ -96,7 +96,7 @@ exports.jobs_get = function (req, res) {
 }
 
 exports.jobs_get_values = function (req, res) {
-
+    //armar
     fs.readFileSync(req.body.file, 'utf8');
 
 }

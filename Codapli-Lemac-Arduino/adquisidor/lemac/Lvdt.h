@@ -2,14 +2,14 @@
 
 class Lvdt {
   private:
-    float constante;
+    long tipo;
     int pinAnalog;
 
   public:
     Lvdt();
     Lvdt(int);
-    Lvdt(int, float);
-    void setConstante(float);
-    float getValue();
+    Lvdt(int, int);
+    void setTipo(int);
+    long getValue();
 
 };

@@ -16,19 +16,6 @@ float Setting::getMultiplicadorCelda(int c){
   return -1;
 }
 
-float Setting::getMultiplicadorLvdt(int id){
-
-  for (int i=0; i<3; i++) {
-
-    if(lvdts[i].getIdentificador() == id){
-
-      return lvdts[i].getMultiplicador();
-
-    }
-  }
-  return -1;
-}
-
 unsigned long Setting::getIntervalo(int pos){
   return intervals[pos];
   }

@@ -5,20 +5,22 @@ Lvdt::Lvdt(){
 
 Lvdt::Lvdt(int pin){
   pinAnalog = pin;
-  constante=1;
+  tipo = 250;
 };
 
-Lvdt::Lvdt(int pin, float cte ){
+Lvdt::Lvdt(int pin, int m ){
   pinAnalog = pin;
-  constante = cte;
+  tipo = m;
 };
   
-void Lvdt::setConstante(float c){
-  constante = c;
+void Lvdt::setTipo(int m){
+  tipo = m;
 };
  
-float Lvdt::getValue() {
-  return analogRead(pinAnalog);
+long Lvdt::getValue() {
+  int a = analogRead(pinAnalog);
+  long val = map(a,0,1023,tipo,0);
+  return val;
   //return ((analogRead(pinAnalog)*1024)/5)*constante; //Falta Vin
 };
 

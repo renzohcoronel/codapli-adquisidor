@@ -29,7 +29,7 @@ exports.settings_set_lvdts = async function (request, response) {
         lvdt0: request.body.lvdt0.value,
         lvdt1: request.body.lvdt1.value
     })
-    serial.write(json);
+    port.Serial.write(json);
     response.send({message:`message code sent: ${code_message.SET_LDVTS}`});
 }
 
