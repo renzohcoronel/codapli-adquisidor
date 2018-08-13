@@ -83,35 +83,14 @@ exports.job_get = function (req, res) {
     }
 }
 
-exports.jobs_get = function (request, response) {
-
-    let time = [];
-    let celda = [];
-    let lvdt0 = [];
-    let lvdt1 = [];
-
-    // ${values.celda},${values.ldvt0},${values.ldvt1},${timeMuestra}${os.EOL}
+exports.jobs_get = function (req, res) {
 
     let jobs = new Array();
-    fs.readdirSync(`./ensayos/`).forEach((line,index) => {
-        
-        if(index >1){ // Las dos primeras lineas son de cabecera;
-
-            const lineSplit = line.split(','); // el limitador es un csv
-            celda.push(lineSplit[0]);
-            lvdt0.push(lineSplit[1]);
-            lvdt1.push(lineSplit[2]);
-            time.push(lineSplit[3]);      
-        }
+    fs.readdirSync(`./ensayos/`).forEach(file => {
+        const fileSplit = file.split('-');
+        jobs.push({ file: file, name: fileSplit[0], date: fileSplit[1], tipo: fileSplit[2] });
     });
-
-    const job = {
-        time: time,
-        celda: celda,
-        lvdt0: lvdt0,
-        lvdt1: lvdt1,
-    }
-    res.send(JSON.stringify(job));
+    res.send(JSON.stringify(jobs));
 
 
 }
@@ -125,7 +104,7 @@ exports.jobs_get_values = function (req, res) {
    const file = fs.readFileSync(`./ensayos/${req.params.fileJob}`, 'utf-8').split(`${os.EOL}`);
    file.forEach((line,index)=>{
        if(index>1){   
-           let lineArray = line.split(',',);
+           let lineArray = line.split(',',4);
            celda.push(lineArray[0]);
            lvdt0.push(lineArray[1]);
            lvdt1.push(lineArray[2]);
