@@ -96,8 +96,28 @@ exports.jobs_get = function (req, res) {
 }
 
 exports.jobs_get_values = function (req, res) {
-    //armar
-    fs.readFileSync(req.body.file, 'utf8');
+    let arrayCelda = new array();
+    let arrayLvdt0 = new array();
+    let arrayLvdt1 = new array();
+    let arrayTime = new array();
+
+    let archivo = fs.readFileSync(req.body.file, 'utf-8').toString();
+	let lineas = archivo.split(',' , 4);
+	arrayCelda.push(lineas[0]);
+	arrayLvdt0.push(lineas[1]);
+	arrayLvdt1.push(lineas[2]);
+    arrayTime.push(lineas[3]);
+    
+    const json = JSON.stringify({
+
+       celdas : arrayCelda , 
+       lvdt0 : arrayLvdt0 ,
+       lvdt1 : arrayLvdt1 , 
+       time : arrayTime
+     
+    });
+
+     console.log("Finalmente se puedo leer lo siguiente ",json);
 
 }
 
