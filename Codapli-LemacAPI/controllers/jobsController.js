@@ -96,28 +96,31 @@ exports.jobs_get = function (req, res) {
 }
 
 exports.jobs_get_values = function (req, res) {
-    let arrayCelda = new array();
-    let arrayLvdt0 = new array();
-    let arrayLvdt1 = new array();
-    let arrayTime = new array();
+    let celda = [];
+    let lvdt0 = [];
+    let lvdt1 = [];
+    let time = [];
 
-    let archivo = fs.readFileSync(req.body.file, 'utf-8').toString();
-	let lineas = archivo.split(',' , 4);
-	arrayCelda.push(lineas[0]);
-	arrayLvdt0.push(lineas[1]);
-	arrayLvdt1.push(lineas[2]);
-    arrayTime.push(lineas[3]);
-    
-    const json = JSON.stringify({
-
-       celdas : arrayCelda , 
-       lvdt0 : arrayLvdt0 ,
-       lvdt1 : arrayLvdt1 , 
-       time : arrayTime
-     
+   const file = fs.readFileSync(`./ensayos/${req.params.fileJob}`, 'utf-8').split(`${os.EOL}`);
+   file.forEach((line,index)=>{
+       if(index>1){   
+           let lineArray = line.split(',',);
+           celda.push(lineArray[0]);
+           lvdt0.push(lineArray[1]);
+           lvdt1.push(lineArray[2]);
+           time.push(lineArray[3]);
+        }
     });
 
-     console.log("Finalmente se puedo leer lo siguiente ",json);
+    const json = {
+
+       celdas : celda , 
+       lvdt0 : lvdt0 ,
+       lvdt1 : lvdt1 , 
+       time : time
+     
+    };
+     res.send(json);
 
 }
 
