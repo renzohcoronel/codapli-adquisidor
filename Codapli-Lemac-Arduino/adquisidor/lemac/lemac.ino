@@ -84,28 +84,30 @@ void loop() {
       
         case SET_CELDA:
              {
-                    int _celda = jsonData["celda"];                                       
+                    int _celda = jsonData["celda"]; 
+                                                          
                     float _scale = setting->getMultiplicadorCelda(_celda);
 
                     celda.set_scale(_scale);
-                    celda.tare(20);
+                    celda.tare();
+                    
                    
                     //creacion de objeto JSON
                     JsonObject& root1 = jsonBuffer.createObject();
                     root1["code"] = CODAPLIOK;
                     root1["celda_scale"] = _celda;
-                    root1["celda_value"] = celda.get_units(20);
+                    root1["celda_value"] = celda.get_units();
                     root1.printTo(Serial);
                     Serial.println();
                
                 break;
         }
         case SET_TARA: {
-                    celda.tare(20);
+                    celda.tare();
                     //creacion de objeto JSON
                     JsonObject& root1 = jsonBuffer.createObject();
                     root1["code"] = CODAPLIOK;
-                    root1["celda_value"] = celda.get_units(20);
+                    root1["celda_value"] = celda.get_units();
                     root1.printTo(Serial);
                     Serial.println();
              
