@@ -18,6 +18,14 @@ export class JobsService {
     return this.http.post<any>(`api/job/`, job, { headers: header });
   }
 
+  deleteJob$(file:String): Observable<any>{
+    return this.http.delete<any>(`/api/job/${file}`);
+  }
+
+  downloadJob$(file:String): Observable<any>{
+    return this.http.delete<any>(`/api/job/download/${file}`);
+  }
+
   getJob$(): Observable<any> {
     return this.http.get<any>(`/api/job`);
   }

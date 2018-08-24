@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { JobsComponent } from './jobs/jobs.component';
-import { JobComponent } from './job/job.component';
-import { SettingComponent } from './setting/setting.component';
-import { TestComponent } from './test/test.component';
+import { JobContainerComponent } from './job/job-container.component';
+import { ExperimentComponent } from './job/job-experiment/experiment/experiment.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/jobs', pathMatch: 'full' },
     { path: 'jobs', component: JobsComponent },
-    { path: 'job', component: JobComponent },
-    { path: 'settings', component: SettingComponent },
-    { path: 'test', component: TestComponent }
+    { path: 'job', children:[
+        { path:'', component : JobContainerComponent},
+        { path: 'experiment', component : ExperimentComponent}
+    ]},
 
 ];
 

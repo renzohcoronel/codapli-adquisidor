@@ -8,7 +8,8 @@ var io = require('./socket').start(server);
 var bodyParser = require("body-parser");
 var router = require('./routes/routes');
 
-var serial = require('./Serial/SerialPort.js');
+var serialConector = require('./Serial/SerialPort.js');
+var serial;
 var setting = require('./models/Setting');
 
 //----------------------------------------------
@@ -27,7 +28,24 @@ app.use((req, res, next) => {
 });
 app.use('/api', router);
 
+app.use('/', express.static(__dirname + '/public'));
+
 
 
 //--------------------------------------------------
-server.listen(5001);
+const port = 5001
+
+server.listen(port, function(){
+    console.log('Server is running Port:',port);
+  
+});
+
+serialConector.getPortSerial().then(response => {
+  serial = response;
+  serial.on('close', () => console.log("closed port"));
+  module.exports.Serial = serial;
+}).catch(error =>{ 
+    console.log(error);
+});
+
+

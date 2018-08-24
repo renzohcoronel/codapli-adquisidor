@@ -1,55 +1,69 @@
-var serial = require('./../Serial/SerialPort');
-var serialConnector = require('./../Serial/SerialPort');
 var setting = require('./../models/Setting');
 var socket = require('./../socket').io();
+var code_message = require('./../models/code_message');
 
-var serial;
+var port = require('./../app.js');
 var bufferReader = '';
-
+/**
+ *  CODAPLI - Manejamos la comunicacion del arduino
+ * por eso cada vez que accedemos a las configuraciones abrimos una conexion con el puerto serie
+ * para leer los datos cargados en el dispositivo y poder enviar datos nuevos
+ * 
+ * */
 exports.initSerial = (req, res) => {
-    try {
-        serial = serialConnector.getPortSerial();
-        serial.on('data', readDataSerial);
-        serial.on('close', () => console.log("closed port"));
-        
-        res.send(JSON.stringify({ "message": "open serial port" }));
-
-    } catch (error) {
-        res.status(500).send(JSON.stringify({ "message": error.message }));
-    }
+    port.Serial.on('data', readDataSerial);
+    res.send({ message: "Leyendo valores" });
 }
 
 exports.closeSerial = (req, res) => {
-    serial.close();
-    res.send(JSON.stringify({ "message": "close serial port" }))
+    port.Serial.removeListener('data', readDataSerial);
+    res.send({ message: "Removido lectura" });
 }
 
-exports.settings_get = function (req, res) {
-    serial.write(JSON.stringify({
-        "estado": 101
+//--------------------------------------------------------------------------------------
+
+// Setea los datos de los LVDTs en arduino
+exports.settings_set_lvdts = async function (request, response) {
+    const json = JSON.stringify({
+        code: code_message.SET_LDVTS,
+        lvdt0: request.body.lvdt0.value,
+        lvdt1: request.body.lvdt1.value
+    })
+    port.Serial.write(json);
+    response.send({message:`message code sent: ${code_message.SET_LDVTS}`});
+}
+
+
+//Setea los datos de la CELDA en arduino
+exports.settings_set_celda = function (request, response) {
+    port.Serial.write(JSON.stringify({
+        code: code_message.SET_CELDA,
+        celda: request.body.celda
+     }));
+     response.send({message:`message code sent: ${code_message.SET_CELDA}`});
+}
+
+//Setea la TARA en arduino
+exports.settings_set_tara = function (request, response) {
+    port.Serial.write(JSON.stringify({
+        code: code_message.SET_TARA
      }));
 
-     res.send(JSON.stringify({'message':'write estado:101'}));
+     response.send({message:`message code sent: ${code_message.SET_TARA}`});
 }
 
-exports.settings_post = function (req, res) {
-   serial.write(JSON.stringify({
-      "estado": 100,
-      "calibration_factor_celda": req.body.calibration_factor_celda,
-      "calibration_factor_ldvt0": req.body.calibration_factor_ldvt0,
-      "calibration_factor_ldvt1": req.body.calibration_factor_ldvt1
-   }));
-   res.send(JSON.stringify({"message": "writed message"}));
-}
-
-exports.settings_post_tare = function (req, res) {
-    res.send("oks")
+//Setea el tiempo de muestreo de datos en arduino
+exports.settings_set_time_muestreo = function (request, response) {
+    const json = JSON.stringify({
+            code: code_message.SET_TMUESTREO,
+            time: request.body.time
+         });
+    port.Serial.write(json);
+    response.send({message:`message code sent: ${code_message.SET_TMUESTREO}`});
 }
 
 
-exports.settings_post_scale = function (req, res) {
-    res.send("oks")
-}
+//--------------------------------------------------------
 
 
 function readDataSerial(data) {
@@ -60,8 +74,12 @@ function readDataSerial(data) {
         try {
             console.log(answers[0]);
             let values = JSON.parse(answers[0]);
-            if (values.tipo === 'setting') {
-                socket.emit('arduino:setting', values);
+            if (values.code === code_message.DATA_SENSOR_SETTINGS) {
+                socket.emit('arduino:settings_data', values);
+            } else if (values.code === code_message.CODAPLIOK) {
+                socket.emit('arduino:settings_ok', values);
+            } else if (values.code === code_message.CODAPLIERROR) {
+                socket.emit('arduino:settings_error', values);
             }
         } catch (error) {
             console.log("error parse json " + error.message);
@@ -70,4 +88,5 @@ function readDataSerial(data) {
 
     }
 }
+
 

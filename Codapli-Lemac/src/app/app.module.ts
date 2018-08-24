@@ -7,13 +7,16 @@ import { AppRoutingModule } from './app.routing';
 import { AppComponent } from './app.component';
 import { JobsComponent } from './jobs/jobs.component';
 import { MenuBarComponent } from './menu-bar/menu-bar.component';
-import { JobComponent } from './job/job.component';
-import { SettingComponent } from './setting/setting.component';
 import { HttpClientModule } from '@angular/common/http';
 import { JobsService } from './services/jobs.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
-import { TestComponent } from './test/test.component';
+
+import { SettingsService } from './services/settings.service';
+import { FooterModule } from './footer/footer.module';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { JobModule } from './job/job.module';
 
 
 @NgModule({
@@ -22,9 +25,7 @@ import { TestComponent } from './test/test.component';
     AppComponent,
     JobsComponent,
     MenuBarComponent,
-    JobComponent,
-    SettingComponent,
-    TestComponent
+
   ],
   imports: [
     BrowserModule,
@@ -32,10 +33,14 @@ import { TestComponent } from './test/test.component';
     HttpClientModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    Ng4LoadingSpinnerModule.forRoot()
+    Ng4LoadingSpinnerModule.forRoot(),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+    FooterModule,
+    JobModule
   ],
-  providers: [JobsService],
+  providers: [JobsService,SettingsService, ToastrService],
   bootstrap: [AppComponent],
-  exports: [JobsComponent, MenuBarComponent, JobComponent, SettingComponent, TestComponent]
+  exports: [JobsComponent, MenuBarComponent]
 })
 export class AppModule { }

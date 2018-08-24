@@ -10,6 +10,7 @@ Codapli-Lemac/out-tsc
 Codapli-Lemac/node_modules
 Codapli-Lemac/package-lock.json
 Codapli-LemacAPI/node_modules
+Codapli-LemacAPI/public
 
 
 # IDEs and editors
@@ -51,4 +52,9 @@ Codapli-Lemac/e2e/*.map
 # System Files
 Codapli-Lemac/.DS_Store
 Codapli-Lemac/Thumbs.db
+
+codapli-lemac.code-workspace
+package-lock.json
+
+Codapli-Lemac-Arduino/.vscode
 
