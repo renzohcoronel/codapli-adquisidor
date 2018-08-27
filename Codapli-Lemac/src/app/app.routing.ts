@@ -10,7 +10,7 @@ const routes: Routes = [
     { path: 'jobs', component: JobsComponent },
     { path: 'job', children:[
         { path:'', component : JobContainerComponent},
-        { path: 'experiment', component : ExperimentComponent}
+        { path: 'experiment', component : ExperimentComponent},
         { path: 'experiment-viewer', component: ExperimentViewerComponent}
     ]},
 
