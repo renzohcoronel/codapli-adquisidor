@@ -5,8 +5,9 @@ import * as socketIo from 'socket.io-client';
 import { isUndefined } from 'util';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { JobsService } from '../../../services/jobs.service';
 import { Job } from '../../../models/job';
+import { JobsService } from '../../../services/jobs.service';
+
 
 @Component({
   selector: 'app-experiment',

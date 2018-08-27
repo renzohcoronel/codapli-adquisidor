@@ -9,7 +9,9 @@ import { JobDescriptionModule } from './job-description/job-description.module';
 import {MatCardModule} from '@angular/material/card';
 import { JobTypeSelectionModule } from './job-type-selection/job-type-selection.module';
 import { JobSettingsModule } from './job-settings/job-settings.module';
-import { JobExperimentModule } from './job-experiment/job-experiment.module';
+import { ExperimentModule } from './job-experiment/experiment/experiment.module';
+import { ExperimentViewerModule } from './job-experiment/experiment-viewer/experiment-viewer.module';
+
 
 @NgModule({
   imports: [
@@ -19,7 +21,8 @@ import { JobExperimentModule } from './job-experiment/job-experiment.module';
     JobDescriptionModule,
     JobTypeSelectionModule,
     JobSettingsModule,
-    JobExperimentModule
+    ExperimentModule,
+    ExperimentViewerModule,
     
   ],
   declarations: [JobContainerComponent],
