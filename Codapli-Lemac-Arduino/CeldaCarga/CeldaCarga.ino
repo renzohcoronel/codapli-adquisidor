@@ -1,4 +1,6 @@
 /*
+ *
+ *
  * circuits4you.com
  * 2016 November 25
  * Load Cell HX711 Module Interface with Arduino to measure weight in Kgs
