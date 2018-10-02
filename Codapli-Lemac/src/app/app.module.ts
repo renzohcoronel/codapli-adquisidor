@@ -17,6 +17,7 @@ import { FooterModule } from './footer/footer.module';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JobModule } from './job/job.module';
+import { ExperimentViewerModule } from './job/job-experiment/experiment-viewer/experiment-viewer.module';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { JobModule } from './job/job.module';
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     FooterModule,
-    JobModule
+    JobModule,
+    ExperimentViewerModule
   ],
   providers: [JobsService,SettingsService, ToastrService],
   bootstrap: [AppComponent],
