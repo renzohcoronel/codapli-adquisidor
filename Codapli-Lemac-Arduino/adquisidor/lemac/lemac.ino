@@ -30,11 +30,14 @@ unsigned long previousMillisWork;
 
 unsigned long  INTERVAL_SETTINGS = 1000;
 unsigned long previousMillisSettings;
+
+
 //--------------------------------
 
 SoftwareSerial serialDebug(10, 11); //10:RX; 11:TX 
 
 void setup() {
+  //analogReference(EXTERNAL);
   serialDebug.begin(115200);
   Serial.begin(115200);   
   Serial.println("Setup...>");
@@ -87,7 +90,7 @@ void loop() {
                     int _celda = jsonData["celda"]; 
                                                           
                     float _scale = setting->getMultiplicadorCelda(_celda);
-
+                    //celda.set_scale(1);
                     celda.set_scale(_scale);
                     celda.tare();
                     
