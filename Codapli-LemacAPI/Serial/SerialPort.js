@@ -24,9 +24,19 @@ module.exports.getPortSerial = function () {
                 console.log('Puerto Abierto ' + pathPort );
                 port.pipe(parser);
                 
+		port.on('error', function(err) {
+	  			console.log('Error: ', err.message);
+			});
+		port.on('close', function(err) {
+	  			console.log('Close: ', err.message);
+		});
+
                 resolve(port);
             }
         });
+
+
+
     });
         
 }
