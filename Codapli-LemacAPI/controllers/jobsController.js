@@ -204,9 +204,8 @@ function readDataSerial(data) {
         } catch (error) {
             console.log("error parse json " + error.message);
         }
-
-
     }
+    port.Serial.flush();
 }
 
 exports.removeFileJob = (req, res) => {
