@@ -68,7 +68,7 @@ exports.settings_set_time_muestreo = function (request, response) {
 
 function readDataSerial(data) {
     bufferReader += data;
-    var answers = bufferReader.split('\r\n');
+    var answers = bufferReader.split('\n');
     bufferReader = answers.pop();
     if (answers.length > 0) {
         try {
@@ -84,7 +84,7 @@ function readDataSerial(data) {
         } catch (error) {
             console.log("error parse json " + error.message);
         }
-
+        bufferReader="";
 
     }
 }

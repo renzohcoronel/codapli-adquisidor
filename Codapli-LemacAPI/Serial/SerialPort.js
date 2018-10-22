@@ -1,9 +1,3 @@
-/*
-    Clase para poder manejar la comunicacion con el puerto serie 
-    Ref: https://es.wikipedia.org/wiki/Puerto_serie
-    Modulo usado: https://www.npmjs.com/package/serialport 
-    V:6.2.0
-*/
 
 var SerialPort = require('serialport');
 module.exports.getPortSerial = function () {
@@ -17,7 +11,6 @@ module.exports.getPortSerial = function () {
         const parser = new Readline('\n');
         var port = new SerialPort(pathPort, {
             baudRate: 115200,
-            autoOpen: false,
             parser : parser
         }, (err) => {
             if (err) {
