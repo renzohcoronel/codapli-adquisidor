@@ -40,7 +40,6 @@ void setup() {
   //analogReference(EXTERNAL);
   serialDebug.begin(115200);
   Serial.begin(115200);   
-  Serial.println("Setup...>");
   setting = new Setting();
   lvdt0 = new Lvdt(A2);
   lvdt1 = new Lvdt(A3);
@@ -65,12 +64,7 @@ void loop() {
                      int _lvdt0 = jsonData["lvdt0"];
                      int _lvdt1 = jsonData["lvdt1"];                    
                      
-                    //float m0 = setting->getMultiplicadorLvdt(_lvdt0);
-                    //float m1 = setting->getMultiplicadorLvdt(_lvdt1);
-
-                    //lvdt0->setConstante(m0);
-                    //lvdt1->setConstante(m1);
-
+      
                     lvdt0->setTipo(_lvdt0);
                     lvdt1->setTipo(_lvdt1);
                     

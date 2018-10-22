@@ -14,23 +14,16 @@ module.exports.getPortSerial = function () {
         //var pathPort = '/dev/pts/7';
         var bufferReader = '';
         const Readline = SerialPort.parsers.Readline;
-        const parser = new Readline();
+        const parser = new Readline('\n');
         var port = new SerialPort(pathPort, {
-            baudRate: 115200
+            baudRate: 115200,
+            autoOpen: false,
+            parser : parser
         }, (err) => {
             if (err) {
                 reject(new Error('No se pudo abrir el puerto serie'));
             } else {
-                console.log('Puerto Abierto ' + pathPort );
-                port.pipe(parser);
-                
-		port.on('error', function(err) {
-	  			console.log('Error: ', err.message);
-			});
-		port.on('close', function(err) {
-	  			console.log('Close: ', err.message);
-		});
-
+                console.log('Puerto Abierto ' + pathPort );          
                 resolve(port);
             }
         });

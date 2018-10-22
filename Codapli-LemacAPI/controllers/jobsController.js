@@ -185,7 +185,7 @@ function closeFile() {
 
 function readDataSerial(data) {
     bufferReader += data;
-    var answers = bufferReader.split('\r\n');
+    var answers = bufferReader.split('\n');
     bufferReader = answers.pop();
     if (answers.length > 0) {
         try {
@@ -205,7 +205,6 @@ function readDataSerial(data) {
             console.log("error parse json " + error.message);
         }
     }
-    port.Serial.flush();
 }
 
 exports.removeFileJob = (req, res) => {
@@ -232,7 +231,7 @@ exports.downloadFile = (req, res) => {
     var file = req.params.file;
     var fileLocation = path.join('./ensayos', file);
     console.log(fileLocation);
-    fs.exists(fileLocation, function (exists) {
+    fs.exists(fileLocation, (exists) => {
         if (exists) {
             console.log('File exists. Download now ...');
             res.download(fileLocation, file);
