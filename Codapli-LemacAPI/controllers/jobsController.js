@@ -133,7 +133,7 @@ exports.jobs_start = function (req, res) {
 
 exports.jobs_stop = function (req, res) {
     closeFile();
-    port.Serial.removeListener('data', readDataSerial);
+    port.Serial.removeAllListeners( 'data' )
     res.send({ message: "Ensayo terminado" });
 }
 

@@ -16,7 +16,7 @@ exports.initSerial = (req, res) => {
 }
 
 exports.closeSerial = (req, res) => {
-    port.Serial.removeListener('data', readDataSerial);
+    port.Serial.removeAllListeners( 'data' );
     res.send({ message: "Removido lectura" });
 }
 
