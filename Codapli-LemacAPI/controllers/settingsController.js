@@ -52,15 +52,8 @@ exports.settings_set_tara = function (request, response) {
      response.send({message:`message code sent: ${code_message.SET_TARA}`});
 }
 
-//Setea el tiempo de muestreo de datos en arduino
-exports.settings_set_time_muestreo = function (request, response) {
-    const json = JSON.stringify({
-            code: code_message.SET_TMUESTREO,
-            time: request.body.time
-         });
-    port.Serial.write(json);
-    response.send({message:`message code sent: ${code_message.SET_TMUESTREO}`});
-}
+
+
 
 
 //--------------------------------------------------------
@@ -74,7 +67,7 @@ function readDataSerial(data) {
         try {
             console.log(answers[0]);
             let values = JSON.parse(answers[0]);
-            if (values.code === code_message.DATA_SENSOR_SETTINGS) {
+            if (values.code === code_message.DATA_SENSOR) {
                 socket.emit('arduino:settings_data', values);
             } else if (values.code === code_message.CODAPLIOK) {
                 socket.emit('arduino:settings_ok', values);

@@ -5,10 +5,12 @@ import { JobsService } from '../../services/jobs.service';
 import { ListDetailAycfComponent } from './experiment/list-detail-aycf/list-detail-aycf.component';
 import { ListDetailSemiprobetaComponent } from './experiment/list-detail-semiprobeta/list-detail-semiprobeta.component';
 import { ListDetailRigidezComponent } from './experiment/list-detail-rigidez/list-detail-rigidez.component';
+import { JobSettingsModule } from '../job-settings/job-settings.module';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    JobSettingsModule
   ],
   declarations: [ExperimentComponent, ListDetailAycfComponent, ListDetailSemiprobetaComponent, ListDetailRigidezComponent],
   exports: [ExperimentComponent, ListDetailAycfComponent, ListDetailSemiprobetaComponent, ListDetailRigidezComponent],

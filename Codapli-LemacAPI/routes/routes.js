@@ -24,7 +24,7 @@ router.get('/close/settings', settingController.closeSerial);
 router.post('/settings/lvdts', settingController.settings_set_lvdts);
 router.post('/settings/celda', settingController.settings_set_celda);
 router.post('/settings/tara', settingController.settings_set_tara);
-router.post('/settings/interval', settingController.settings_set_time_muestreo);
+
 
 
 module.exports = router
