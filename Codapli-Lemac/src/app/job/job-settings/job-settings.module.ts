@@ -6,7 +6,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LecturasComponent } from './lecturas/lecturas.component';
 import { CeldaComponent } from './celda/celda.component';
 import { LvdtsComponent } from './lvdts/lvdts.component';
-import { TimeMuestrasComponent } from './time-muestras/time-muestras.component';
 
 @NgModule({
   imports: [
@@ -14,7 +13,7 @@ import { TimeMuestrasComponent } from './time-muestras/time-muestras.component';
     MatCardModule,
     ReactiveFormsModule
   ],
-  declarations: [JobSettingsComponent, LecturasComponent, CeldaComponent, LvdtsComponent, TimeMuestrasComponent],
-  exports: [JobSettingsComponent, LecturasComponent, CeldaComponent, LvdtsComponent, TimeMuestrasComponent]
+  declarations: [JobSettingsComponent, LecturasComponent, CeldaComponent, LvdtsComponent],
+  exports: [JobSettingsComponent, LecturasComponent, CeldaComponent, LvdtsComponent, ]
 })
 export class JobSettingsModule { }

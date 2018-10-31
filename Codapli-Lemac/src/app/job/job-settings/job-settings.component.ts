@@ -6,7 +6,57 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-job-settings',
-  templateUrl: './job-settings.component.html',
+  template: `
+    
+    <div class="row my-4 justify-content-center">
+    <div class="col-md-12">
+      <mat-card>
+        <mat-card-title>Lecturas Actuales</mat-card-title>
+        <mat-card-content>
+          <app-lecturas
+          [celda]="celda"
+          [lvdt0]="lvdt0"
+          [lvdt1]="lvdt1"
+          ></app-lecturas>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 py-2">
+      <mat-card>
+        <mat-card-title>Celda</mat-card-title>
+        <mat-card-content>
+          <app-celda [formGroup]="formGroup"></app-celda>
+        </mat-card-content>
+        <mat-card-actions>
+            <div class="row text-center">
+                <div class="col-md-12">
+                  <button class="btn btn-secondary" (click)="setTara()">Tara</button>
+                  <button class="btn btn-secondary" (click)="setCelda()">Setear</button>
+             </div>
+            </div>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+    <div class="col-md-6">
+      <mat-card>
+        <mat-card-title>LVDTs</mat-card-title>
+        <mat-card-content>
+          <app-lvdts [formGroup]="formGroup"></app-lvdts>
+        </mat-card-content>
+        <mat-card-actions>
+          <div class="row text-center">
+            <div class="col-md-12">
+              <button class="btn btn-secondary" (click)="setLVDTS()">Setear</button>
+            </div>
+          </div>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+
+  `,
   styleUrls: ['./job-settings.component.css']
 })
 export class JobSettingsComponent implements OnInit {
@@ -26,14 +76,13 @@ export class JobSettingsComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       celda: [500, Validators.required],
       lvdt0: this.formBuilder.group({
-        value: [1, Validators.required],
+        value: [250, Validators.required],
         isSelected: [true, Validators.required]
       }),
       lvdt1: this.formBuilder.group({
-        value: [1, Validators.required],
+        value: [250, Validators.required],
         isSelected: [true, Validators.required]
-      }),
-      timeSelected: [1, Validators.required]
+      })
     });
 
   }
@@ -41,7 +90,7 @@ export class JobSettingsComponent implements OnInit {
   ngOnInit() {
 
     this.socket = socketIo(`http://localhost:5001`);
-    this.socket.on('arduino:settings_data', function (data) {
+    this.socket.on('arduino:data', function (data) {
 
       this.celda = data.celda;
       this.lvdt0 = data.ldvt0;

@@ -28,8 +28,9 @@ import * as moment from 'moment';
     </div>
   </div>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 text-center">
           <app-lecturas
+          [cssClass]="'ul-inline'"
           [celda]="_celda"
           [lvdt0]="_lvdt0"
           [lvdt1]="_lvdt1">
@@ -104,21 +105,20 @@ export class ExperimentComponent implements OnInit {
 
 
     this.socket = socketIo(`http://localhost:5001`);
-    this.socket.on('arduino:data_work', function (data) {
-      const momento = moment(data.time).format("HH:mm:ss");
-      console.log(momento);
-      this.times.push(moment(data.time).format("HH:mm:ss"));
+    this.socket.on('arduino:graph_value', function (data) {
+      this.times.push(data.time);
       this.celda.push(data.celda); 
       this.lvdt0.push(data.ldvt0);
       this.lvdt1.push(data.lvdt1);
-
-      this._ldvt0 = data.ldvt0;
-      this._ldvt1 = data.ldvt1;
-      this._celda = data.celda; 
-
       this.forceChart.update();
       this.displacementChart.update();
 
+    }.bind(this));
+
+    this.socket.on('arduino:data', function (data) {
+      this._ldvt0 = data.ldvt0;
+      this._ldvt1 = data.ldvt1;
+      this._celda = data.celda; 
     }.bind(this));
 
     this.forceChart = new Chart(this.force.nativeElement.getContext('2d'), {
@@ -206,7 +206,7 @@ export class ExperimentComponent implements OnInit {
             round: 'hour',
             tooltipFormat: "h:mm:ss a",
             displayFormats: {
-              hour: 'MMM D, h:mm A'
+              hour: 'h:mm A'
             },
             scaleLabel: {
               display: true,

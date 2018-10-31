@@ -51,13 +51,7 @@ exports.settings_set_tara = function (request, response) {
 
      response.send({message:`message code sent: ${code_message.SET_TARA}`});
 }
-
-
-
-
-
 //--------------------------------------------------------
-
 
 function readDataSerial(data) {
     bufferReader += data;
@@ -68,7 +62,7 @@ function readDataSerial(data) {
             console.log(answers[0]);
             let values = JSON.parse(answers[0]);
             if (values.code === code_message.DATA_SENSOR) {
-                socket.emit('arduino:settings_data', values);
+                socket.emit('arduino:data', values);
             } else if (values.code === code_message.CODAPLIOK) {
                 socket.emit('arduino:settings_ok', values);
             } else if (values.code === code_message.CODAPLIERROR) {

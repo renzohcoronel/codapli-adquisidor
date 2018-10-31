@@ -9,6 +9,14 @@ var bufferReader = '';
 var ensayo = null;
 var file;
 
+var last_value = {
+    time: new Date(),
+    celda: 0,
+    lvdt0: 0,
+    ldvt1: 0
+}
+var myInterval;
+
 
 socket.on('connect', function (data) {
     console.log("Client connected");
@@ -127,6 +135,15 @@ exports.jobs_get_values = function (req, res) {
 exports.jobs_start = function (req, res) {
     console.log("Post start Job");
     port.Serial.on('data', readDataSerial);
+    
+    myInterval = setInterval(()=>{
+         let registro = `${last_value.celda},${last_value.ldvt0},${last_value.ldvt1},${last_value.time}${os.EOL}`;
+         fs.writeSync(file, registro);
+         ensayo.values.push(last_value);
+         socket.emit('arduino:graph_value', last_value);
+
+    },10000);
+    
     ensayo.registrando = true;
     res.send({ message: "Registrando Valores" });
 }
@@ -134,6 +151,7 @@ exports.jobs_start = function (req, res) {
 exports.jobs_stop = function (req, res) {
     closeFile();
     port.Serial.removeAllListeners( 'data' )
+    clearInterval(myInterval);
     res.send({ message: "Ensayo terminado" });
 }
 
@@ -192,14 +210,11 @@ function readDataSerial(data) {
             console.log(answers[0]);
             let values = JSON.parse(answers[0]);
             if (values.code === code_message.DATA_SENSOR) {
-                const timeMuestra = new Date().toTimeString();
-                //Ahora solamente guardamos los valores de los sensores
-                // ya en la cabecera guardamos los datos del ensayo
-                let registro = `${values.celda},${values.ldvt0},${values.ldvt1},${timeMuestra}${os.EOL}`;
-                fs.writeSync(file, registro);
-                ensayo.values.push(values);
-                values.time = timeMuestra;
-                socket.emit('arduino:data_work', values);
+                last_value.time = new Date();
+                last_value.celda =   values.celda;
+                last_value.lvdt0 = values.lvdt0;
+                last_value.lvdt1 = values.ldvt1;            
+                socket.emit('arduino:data', values);
             }
         } catch (error) {
             console.log("error parse json " + error.message);
