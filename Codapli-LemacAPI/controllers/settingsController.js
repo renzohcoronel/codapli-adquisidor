@@ -11,6 +11,7 @@ var bufferReader = '';
  * 
  * */
 exports.initSerial = (req, res) => {
+    port.Serial.write(json);
     port.Serial.on('data', readDataSerial);
     res.send({ message: "Leyendo valores" });
 }

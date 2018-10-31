@@ -5,17 +5,20 @@ var socket = require('./../socket').io();
 var code_message = require('./../models/code_message');
 const path = require('path');
 var port = require('./../app.js');
+var moment = require('moment');
+
 var bufferReader = '';
 var ensayo = null;
 var file;
 
 var last_value = {
-    time: new Date(),
+    time: moment(new Date()).format("hh:mm:ss"),
     celda: 0,
     lvdt0: 0,
     ldvt1: 0
 }
 var myInterval;
+
 
 
 socket.on('connect', function (data) {
@@ -210,7 +213,7 @@ function readDataSerial(data) {
             console.log(answers[0]);
             let values = JSON.parse(answers[0]);
             if (values.code === code_message.DATA_SENSOR) {
-                last_value.time = new Date();
+                last_value.time =  moment(new Date()).format("hh:mm:ss");
                 last_value.celda =   values.celda;
                 last_value.lvdt0 = values.lvdt0;
                 last_value.lvdt1 = values.ldvt1;            
