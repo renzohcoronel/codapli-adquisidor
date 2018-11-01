@@ -4,6 +4,8 @@ var code_message = require('./../models/code_message');
 
 var port = require('./../app.js');
 var bufferReader = '';
+var json = JSON.stringify({});
+
 /**
  *  CODAPLI - Manejamos la comunicacion del arduino
  * por eso cada vez que accedemos a las configuraciones abrimos una conexion con el puerto serie
