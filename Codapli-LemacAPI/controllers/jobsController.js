@@ -262,11 +262,21 @@ exports.downloadFile = (req, res) => {
 
 }
 
-function downloadFilePDF() {
-    var doc = new documentoPDF;
-    doc.pipe.fs.createWriteStream('Prueba.pdf');
-    doc.font('times new roman');
+exports.createdReport = (req, res) => {
+   // console.log("QUERY:", req.query)
+    const filePath = `./ensayos/${req.query.file}`;
+
+    res.statusCode = 200;
+    res.setHeader('Content-type', 'application/pdf');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Content-disposition', 'attachment; filename=reporte.pdf');
+
+
+    var doc = new documentoPDF();
+    doc.pipe(res);
+    doc.font('Courier');
     doc.fontSize(14);
     doc.text('Hola Mundo, creando pdf desde nodejs');
-    doc.end;
+    doc.end();
+
 }
