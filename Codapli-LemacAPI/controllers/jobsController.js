@@ -6,6 +6,7 @@ var code_message = require('./../models/code_message');
 const path = require('path');
 var port = require('./../app.js');
 var moment = require('moment');
+var documentoPDF = require('pdfkit');
 
 var bufferReader = '';
 var ensayo = null;
@@ -259,4 +260,13 @@ exports.downloadFile = (req, res) => {
         }
     });
 
+}
+
+function downloadFilePDF() {
+    var doc = new documentoPDF;
+    doc.pipe.fs.createWriteStream('Prueba.pdf');
+    doc.font('times new roman');
+    doc.fontSize(14);
+    doc.text('Hola Mundo, creando pdf desde nodejs');
+    doc.end;
 }
