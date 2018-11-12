@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-lecturas',
-  template:`
+  template: `
     <div class="row">
     <div class="col-12">
       <ul [class]="cssClass">
@@ -27,6 +27,6 @@ export class LecturasComponent implements OnInit {
 
   ngOnInit() {
 
-   
+
   }
 }

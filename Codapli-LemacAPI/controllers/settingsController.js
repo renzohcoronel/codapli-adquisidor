@@ -62,7 +62,7 @@ function readDataSerial(data) {
     bufferReader = answers.pop();
     if (answers.length > 0) {
         try {
-            console.log(answers[0]);
+            //console.log(answers[0]);
             let values = JSON.parse(answers[0]);
             if (values.code === code_message.DATA_SENSOR) {
                 socket.emit('arduino:data', values);

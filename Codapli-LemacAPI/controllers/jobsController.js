@@ -16,7 +16,7 @@ var last_value = {
     time: moment(new Date()).format("hh:mm:ss"),
     celda: 0,
     lvdt0: 0,
-    ldvt1: 0
+    lvdt1: 0
 }
 var myInterval;
 
@@ -141,7 +141,7 @@ exports.jobs_start = function (req, res) {
     port.Serial.on('data', readDataSerial);
     
     myInterval = setInterval(()=>{
-         let registro = `${last_value.celda},${last_value.ldvt0},${last_value.ldvt1},${last_value.time}${os.EOL}`;
+         let registro = `${last_value.celda},${last_value.lvdt0},${last_value.lvdt1},${last_value.time}${os.EOL}`;
          fs.writeSync(file, registro);
          ensayo.values.push(last_value);
          socket.emit('arduino:graph_value', last_value);
@@ -211,14 +211,14 @@ function readDataSerial(data) {
     bufferReader = answers.pop();
     if (answers.length > 0) {
         try {
-            console.log(answers[0]);
+           // console.log(answers[0]);
             let values = JSON.parse(answers[0]);
             if (values.code === code_message.DATA_SENSOR) {
                 last_value.time =  moment(new Date()).format("hh:mm:ss");
-                last_value.celda =   values.celda;
+                last_value.celda = values.celda;
                 last_value.lvdt0 = values.lvdt0;
-                last_value.lvdt1 = values.ldvt1;            
-                socket.emit('arduino:data', values);
+                last_value.lvdt1 = values.lvdt1;            
+                socket.emit('arduino:data', last_value);
             }
         } catch (error) {
             console.log("error parse json " + error.message);
