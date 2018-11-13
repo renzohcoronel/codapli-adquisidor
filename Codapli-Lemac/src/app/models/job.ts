@@ -7,7 +7,9 @@ export interface Job {
     espesor: number;
     ranura: number;
     carga: number;
-    dimensiones: String;
+    alto: string;
+    ancho: string;
+    profundidad: string;
     muestra: String;
     temperatura: number;
     recorridoPlaca: number;

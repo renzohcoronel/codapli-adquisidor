@@ -41,7 +41,9 @@ exports.job_post = function (req, res) {
         switch (ensayo.tipoEnsayo) {
             case 'APERTURA_Y_CIERRE':
 
-                ensayo.dimensiones = req.body.dimensiones;
+                ensayo.alto = req.body.alto;
+                ensayo.ancho = req.body.ancho;
+                ensayo.profundidad = req.body.profundidad;
                 ensayo.material = req.body.material;
                 ensayo.temperatura = req.body.temperatura;
                 ensayo.recorridoPlaca = req.body.recorridoPlaca;
@@ -51,7 +53,9 @@ exports.job_post = function (req, res) {
 
                 ensayo.material = req.body.material;
                 ensayo.frecuencia = req.body.frecuencia;
-                ensayo.dimensiones = req.body.dimensiones;
+                ensayo.alto = req.body.alto;
+                ensayo.ancho = req.body.ancho;
+                ensayo.profundidad = req.body.profundidad;
                 ensayo.carga = req.body.carga;
                 ensayo.muestra = req.body.muestra;
                 ensayo.temperatura = req.body.temperatura;
@@ -174,12 +178,12 @@ function openFile() {
             //Para no almacenar siempre todos los datos en el primer registro vasmoa almacenar los datos del trabajo
             switch (ensayo.tipoEnsayo) {
                 case 'APERTURA_Y_CIERRE':
-                    firstLine = `fecha | tipo | dimensiones | material | temperatura | recorridoPlaca${os.EOL}`;
-                    header = `${ensayo.fecha},${ensayo.tipoEnsayo},${ensayo.dimensiones},${ensayo.material},${ensayo.temperatura},${ensayo.recorridoPlaca}${os.EOL}`;
+                    firstLine = `fecha | tipo | alto | ancho | profundidad | material | temperatura | recorridoPlaca${os.EOL}`;
+                    header = `${ensayo.fecha},${ensayo.tipoEnsayo},${ensayo.alto},${ensayo.ancho},${ensayo.profundidad},${ensayo.material},${ensayo.temperatura},${ensayo.recorridoPlaca}${os.EOL}`;
                     break;
                 case 'MODULO_RIGIDEZ':
-                    firstLine = `fecha | tipo | dimensiones | temperatura | frecuencia | carga | material | muestra${os.EOL}`;
-                    header = `${ensayo.fecha},${ensayo.tipoEnsayo},${ensayo.dimensiones},${ensayo.temperatura},${ensayo.frecuencia},${ensayo.carga},${ensayo.material},${ensayo.muestra}${os.EOL}`;
+                    firstLine = `fecha | tipo | alto | ancho | profundidad | temperatura | frecuencia | carga | material | muestra${os.EOL}`;
+                    header = `${ensayo.fecha},${ensayo.tipoEnsayo},${ensayo.alto},${ensayo.ancho},${ensayo.profundidad},${ensayo.temperatura},${ensayo.frecuencia},${ensayo.carga},${ensayo.material},${ensayo.muestra}${os.EOL}`;
                     break;
                 case 'SEMI_PROBETA':
                     firstLine = `fecha | tipo | muestra | material | diametro | espesor | ranura | ${os.EOL}`;
@@ -215,7 +219,7 @@ function readDataSerial(data) {
             let values = JSON.parse(answers[0]);
             if (values.code === code_message.DATA_SENSOR) {
                 last_value.time =  moment(new Date()).format("hh:mm:ss");
-                last_value.celda = values.celda;
+                last_value.celda = (values.celda).toFixed(2);
                 last_value.lvdt0 = values.lvdt0;
                 last_value.lvdt1 = values.lvdt1;            
                 socket.emit('arduino:data', last_value);
