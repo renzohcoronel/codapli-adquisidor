@@ -112,7 +112,6 @@ export class ExperimentComponent implements OnInit {
       this.lvdt1.push(data.lvdt1);
       this.forceChart.update();
       this.displacementChart.update();
-
     }.bind(this));
 
     this.socket.on('arduino:data', function (data) {
