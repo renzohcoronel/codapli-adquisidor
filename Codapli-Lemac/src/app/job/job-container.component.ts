@@ -98,7 +98,9 @@ export class JobContainerComponent implements OnInit {
     switch ($event) {
       case 'APERTURA_Y_CIERRE':
         this.ensayoFormGroup = this.formBuilder.group({
-          dimensiones: ["", Validators.required],
+          alto: ["", Validators.required],
+          ancho: ["", Validators.required],
+          profundidad: ["", Validators.required],
           material: ["", Validators.required],
           temperatura: ["", Validators.required],
           recorridoPlaca: ["", Validators.required],
@@ -109,7 +111,9 @@ export class JobContainerComponent implements OnInit {
         this.ensayoFormGroup = this.formBuilder.group({
           material: ["", Validators.required],
           frecuencia: ["", Validators.required],
-          dimensiones: ["", Validators.required],
+          alto: ["", Validators.required],
+          ancho: ["", Validators.required],
+          profundidad: ["", Validators.required],
           carga: ["", Validators.required],
           muestra: ["", Validators.required],
           temperatura: ["", Validators.required],
