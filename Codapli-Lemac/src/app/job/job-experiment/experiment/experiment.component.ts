@@ -12,7 +12,6 @@ import * as moment from 'moment';
 @Component({
   selector: 'app-experiment',
   template: `
-  
   <div class="container-fluid pb-4">
   <!-- Ambos graficos si son  -->
   <div class="row align-items-center">
@@ -91,7 +90,7 @@ export class ExperimentComponent implements OnInit {
     this.jobService.getJob$().subscribe(response => {
       this.job = response;
 
-          this.jobService.startJob$().subscribe(response => {
+          this.jobService.startJob$().subscribe( response => {
             this.toastService.info(response.message);
           }, er => {
             console.log('Error Start Job', er);
@@ -107,7 +106,7 @@ export class ExperimentComponent implements OnInit {
     this.socket = socketIo(`http://localhost:5001`);
     this.socket.on('arduino:graph_value', function (data) {
       this.times.push(data.time);
-      this.celda.push(data.celda); 
+      this.celda.push(data.celda);
       this.lvdt0.push(data.ldvt0);
       this.lvdt1.push(data.lvdt1);
       this.forceChart.update();
@@ -115,9 +114,10 @@ export class ExperimentComponent implements OnInit {
     }.bind(this));
 
     this.socket.on('arduino:data', function (data) {
-      this._ldvt0 = data.ldvt0;
-      this._ldvt1 = data.ldvt1;
-      this._celda = data.celda; 
+      this._lvdt0 = data.lvdt0;
+      this._lvdt1 = data.lvdt1;
+      this._celda = data.celda;
+
     }.bind(this));
 
     this.forceChart = new Chart(this.force.nativeElement.getContext('2d'), {

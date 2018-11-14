@@ -6,6 +6,7 @@ var code_message = require('./../models/code_message');
 const path = require('path');
 var port = require('./../app.js');
 var moment = require('moment');
+var documentoPDF = require('pdfkit');
 
 var bufferReader = '';
 var ensayo = null;
@@ -15,7 +16,7 @@ var last_value = {
     time: moment(new Date()).format("hh:mm:ss"),
     celda: 0,
     lvdt0: 0,
-    ldvt1: 0
+    lvdt1: 0
 }
 var myInterval;
 
@@ -40,7 +41,9 @@ exports.job_post = function (req, res) {
         switch (ensayo.tipoEnsayo) {
             case 'APERTURA_Y_CIERRE':
 
-                ensayo.dimensiones = req.body.dimensiones;
+                ensayo.alto = req.body.alto;
+                ensayo.ancho = req.body.ancho;
+                ensayo.profundidad = req.body.profundidad;
                 ensayo.material = req.body.material;
                 ensayo.temperatura = req.body.temperatura;
                 ensayo.recorridoPlaca = req.body.recorridoPlaca;
@@ -50,7 +53,9 @@ exports.job_post = function (req, res) {
 
                 ensayo.material = req.body.material;
                 ensayo.frecuencia = req.body.frecuencia;
-                ensayo.dimensiones = req.body.dimensiones;
+                ensayo.alto = req.body.alto;
+                ensayo.ancho = req.body.ancho;
+                ensayo.profundidad = req.body.profundidad;
                 ensayo.carga = req.body.carga;
                 ensayo.muestra = req.body.muestra;
                 ensayo.temperatura = req.body.temperatura;
@@ -140,7 +145,11 @@ exports.jobs_start = function (req, res) {
     port.Serial.on('data', readDataSerial);
     
     myInterval = setInterval(()=>{
+<<<<<<< HEAD
          const registro = `${last_value.celda},${last_value.ldvt0},${last_value.ldvt1},${last_value.time}${os.EOL}`;
+=======
+         let registro = `${last_value.celda},${last_value.lvdt0},${last_value.lvdt1},${last_value.time}${os.EOL}`;
+>>>>>>> eb95dc8af072be85c58188881a2a3cec8afd1f90
          fs.writeSync(file, registro);
          ensayo.values.push(last_value);
          socket.emit('arduino:graph_value', last_value);
@@ -173,12 +182,12 @@ function openFile() {
             //Para no almacenar siempre todos los datos en el primer registro vasmoa almacenar los datos del trabajo
             switch (ensayo.tipoEnsayo) {
                 case 'APERTURA_Y_CIERRE':
-                    firstLine = `fecha | tipo | dimensiones | material | temperatura | recorridoPlaca${os.EOL}`;
-                    header = `${ensayo.fecha},${ensayo.tipoEnsayo},${ensayo.dimensiones},${ensayo.material},${ensayo.temperatura},${ensayo.recorridoPlaca}${os.EOL}`;
+                    firstLine = `fecha | tipo | alto | ancho | profundidad | material | temperatura | recorridoPlaca${os.EOL}`;
+                    header = `${ensayo.fecha},${ensayo.tipoEnsayo},${ensayo.alto},${ensayo.ancho},${ensayo.profundidad},${ensayo.material},${ensayo.temperatura},${ensayo.recorridoPlaca}${os.EOL}`;
                     break;
                 case 'MODULO_RIGIDEZ':
-                    firstLine = `fecha | tipo | dimensiones | temperatura | frecuencia | carga | material | muestra${os.EOL}`;
-                    header = `${ensayo.fecha},${ensayo.tipoEnsayo},${ensayo.dimensiones},${ensayo.temperatura},${ensayo.frecuencia},${ensayo.carga},${ensayo.material},${ensayo.muestra}${os.EOL}`;
+                    firstLine = `fecha | tipo | alto | ancho | profundidad | temperatura | frecuencia | carga | material | muestra${os.EOL}`;
+                    header = `${ensayo.fecha},${ensayo.tipoEnsayo},${ensayo.alto},${ensayo.ancho},${ensayo.profundidad},${ensayo.temperatura},${ensayo.frecuencia},${ensayo.carga},${ensayo.material},${ensayo.muestra}${os.EOL}`;
                     break;
                 case 'SEMI_PROBETA':
                     firstLine = `fecha | tipo | muestra | material | diametro | espesor | ranura | ${os.EOL}`;
@@ -210,14 +219,14 @@ function readDataSerial(data) {
     bufferReader = answers.pop();
     if (answers.length > 0) {
         try {
-            console.log(answers[0]);
+           // console.log(answers[0]);
             let values = JSON.parse(answers[0]);
             if (values.code === code_message.DATA_SENSOR) {
                 last_value.time =  moment(new Date()).format("hh:mm:ss");
-                last_value.celda =   values.celda;
+                last_value.celda = (values.celda).toFixed(2);
                 last_value.lvdt0 = values.lvdt0;
-                last_value.lvdt1 = values.ldvt1;            
-                socket.emit('arduino:data', values);
+                last_value.lvdt1 = values.lvdt1;            
+                socket.emit('arduino:data', last_value);
             }
         } catch (error) {
             console.log("error parse json " + error.message);
@@ -258,5 +267,24 @@ exports.downloadFile = (req, res) => {
             res.status(500).send({ message: "File not exitst" });
         }
     });
+
+}
+
+exports.createdReport = (req, res) => {
+   // console.log("QUERY:", req.query)
+    const filePath = `./ensayos/${req.query.file}`;
+
+    res.statusCode = 200;
+    res.setHeader('Content-type', 'application/pdf');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Content-disposition', 'attachment; filename=reporte.pdf');
+
+
+    var doc = new documentoPDF();
+    doc.pipe(res);
+    doc.font('Courier');
+    doc.fontSize(14);
+    doc.text('Hola Mundo, creando pdf desde nodejs');
+    doc.end();
 
 }

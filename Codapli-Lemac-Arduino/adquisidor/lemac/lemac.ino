@@ -136,8 +136,8 @@ void loop() {
       root["code"] = DATA_SENSOR;
       float celda_value = celda.get_units();
       root["celda"] = !isnan(celda_value) && !isinf(celda_value) ? celda_value: 0.0f;
-      root["ldvt0"] = lvdt0->getValue();
-      root["ldvt1"] = lvdt1->getValue();
+      root["lvdt0"] = lvdt0->getValue();
+      root["lvdt1"] = lvdt1->getValue();
       root["intervalo"]=INTERVAL;          
       root.printTo(Serial);
       Serial.println();

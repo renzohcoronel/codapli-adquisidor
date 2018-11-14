@@ -3,7 +3,20 @@ import { Job } from '../../../../models/job';
 
 @Component({
   selector: 'app-list-detail-rigidez',
-  templateUrl: './list-detail-rigidez.component.html',
+  template: `
+    <ul class="list-group">
+    <li>Material : {{job.material}}</li>
+    <li>Frecuencia : {{job.frecuencia}}</li>
+    <li>Alto : {{job.alto}}</li>
+    <li>Ancho : {{job.ancho}}</li>
+    <li>Profundidad : {{job.profundidad}}</li>
+    <li>Carga : {{job.carga}}</li>
+    <li>Muestra : {{job.muestra}}</li>
+    <li>Temperatura : {{job.temperatura}}</li>
+  </ul>
+
+
+  `,
   styleUrls: ['./list-detail-rigidez.component.css']
 })
 export class ListDetailRigidezComponent implements OnInit {

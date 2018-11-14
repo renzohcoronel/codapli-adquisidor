@@ -4,12 +4,15 @@ import { Job } from '../../../../models/job';
 @Component({
   selector: 'app-list-detail-aycf',
   template: `
-      <ul class="list-group">
-        <li>Dimensiones : {{job.dimensiones}}</li>
-        <li>Material : {{job.material}}</li>
-        <li>Temperatura : {{job.temperatura}}</li>
-        <li>Recorrido de la placa : {{job.recorridoPlaca}}</li>
-      </ul>
+  <ul class="list-group">
+  <li>alto : {{job.alto}}</li>
+  <li>Ancho : {{job.ancho}}</li>
+  <li>profundidad : {{job.profundidad}}</li>
+  <li>Material : {{job.material}}</li>
+  <li>Temperatura : {{job.temperatura}}</li>
+  <li>Recorrido de la placa : {{job.recorridoPlaca}}</li>
+</ul>
+
   `,
   styleUrls: ['./list-detail-aycf.component.css']
 })

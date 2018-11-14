@@ -4,6 +4,8 @@ var code_message = require('./../models/code_message');
 
 var port = require('./../app.js');
 var bufferReader = '';
+var json = JSON.stringify({});
+
 /**
  *  CODAPLI - Manejamos la comunicacion del arduino
  * por eso cada vez que accedemos a las configuraciones abrimos una conexion con el puerto serie
@@ -60,7 +62,7 @@ function readDataSerial(data) {
     bufferReader = answers.pop();
     if (answers.length > 0) {
         try {
-            console.log(answers[0]);
+            //console.log(answers[0]);
             let values = JSON.parse(answers[0]);
             if (values.code === code_message.DATA_SENSOR) {
                 socket.emit('arduino:data', values);
