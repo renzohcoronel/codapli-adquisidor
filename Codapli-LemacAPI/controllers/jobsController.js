@@ -145,11 +145,7 @@ exports.jobs_start = function (req, res) {
     port.Serial.on('data', readDataSerial);
     
     myInterval = setInterval(()=>{
-<<<<<<< HEAD
-         const registro = `${last_value.celda},${last_value.ldvt0},${last_value.ldvt1},${last_value.time}${os.EOL}`;
-=======
          let registro = `${last_value.celda},${last_value.lvdt0},${last_value.lvdt1},${last_value.time}${os.EOL}`;
->>>>>>> eb95dc8af072be85c58188881a2a3cec8afd1f90
          fs.writeSync(file, registro);
          ensayo.values.push(last_value);
          socket.emit('arduino:graph_value', last_value);
