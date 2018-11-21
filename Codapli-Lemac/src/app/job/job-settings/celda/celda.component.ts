@@ -25,6 +25,7 @@ import { FormGroup } from '@angular/forms';
 export class CeldaComponent implements OnInit {
 
   @Input() formGroup: FormGroup;
+ //@Input() dataCelda: any;
   constructor() { }
 
   ngOnInit() {

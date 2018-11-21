@@ -16,6 +16,10 @@ Lvdt::Lvdt(int pin, int m ){
 void Lvdt::setTipo(int m){
   tipo = m;
 };
+
+int Lvdt::getTipo(){
+  return tipo;
+  }
  
 long Lvdt::getValue() {
   int a = analogRead(pinAnalog);
@@ -23,4 +27,3 @@ long Lvdt::getValue() {
   return val;
   //return ((analogRead(pinAnalog)*1024)/5)*constante; //Falta Vin
 };
-

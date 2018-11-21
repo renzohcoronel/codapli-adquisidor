@@ -46,6 +46,11 @@ void setup() {
 }
 
 void loop() {
+
+      JsonObject& conf = jsonBuffer.createObject();
+      conf["celda"] = 500;
+      conf["lvdt0"] = lvdt0->getTipo();
+      conf["lvdt1"] = lvdt1->getTipo();
   
    if(Serial.available()){
   

@@ -4,7 +4,7 @@ import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-job-rigidez',
   template:`
-  <form [formGroup]="formGroup">
+  <form [formGroup]="formGroup">  
   <div class="form-group">
     <label for="alto">Alto</label>
     <input type="text" class="form-control" id="alto" formControlName="alto">

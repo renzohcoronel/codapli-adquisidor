@@ -8,10 +8,10 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-job-container',
-  template: `       
+  template: `
+   
         <div class="container">
-        <div class="row">
-      
+        <div class="row">        
           <div class="class col-md-12">
             <mat-horizontal-stepper [linear]="true" #stepper>
               <mat-step [stepControl]="ensayoTipoFromGroup">

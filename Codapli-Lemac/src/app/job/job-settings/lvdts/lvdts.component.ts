@@ -33,7 +33,9 @@ import { FormGroup } from '@angular/forms';
 export class LvdtsComponent implements OnInit {
 
   @Input() formGroup: FormGroup;
-  constructor() { }
+  //@Input() dataLvdt: any;
+  constructor() {
+   }
 
   ngOnInit() {
   }

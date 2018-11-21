@@ -12,6 +12,9 @@ import * as moment from 'moment';
 @Component({
   selector: 'app-experiment',
   template: `
+  <div  *ngIf="mostrar" class="alert" role="alert">
+  IBO TINCHO MATI
+  </div>
   <div class="container-fluid pb-4">
   <!-- Ambos graficos si son  -->
   <div class="row align-items-center">
@@ -51,7 +54,7 @@ import * as moment from 'moment';
             </ng-container>
       </div>
       <div class="row mt-4 text-center">
-        <div class="col-md-6 offset-md-3">
+      <div class="col-md-6 offset-md-3">
           <button class="btn btn-secondary" (click)="detener()">Detener</button>
         </div>
       </div>
@@ -77,8 +80,6 @@ export class ExperimentComponent implements OnInit {
   _celda: number;
   _lvdt0: number;
   _lvdt1: number;
-
-
 
   constructor(private jobService: JobsService,
     private router: Router,
@@ -117,6 +118,12 @@ export class ExperimentComponent implements OnInit {
       this._lvdt0 = data.lvdt0;
       this._lvdt1 = data.lvdt1;
       this._celda = data.celda;
+
+      //this._celda = 480;
+
+      if(this._celda >= 450){
+        this.mostrar = true;
+      }
 
     }.bind(this));
 
