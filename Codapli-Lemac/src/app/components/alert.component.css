@@ -1,0 +1,7 @@
+.alert{
+  background-color: red;
+  text-align: center;
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+}

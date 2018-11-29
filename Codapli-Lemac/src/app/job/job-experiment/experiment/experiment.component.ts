@@ -12,9 +12,6 @@ import * as moment from 'moment';
 @Component({
   selector: 'app-experiment',
   template: `
-  <div  *ngIf="mostrar" class="alert" role="alert">
-  IBO TINCHO MATI
-  </div>
   <div class="container-fluid pb-4">
   <!-- Ambos graficos si son  -->
   <div class="row align-items-center">

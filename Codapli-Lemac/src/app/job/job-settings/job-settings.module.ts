@@ -6,12 +6,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LecturasComponent } from './lecturas/lecturas.component';
 import { CeldaComponent } from './celda/celda.component';
 import { LvdtsComponent } from './lvdts/lvdts.component';
+import { AlertModule } from '../../components/alert.module';
 
 @NgModule({
   imports: [
-    CommonModule,   
+    CommonModule,
     MatCardModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AlertModule
   ],
   declarations: [JobSettingsComponent, LecturasComponent, CeldaComponent, LvdtsComponent],
   exports: [JobSettingsComponent, LecturasComponent, CeldaComponent, LvdtsComponent, ]

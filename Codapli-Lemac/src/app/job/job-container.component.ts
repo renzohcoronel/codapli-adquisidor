@@ -9,9 +9,9 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-job-container',
   template: `
-   
+
         <div class="container">
-        <div class="row">        
+        <div class="row pb-4">
           <div class="class col-md-12">
             <mat-horizontal-stepper [linear]="true" #stepper>
               <mat-step [stepControl]="ensayoTipoFromGroup">
@@ -22,7 +22,7 @@ import { ToastrService } from 'ngx-toastr';
                     <button mat-button matStepperNext class="btn btn-primary">Siguiente</button>
                   </div>
                 </div>
-      
+
               </mat-step>
               <mat-step [stepControl]="ensayoFormGroup">
                 <ng-template matStepLabel>Datos</ng-template>
@@ -45,20 +45,20 @@ import { ToastrService } from 'ngx-toastr';
               <mat-step [stepControl]="settingFormGroup">
                 <ng-template matStepLabel>Configuracion del equipo</ng-template>
                 <app-job-settings></app-job-settings>
-                <div class="row mt-5 text-right">
+                <div class="row pt-2 pb-2 text-right">
                   <div class="col-md-12">
-      
+
                     <button mat-button matStepperPrevious class="btn btn-primary">Atras</button>
                     <button mat-button (click)="Run()" class="btn btn-warning">Comenzar</button>
                   </div>
                 </div>
-      
+
               </mat-step>
             </mat-horizontal-stepper>
           </div>
         </div>
       </div>
-  
+
   `,
   styleUrls: ['./job-container.component.css']
 })
@@ -146,7 +146,7 @@ export class JobContainerComponent implements OnInit {
         this.router.navigate(['job/experiment']);
       }
     )
-   
+
   }
 
 }

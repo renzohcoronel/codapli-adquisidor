@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-job-settings',
   template: `
-    
+
     <div class="row my-4 justify-content-center">
     <div class="col-md-12">
       <mat-card>

@@ -2,7 +2,7 @@
 #include <ArduinoJson.h>
 #include <HX711.h>
 #include <SoftwareSerial.h>
-#include "Setting.h";
+#include "SettingItem.h";
 #include "Lvdt.h";
 
 
@@ -19,7 +19,7 @@
 
 
 // instanciacion de Objetos y demas variables
-Setting *setting;
+SettingItem celdas[3] = {{500,-6561.95},{1000,105.293},{2000,52.6465}};
 HX711 celda(A1, A0);
 Lvdt *lvdt0;
 Lvdt *lvdt1;
@@ -84,9 +84,9 @@ void loop() {
              {
                     int _celda = jsonData["celda"]; 
                                                           
-                    float _scale = setting->getMultiplicadorCelda(_celda);
+                    float _scale = celda[_celda];
                     //celda.set_scale(1);
-                    celda.set_scale(_scale);
+                    celda.set_scale(celda[_celda].multiplicador);
                     celda.tare();
                     
                    

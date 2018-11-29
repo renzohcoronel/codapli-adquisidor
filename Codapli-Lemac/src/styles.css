@@ -6,10 +6,9 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
 html,body {
-    background-color: #fffffffb;
+    background-color: rgb(240,253, 255);
     padding-top:30px;
     padding-bottom: 30px;
     height: 100%;
-    font-size:15px;
-    
+    font-size:15px;    
 }
