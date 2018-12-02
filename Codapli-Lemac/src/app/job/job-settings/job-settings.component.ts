@@ -3,14 +3,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SettingsService } from '../../services/settings.service';
 import * as socketIo from 'socket.io-client';
 import { ToastrService } from 'ngx-toastr';
+import { AlertCodapliService } from '../../components/alert.service';
 
 @Component({
   selector: 'app-job-settings',
   template: `
-
-    <div class="row my-4 justify-content-center">
-    <div class="col-md-12">
-      <mat-card>
+  <div class="row my-4 justify-content-center">
+  <div class="col-md-12">
+  <mat-card>
         <mat-card-title>Lecturas Actuales</mat-card-title>
         <mat-card-content>
           <app-lecturas
@@ -18,6 +18,8 @@ import { ToastrService } from 'ngx-toastr';
           [lvdt0]="lvdt0"
           [lvdt1]="lvdt1"
           ></app-lecturas>
+          <button class="btn btn-secondary" (click)="show()">Tara</button>
+          <button class="btn btn-secondary" (click)="deleteAlert()">Tara</button>
         </mat-card-content>
       </mat-card>
     </div>
@@ -70,7 +72,8 @@ export class JobSettingsComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
     private settingsService: SettingsService,
-    private toasterService: ToastrService) {
+    private toasterService: ToastrService,
+    private alertService: AlertCodapliService) {
 
 
     this.formGroup = this.formBuilder.group({
@@ -95,6 +98,8 @@ export class JobSettingsComponent implements OnInit {
       this.celda = data.celda;
       this.lvdt0 = data.ldvt0;
       this.lvdt1 = data.lvdt1;
+
+      // Logica de como 
 
     }.bind(this));
 
@@ -136,6 +141,14 @@ export class JobSettingsComponent implements OnInit {
     this.settingsService.SetInterval$(this.formGroup.value.timeSelected).subscribe(response => {
       console.log(response);
     });
+  }
+
+  show(){
+    this.alertService.alert("HEllowwwws");
+  }
+
+  deleteAlert(){
+    this.alertService.closeAlert();
   }
 
 }
