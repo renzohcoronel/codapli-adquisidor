@@ -5,10 +5,12 @@ import { AlertCodapliService } from './alert.service';
 @Component({
   selector: 'app-alert',
   template: `
-    <div  *ngIf="message" class="row" role="alert">
+    <div class="container-fluid">
+      <div  *ngIf="message" class="row" role="alert">
         <div class="col-md-12 text-center alert">
-            <span class="blink_me"> {{message}}</span>
+          <span class="blink_me"> {{message}}</span>
         </div>
+      </div>
     </div>
 
   `,
