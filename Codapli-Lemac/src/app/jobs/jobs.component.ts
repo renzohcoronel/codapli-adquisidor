@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { JobsService } from '../services/jobs.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-jobs',
   template:
-     `  
+     `
        <div class="container">
         <div class="col-md-12">
           <div class="row my-3">
@@ -31,14 +32,14 @@ import { JobsService } from '../services/jobs.service';
                     <td>{{job.name}}</td>
                     <td>{{job.date}}</td>
                     <td>{{job.tipo}}</td>
-                    <td><a href="#" class="fa fa-eye" aria-hidden="true"></a>
+                    <td><a  (click)="view(job)" class="fa fa-eye" aria-hidden="true"></a>
                       <a  (click)="deleteJob(job)" href="#" class="fa fa-trash" aria-hidden="true"></a>
-                      <a  (click)="download(job)" href="#" class="fa fa-download" aria-hidden="true"></a>
+
                     </td>
                   </tr>
                 </tbody>
               </table>
-              <ngb-pagination class="d-flex justify-content-center" 
+              <ngb-pagination class="d-flex justify-content-center"
                     [collectionSize]="jobs.length"
                     [pageSize]= "pageSize"
                     [page]= "page"
@@ -60,11 +61,11 @@ export class JobsComponent implements OnInit {
   page: number = 1;
   pageSize: number = 10;
 
-  constructor(private jobService: JobsService) { }
+  constructor(private jobService: JobsService, private router: Router) { }
 
   ngOnInit() {
    this.refreshJobs();
-   
+
 
   }
   refreshJobs() {
@@ -80,8 +81,8 @@ export class JobsComponent implements OnInit {
     });
   }
 
-  download(file:String){
-
+  view(job:any){
+    this.router.navigate(['/job/view', job.file]);
   }
 
   pageChange(page: number){

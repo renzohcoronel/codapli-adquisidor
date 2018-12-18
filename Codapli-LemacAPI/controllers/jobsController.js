@@ -117,6 +117,8 @@ exports.jobs_get_values = function (req, res) {
     let lvdt1 = [];
     let time = [];
 
+    console.log(req.params.fileJob);
+
    const file = fs.readFileSync(`./ensayos/${req.params.fileJob}`, 'utf-8').split(`${os.EOL}`);
    file.forEach((line,index)=>{
        if(index>1){   
