@@ -10,9 +10,9 @@ import { FormGroup } from '@angular/forms';
         <div class="form-group">
           <label for="celda">Celda</label>
             <select class="form-control" id="celda" formControlName="celda" class="custom-select">
-                <option [ngValue]="500">500Kg</option>
-                <option [ngValue]="1000">1000Kg</option>
-                <option [ngValue]="2000">2000Kg</option>
+                <option [ngValue]="0">500Kg</option>
+                <option [ngValue]="1">1000Kg</option>
+                <option [ngValue]="2">2000Kg</option>
               </select>
         </div>
       </form>
@@ -25,7 +25,6 @@ import { FormGroup } from '@angular/forms';
 export class CeldaComponent implements OnInit {
 
   @Input() formGroup: FormGroup;
- //@Input() dataCelda: any;
   constructor() { }
 
   ngOnInit() {

@@ -3,13 +3,12 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { jobViewService } from '../../../services/job-view.service';
-import { Job } from '../../../models/job';
+import { Job } from '../../models/job';
 import { jobViewService } from '../../services/job-view.servicet';
 
 
 @Component({
-  selector: 'app-experiment',
+  selector: 'app-experiment-view',
   template: `
   <div class="container-fluid pb-4">
   <!-- Ambos graficos si son  -->
@@ -80,22 +79,6 @@ export class ExperimentComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    this.jobViewService.getJob$().subscribe(response => {
-      this.job = response;
-
-    }),
-      this.jobViewService.viewJob$(this.job).subscribe(Response => {
-        this.times.push(Response.time);
-        this.celda.push(Response.celda);
-        this.lvdt0.push(Response.ldvt0);
-        this.lvdt1.push(Response.lvdt1);
-        this.forceChart.update();
-        this.displacementChart.update();
-    }), er => {
-    console.log('Error Trabajo', er);
-    this.toastService.error(er.error.message);
-  };//.bind(this));
 
 
     this.forceChart = new Chart(this.force.nativeElement.getContext('2d'), {

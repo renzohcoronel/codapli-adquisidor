@@ -1,5 +1,5 @@
 class SettingItem{
-
+ public:
       int identificador;
       float multiplicador;
 

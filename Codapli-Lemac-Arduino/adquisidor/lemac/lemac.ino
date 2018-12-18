@@ -20,6 +20,7 @@
 
 // instanciacion de Objetos y demas variables
 SettingItem celdas[3] = {{500,-6561.95},{1000,105.293},{2000,52.6465}};
+int settingSelected = 0; 
 HX711 celda(A1, A0);
 Lvdt *lvdt0;
 Lvdt *lvdt1;
@@ -37,20 +38,17 @@ void setup() {
   analogReference(EXTERNAL);
   serialDebug.begin(115200);
   Serial.begin(115200);   
-  setting = new Setting();
   lvdt0 = new Lvdt(A2);
   lvdt1 = new Lvdt(A3);
+  lvdt0->setTipo(250);
+  lvdt1->setTipo(250);
+  celda.set_scale(celdas[0].multiplicador);
 
   // Capturar el primer millis
    previousMillis = millis();
 }
 
-void loop() {
-
-      JsonObject& conf = jsonBuffer.createObject();
-      conf["celda"] = 500;
-      conf["lvdt0"] = lvdt0->getTipo();
-      conf["lvdt1"] = lvdt1->getTipo();
+void loop() {  
   
    if(Serial.available()){
   
@@ -82,18 +80,17 @@ void loop() {
       
         case SET_CELDA:
              {
-                    int _celda = jsonData["celda"]; 
+                    settingSelected = jsonData["celda"]; 
                                                           
-                    float _scale = celda[_celda];
-                    //celda.set_scale(1);
-                    celda.set_scale(celda[_celda].multiplicador);
+                    float _scale = celdas[settingSelected].multiplicador;
+                    celda.set_scale(_scale);
                     celda.tare();
                     
                    
                     //creacion de objeto JSON
                     JsonObject& root1 = jsonBuffer.createObject();
                     root1["code"] = CODAPLIOK;
-                    root1["celda_scale"] = _celda;
+                    root1["celda_scale"] = settingSelected;
                     root1["celda_value"] = celda.get_units();
                     root1.printTo(Serial);
                     Serial.println();
@@ -140,6 +137,10 @@ void loop() {
       JsonObject& root = jsonBuffer.createObject();
       root["code"] = DATA_SENSOR;
       float celda_value = celda.get_units();
+      root["celdaSet"] = celdas[settingSelected].identificador; 
+      root["celdaIndex"] = settingSelected;
+      root["lvdt0Set"] = lvdt0->getTipo();
+      root["lvdt1Set"] = lvdt1->getTipo();
       root["celda"] = !isnan(celda_value) && !isinf(celda_value) ? celda_value: 0.0f;
       root["lvdt0"] = lvdt0->getValue();
       root["lvdt1"] = lvdt1->getValue();

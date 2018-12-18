@@ -81,7 +81,6 @@ export class JobContainerComponent implements OnInit {
 
   ngOnInit() {
     this.settingsService.initSerialSetting().subscribe(banana => {
-      console.log(banana);
     }, error => {
       console.log(error);
       this.toastService.error(error.error.message);
@@ -91,7 +90,7 @@ export class JobContainerComponent implements OnInit {
   ngOnDestroy(): void {
     this.settingsService.closeSerialSetting().subscribe(response => {
       console.log(response);
-    })
+    });
   }
 
   setFormulario($event: string) {
