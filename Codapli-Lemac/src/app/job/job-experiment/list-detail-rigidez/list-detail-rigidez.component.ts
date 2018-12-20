@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Job } from '../../../../models/job';
+import { Job } from '../../../models/job';
+
 
 @Component({
   selector: 'app-list-detail-rigidez',
@@ -21,7 +22,7 @@ import { Job } from '../../../../models/job';
 })
 export class ListDetailRigidezComponent implements OnInit {
 
-  @Input() job:Job; 
+  @Input() job:Job;
   constructor() { }
 
   ngOnInit() {

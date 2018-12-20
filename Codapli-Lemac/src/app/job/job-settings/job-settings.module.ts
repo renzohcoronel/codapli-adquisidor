@@ -7,15 +7,17 @@ import { LecturasComponent } from './lecturas/lecturas.component';
 import { CeldaComponent } from './celda/celda.component';
 import { LvdtsComponent } from './lvdts/lvdts.component';
 import { AlertModule } from '../../components/alert.module';
+import { LecturasModule } from './lecturas/lecturas.module';
 
 @NgModule({
   imports: [
     CommonModule,
     MatCardModule,
     ReactiveFormsModule,
-    AlertModule
+    AlertModule,
+    LecturasModule
   ],
-  declarations: [JobSettingsComponent, LecturasComponent, CeldaComponent, LvdtsComponent],
-  exports: [JobSettingsComponent, LecturasComponent, CeldaComponent, LvdtsComponent, ]
+  declarations: [JobSettingsComponent,  CeldaComponent, LvdtsComponent],
+  exports: [JobSettingsComponent, CeldaComponent, LvdtsComponent, ]
 })
 export class JobSettingsModule { }

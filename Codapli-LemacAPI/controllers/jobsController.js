@@ -123,9 +123,9 @@ exports.jobs_get_values = function (req, res) {
    file.forEach((line,index)=>{
        if(index>1){   
            let lineArray = line.split(',',4);
-           celda.push(lineArray[0]);
-           lvdt0.push(lineArray[1]);
-           lvdt1.push(lineArray[2]);
+           celda.push(+lineArray[0]);
+           lvdt0.push(+lineArray[1]);
+           lvdt1.push(+lineArray[2]);
            time.push(lineArray[3]);
         }
     });

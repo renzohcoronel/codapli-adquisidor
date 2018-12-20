@@ -33,7 +33,7 @@ import { Router } from '@angular/router';
                     <td>{{job.date}}</td>
                     <td>{{job.tipo}}</td>
                     <td><a  (click)="view(job)" class="fa fa-eye" aria-hidden="true"></a>
-                      <a  (click)="deleteJob(job)" href="#" class="fa fa-trash" aria-hidden="true"></a>
+                      <a  (click)="deleteJob(job)"  class="fa fa-trash" aria-hidden="true"></a>
 
                     </td>
                   </tr>

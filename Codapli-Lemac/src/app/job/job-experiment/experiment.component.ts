@@ -5,9 +5,9 @@ import * as socketIo from 'socket.io-client';
 import { isUndefined } from 'util';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { JobsService } from '../../../services/jobs.service';
-import { Job } from '../../../models/job';
 import * as moment from 'moment';
+import { JobsService } from '../../services/jobs.service';
+import { Job } from '../../models/job';
 
 @Component({
   selector: 'app-experiment',
@@ -116,9 +116,7 @@ export class ExperimentComponent implements OnInit {
       this._lvdt1 = data.lvdt1;
       this._celda = data.celda;
 
-      //this._celda = 480;
-
-      if(this._celda >= 450){
+      if ( this._celda >= 450) {
         this.mostrar = true;
       }
 
