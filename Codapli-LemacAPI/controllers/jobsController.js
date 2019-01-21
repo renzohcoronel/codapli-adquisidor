@@ -112,6 +112,7 @@ exports.jobs_get = function (req, res) {
 }
 
 exports.jobs_get_values = function (req, res) {
+    let header = {};
     let celda = [];
     let lvdt0 = [];
     let lvdt1 = [];
@@ -121,21 +122,63 @@ exports.jobs_get_values = function (req, res) {
 
    const file = fs.readFileSync(`./ensayos/${req.params.fileJob}`, 'utf-8').split(`${os.EOL}`);
    file.forEach((line,index)=>{
-       if(index>1){   
-           let lineArray = line.split(',',4);
-           celda.push(+lineArray[0]);
-           lvdt0.push(+lineArray[1]);
-           lvdt1.push(+lineArray[2]);
-           time.push(lineArray[3]);
+
+    if(index==1){   
+        let lineArray = line.split(',');
+        switch (lineArray[1]) {
+            case 'APERTURA_Y_CIERRE':
+                header = {
+                    tipoEnsayo: lineArray[1],
+                    alto: lineArray[2],
+                    ancho: lineArray[3],
+                    profundidad: lineArray[4],
+                    material: lineArray[5],
+                    temperatura: lineArray[6],
+                    recorridoPlaca: lineArray[7]
+
+                }
+
+                break;
+            case 'MODULO_RIGIDEZ':
+            header = {
+                tipoEnsayo: lineArray[1],
+                material : lineArray[2],
+                frecuencia : lineArray[3],
+                alto: lineArray[4],
+                ancho : lineArray[5],
+                profundidad : lineArray[6],
+                carga: lineArray[7],
+                muestra: lineArray[8],
+                temperatura: lineArray[9]
+            }
+                break;
+            case 'SEMI_PROBETA':
+            header = {
+                tipoEnsayo: lineArray[1],
+                material: lineArray[2],
+                diametro: lineArray[3],
+                espesor: lineArray[4],
+                ranura: lineArray[5],
+                muestra: lineArray[6]
+            }
+        }
+     } else if(index>1){   
+           let lineArray = line.split(',',4);  
+            celda.push(+lineArray[0]);
+            lvdt0.push(+lineArray[1]);
+            lvdt1.push(+lineArray[2]);
+            time.push(lineArray[3]);
         }
     });
 
     const json = {
-
-       celdas : celda , 
-       lvdt0 : lvdt0 ,
-       lvdt1 : lvdt1 , 
-       time : time
+       header : header,
+       values : {
+           celdas : celda , 
+           lvdt0 : lvdt0 ,
+           lvdt1 : lvdt1 , 
+           time : time
+       }
      
     };
      res.send(json);

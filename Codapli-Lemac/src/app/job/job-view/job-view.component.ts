@@ -80,10 +80,11 @@ export class JobViewComponent implements OnInit {
 
     this.jobService.getJobForFile$(this.file).subscribe(resp => {
       console.log(resp);
-      this.celda = resp.celdas;
-      this.lvdt1 = resp.lvdt1;
-      this.lvdt0 = resp.lvdt0;
-      this.times = resp.times;
+      this.job = resp['header'];
+      this.celda = resp['values'].celdas;
+      this.lvdt1 = resp['values'].lvdt1;
+      this.lvdt0 = resp['values'].lvdt0;
+      this.times = resp['values'].times;
 
     this.forceChart = new Chart(this.force.nativeElement.getContext('2d'), {
       type: 'line',
