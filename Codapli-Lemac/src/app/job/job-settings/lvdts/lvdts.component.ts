@@ -10,17 +10,17 @@ import { FormGroup } from '@angular/forms';
         <div class="form-group"  formGroupName="lvdt0">
             <label for="value">LVDT1</label>
               <select class="form-control" id="value" formControlName="value" class="custom-select">
-                  <option [ngValue]="100">0mm-1mm</option>
-                  <option [ngValue]="200">0mm-2mm</option>
-                  <option [ngValue]="250">0mm-2.5mm</option>
+                  <option [ngValue]="10">0mm-1mm</option>
+                  <option [ngValue]="20">0mm-2mm</option>
+                  <option [ngValue]="25">0mm-2.5mm</option>
                 </select>
           </div>
           <div class="form-group" formGroupName="lvdt1">
               <label for="value">LVDT2</label>
                 <select class="form-control" id="value" formControlName="value" class="custom-select">
-                    <option [ngValue]="100">0mm-1mm</option>
-                    <option [ngValue]="200">0mm-2mm</option>
-                    <option [ngValue]="250">0mm-2.5mm</option>
+                    <option [ngValue]="10">0mm-1mm</option>
+                    <option [ngValue]="20">0mm-2mm</option>
+                    <option [ngValue]="25">0mm-2.5mm</option>
                   </select>
             </div>
       </form>

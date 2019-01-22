@@ -15,8 +15,11 @@ var file;
 var last_value = {
     time: moment(new Date()).format("hh:mm:ss"),
     celda: 0,
+    celdaSet:0,
     lvdt0: 0,
-    lvdt1: 0
+    lvdt0Set:0,
+    lvdt1: 0,
+    lvdt1Set:0
 }
 var myInterval;
 
@@ -265,8 +268,11 @@ function readDataSerial(data) {
             if (values.code === code_message.DATA_SENSOR) {
                 last_value.time =  moment(new Date()).format("hh:mm:ss");
                 last_value.celda = (values.celda).toFixed(2);
+                last_value.celdaSet = values.celdaSet;
                 last_value.lvdt0 = values.lvdt0;
-                last_value.lvdt1 = values.lvdt1;            
+                last_value.lvdt0Set = values.lvdt0Set;
+                last_value.lvdt1 = values.lvdt1;      
+                last_value.lvdt1Set = values.lvdt1Set;      
                 socket.emit('arduino:data', last_value);
             }
         } catch (error) {

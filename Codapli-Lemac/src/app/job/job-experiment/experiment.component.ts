@@ -116,8 +116,11 @@ export class ExperimentComponent implements OnInit {
       this._lvdt1 = data.lvdt1;
       this._celda = data.celda;
 
-      if ( this._celda >= 450) {
-        this.mostrar = true;
+       // Logica de como
+       if (this._celda > (data.celdaSet - 100) ) {
+        this.alertService.alert('ATENCION CELDA PROXIMA A VALOR MAXIMO DE RESISTENCIA');
+      } else {
+        this.alertService.closeAlert();
       }
 
     }.bind(this));
