@@ -40,8 +40,8 @@ void setup() {
   Serial.begin(115200);   
   lvdt0 = new Lvdt(A2);
   lvdt1 = new Lvdt(A3);
-  lvdt0->setTipo(250);
-  lvdt1->setTipo(250);
+  lvdt0->setTipo(25);
+  lvdt1->setTipo(25);
   celda.set_scale(celdas[0].multiplicador);
 
   // Capturar el primer millis
