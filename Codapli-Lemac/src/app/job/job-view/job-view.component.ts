@@ -1,5 +1,5 @@
 
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { Chart } from 'chart.js';
 import * as socketIo from 'socket.io-client';
 import { isUndefined } from 'util';
@@ -50,7 +50,7 @@ import { Job } from '../../models/job';
 `,
   styleUrls: ['./job-view.component.css']
 })
-export class JobViewComponent implements OnInit {
+export class JobViewComponent implements OnInit, AfterViewInit {
 
   forceChart: any;
   displacementChart: any;
@@ -86,6 +86,9 @@ export class JobViewComponent implements OnInit {
       this.lvdt0 = resp['values'].lvdt0;
       this.times = resp['values'].times;
 
+    });
+  }
+   ngAfterViewInit() {
     this.forceChart = new Chart(this.force.nativeElement.getContext('2d'), {
       type: 'line',
       data: {
@@ -185,15 +188,10 @@ export class JobViewComponent implements OnInit {
           }]
         }
       }
-    });
-
-     this.forceChart.update();
-      this.displacementChart.update();
-
-    });
+   });
+   this.forceChart.update();
+   this.displacementChart.update();
   }
-
-
 
 
 }

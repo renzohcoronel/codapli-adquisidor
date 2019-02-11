@@ -145,24 +145,24 @@ exports.jobs_get_values = function (req, res) {
             case 'MODULO_RIGIDEZ':
             header = {
                 tipoEnsayo: lineArray[1],
-                material : lineArray[2],
-                frecuencia : lineArray[3],
-                alto: lineArray[4],
-                ancho : lineArray[5],
-                profundidad : lineArray[6],
+                material : lineArray[8],
+                frecuencia : lineArray[6],
+                alto: lineArray[2],
+                ancho : lineArray[3],
+                profundidad : lineArray[4],
                 carga: lineArray[7],
-                muestra: lineArray[8],
-                temperatura: lineArray[9]
+                muestra: lineArray[9],
+                temperatura: lineArray[5]
             }
                 break;
             case 'SEMI_PROBETA':
             header = {
                 tipoEnsayo: lineArray[1],
-                material: lineArray[2],
-                diametro: lineArray[3],
-                espesor: lineArray[4],
-                ranura: lineArray[5],
-                muestra: lineArray[6]
+                material: lineArray[3],
+                diametro: lineArray[4],
+                espesor: lineArray[5],
+                ranura: lineArray[6],
+                muestra: lineArray[2]
             }
         }
      } else if(index>1){   
