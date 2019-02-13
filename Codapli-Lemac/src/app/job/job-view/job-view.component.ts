@@ -220,11 +220,16 @@ export class JobViewComponent implements OnInit, AfterContentInit {
 
     this.jobService.getJobForFile$(this.file).subscribe(resp => {
       console.log(resp);
+      const { time, celdas, lvdt0, lvdt1} = resp['values'];
       this.job = resp["header"];
-      this.celda = resp["values"].celdas;
-      this.lvdt1 = resp["values"].lvdt1;
-      this.lvdt0 = resp["values"].lvdt0;
-      this.times = resp["values"].time;
+      time.forEach((t, index) => {
+          this.times.push(t);
+          this.celda.push(celdas[index]);
+          this.lvdt0.push(lvdt0[index]);
+          this.lvdt1.push(lvdt1[index]);
+
+      });
+      
       this.forceChart.update();
       this.displacementChart.update();
     });
