@@ -229,7 +229,6 @@ export class JobViewComponent implements OnInit, AfterContentInit {
           this.lvdt1.push(lvdt1[index]);
 
       });
-      
       this.forceChart.update();
       this.displacementChart.update();
     });
