@@ -111,7 +111,7 @@ export class JobSettingsComponent implements OnInit {
         const lvdt0Set = data.lvdt0Set;
         const lvdt1Set = data.lvdt1Set;
         this.celda = data.celda;
-        this.lvdt0 = data.ldvt0;
+        this.lvdt0 = data.lvdt1;
         this.lvdt1 = data.lvdt1;
 
         // Logica de como
