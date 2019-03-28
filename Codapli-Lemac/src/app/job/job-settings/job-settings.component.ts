@@ -23,7 +23,7 @@ import { AlertCodapliService } from "../../components/alert.service";
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6 py-2">
+      <div class="col-md-4 py-2">
         <mat-card>
           <mat-card-title>Celda</mat-card-title>
           <mat-card-content>
@@ -43,7 +43,7 @@ import { AlertCodapliService } from "../../components/alert.service";
           </mat-card-actions>
         </mat-card>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-8">
         <mat-card>
           <mat-card-title>LVDTs</mat-card-title>
           <mat-card-content>
@@ -111,7 +111,7 @@ export class JobSettingsComponent implements OnInit {
         const lvdt0Set = data.lvdt0Set;
         const lvdt1Set = data.lvdt1Set;
         this.celda = data.celda;
-        this.lvdt0 = data.lvdt1;
+        this.lvdt0 = data.lvdt0;
         this.lvdt1 = data.lvdt1;
 
         // Logica de como

@@ -5,7 +5,7 @@ import { FormGroup } from '@angular/forms';
   selector: 'app-celda',
   template: `
     <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-12">
       <form [formGroup]="formGroup">
         <div class="form-group">
           <label for="celda">Celda</label>

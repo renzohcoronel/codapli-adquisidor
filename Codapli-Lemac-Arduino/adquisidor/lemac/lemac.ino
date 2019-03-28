@@ -143,8 +143,7 @@ void loop() {
       root["lvdt1Set"] = lvdt1->getTipo();
       root["celda"] = !isnan(celda_value) && !isinf(celda_value) ? celda_value: 0.0f;
       root["lvdt0"] = lvdt0->getValue();
-      root["lvdt1"] = lvdt1->getValue();
-      root["intervalo"]=INTERVAL;          
+      root["lvdt1"] = lvdt1->getValue();        
       root.printTo(Serial);
       Serial.println();
       

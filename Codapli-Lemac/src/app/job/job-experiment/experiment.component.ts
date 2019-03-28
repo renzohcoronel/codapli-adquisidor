@@ -105,7 +105,7 @@ export class ExperimentComponent implements OnInit {
     this.socket.on('arduino:graph_value', function (data) {
       this.times.push(data.time);
       this.celda.push(data.celda);
-      this.lvdt0.push(data.ldvt0);
+      this.lvdt0.push(data.lvdt0);
       this.lvdt1.push(data.lvdt1);
       this.forceChart.update();
       this.displacementChart.update();
@@ -178,13 +178,13 @@ export class ExperimentComponent implements OnInit {
           label: 'ldvt0',
           backgroundColor: '#ffff',
           borderColor: 'blue',
-          fill: true,
+          fill: false,
           data: this.lvdt0,
         }, {
           label: 'lvdt1',
           backgroundColor: '#ffff',
           borderColor: 'black',
-          fill: true,
+          fill: false,
           data: this.lvdt1,
         }]
       },
