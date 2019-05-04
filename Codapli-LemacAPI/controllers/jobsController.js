@@ -309,9 +309,10 @@ exports.downloadFile = (req, res) => {
     fs.exists(fileLocation, (exists) => {
         if (exists) {
             console.log('File exists. Download now ...');
+            res.setHeader('Content-disposition', 'attachment; filename='+file);
             res.download(fileLocation, file);
         } else {
-            res.status(500).send({ message: "File not exitst" });
+            res.status(500).send({ message: "File not exists" });
         }
     });
 

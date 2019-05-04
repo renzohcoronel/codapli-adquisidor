@@ -6,19 +6,22 @@ import { ExperimentComponent } from './job/job-experiment/experiment.component';
 import { JobViewComponent } from './job/job-view/job-view.component';
 
 const routes: Routes = [
-    { path: '', redirectTo: '/jobs', pathMatch: 'full' },
-    { path: 'jobs', component: JobsComponent },
-    { path: 'job', children:[
-        { path: '', component : JobContainerComponent},
-        { path: 'experiment', component : ExperimentComponent},
-        { path: 'view/:file', component : JobViewComponent}
-    ]},
-
+  { path: '', redirectTo: '/jobs', pathMatch: 'full' },
+  { path: 'jobs', component: JobsComponent },
+  {
+    path: 'job',
+    children: [
+      { path: '', component: JobContainerComponent },
+      { path: 'experiment', component: ExperimentComponent },
+      { path: 'view/:file', component: JobViewComponent }
+    ]
+  }
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes, { enableTracing: false, useHash: false })],
-    exports: [RouterModule]
+  imports: [
+    RouterModule.forRoot(routes, { enableTracing: false, useHash: false })
+  ],
+  exports: [RouterModule]
 })
-
-export class AppRoutingModule { }
+export class AppRoutingModule {}

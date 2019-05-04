@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable } from "rxjs/Observable";
-import { Setting } from "../models/setting";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
+import { Setting } from '../models/setting';
 
 @Injectable()
 export class SettingsService {
@@ -16,26 +16,26 @@ export class SettingsService {
   }
 
   Setlvdts$(settings: any): Observable<any> {
-    const header = new HttpHeaders({ "Content-Type": "application/json" });
+    const header = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post<any>(`api/settings/lvdts`, settings, {
       headers: header
     });
   }
 
   SetCelda$(settings: any): Observable<any> {
-    const header = new HttpHeaders({ "Content-Type": "application/json" });
+    const header = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post<any>(`api/settings/celda`, settings, {
       headers: header
     });
   }
 
   SetTara$(): Observable<any> {
-    const header = new HttpHeaders({ "Content-Type": "application/json" });
+    const header = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post<any>(`api/settings/tara`, {}, { headers: header });
   }
 
   SetInterval$(interval: any): Observable<any> {
-    const header = new HttpHeaders({ "Content-Type": "application/json" });
+    const header = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post<any>(
       `api/settings/interval`,
       { time: interval },

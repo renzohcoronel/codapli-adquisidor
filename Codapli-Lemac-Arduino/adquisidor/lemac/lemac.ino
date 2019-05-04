@@ -35,13 +35,13 @@ unsigned long previousMillis;
 SoftwareSerial serialDebug(10, 11); //10:RX; 11:TX 
 
 void setup() {
-  analogReference(EXTERNAL);
+ // analogReference(1.9);
   serialDebug.begin(115200);
   Serial.begin(115200);   
   lvdt0 = new Lvdt(A2);
   lvdt1 = new Lvdt(A3);
-  lvdt0->setTipo(25);
-  lvdt1->setTipo(25);
+  lvdt0->setTipo(50);
+  lvdt1->setTipo(50);
   celda.set_scale(celdas[0].multiplicador);
 
   // Capturar el primer millis

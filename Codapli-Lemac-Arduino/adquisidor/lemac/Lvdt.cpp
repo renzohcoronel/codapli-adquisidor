@@ -5,7 +5,7 @@ Lvdt::Lvdt(){
 
 Lvdt::Lvdt(int pin){
   pinAnalog = pin;
-  tipo = 250;
+  tipo = 50;
 };
 
 Lvdt::Lvdt(int pin, int m ){
@@ -21,9 +21,11 @@ int Lvdt::getTipo(){
   return tipo;
   }
  
-long Lvdt::getValue() {
+float Lvdt::getValue() {
   int a = analogRead(pinAnalog);
-  long val = map(a,0,1023,tipo,0);
-  return val;
+  Serial.println(a);
+  float val = map(a,0,1023,tipo,0);
+  Serial.println(val);
+  return (val - (tipo/2))/-10;
   //return ((analogRead(pinAnalog)*1024)/5)*constante; //Falta Vin
 };
