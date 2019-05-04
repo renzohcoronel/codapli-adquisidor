@@ -297,10 +297,6 @@ exports.removeFileJob = (req, res) => {
     });
 }
 
-/**
- * Falta implementar el metodo en el front para descargar el archivo
- * Basicamente responde con un atachment en la respuesta http
- */
 exports.downloadFile = (req, res) => {
 
     var file = req.params.file;

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { JobsService } from '../services/jobs.service';
 import { Router } from '@angular/router';
-import { saveAs } from './../../../node_modules/file-saver/src/FileSaver';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-jobs',
@@ -102,7 +102,7 @@ export class JobsComponent implements OnInit {
 
   downloadJob(job: any) {
     this.jobService.downloadJob$(job.file).subscribe(response => {
-      console.log('Existe respuestas');
+      console.log('Success-> Downloading file: '+job.file+'...');
       const blob = new Blob([response], { type: 'text/csv' });
       saveAs(blob, job.file);
     });

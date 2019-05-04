@@ -35,7 +35,7 @@ unsigned long previousMillis;
 SoftwareSerial serialDebug(10, 11); //10:RX; 11:TX 
 
 void setup() {
- // analogReference(1.9);
+  analogReference(EXTERNAL);
   serialDebug.begin(115200);
   Serial.begin(115200);   
   lvdt0 = new Lvdt(A2);

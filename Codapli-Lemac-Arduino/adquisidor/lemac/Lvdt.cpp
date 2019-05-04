@@ -8,16 +8,16 @@ Lvdt::Lvdt(int pin){
   tipo = 50;
 };
 
-Lvdt::Lvdt(int pin, int m ){
+Lvdt::Lvdt(int pin, float m ){
   pinAnalog = pin;
   tipo = m;
 };
   
-void Lvdt::setTipo(int m){
+void Lvdt::setTipo(float m){
   tipo = m;
 };
 
-int Lvdt::getTipo(){
+float Lvdt::getTipo(){
   return tipo;
   }
  

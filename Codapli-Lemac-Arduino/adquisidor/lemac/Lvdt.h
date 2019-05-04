@@ -8,9 +8,9 @@ class Lvdt {
   public:
     Lvdt();
     Lvdt(int);
-    Lvdt(int, int);
-    void setTipo(int);
-    int getTipo();
+    Lvdt(int, float);
+    void setTipo(float);
+    float getTipo();
     float getValue();
 
 };
