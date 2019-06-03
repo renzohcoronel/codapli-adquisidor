@@ -260,8 +260,8 @@ function closeFile() {
 function readDataSerial(data) {
     bufferReader += data;
     var answers = bufferReader.split('\n');
-    bufferReader = answers.pop();
-    if (answers.length > 0) {
+    bufferReader = answers[0];
+    if (answers.length > 1) {
         try {
            // console.log(answers[0]);
             let values = JSON.parse(answers[0]);
