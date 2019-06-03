@@ -58,9 +58,9 @@ exports.settings_set_tara = function (request, response) {
 
 function readDataSerial(data) {
     bufferReader += data;
-    var answers = bufferReader.split('\r\n');
+    var answers = bufferReader.split('\r');
+    console.log(answers)
     bufferReader = answers.pop();
-    console.log('buffer ', bufferReader, 'Answer', answers)
     if (answers.length > 0) {
         try {
             //console.log(answers[0]);
