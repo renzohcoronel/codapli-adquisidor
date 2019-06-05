@@ -9,7 +9,7 @@ import { FormGroup } from "@angular/forms";
         <form [formGroup]="formGroup">
           <div class="row">
             <div class="col-md-6">
-            
+
             <div class="form-group" formGroupName="lvdt0">
               <label for="value">LVDT1</label>
               <select
@@ -18,9 +18,9 @@ import { FormGroup } from "@angular/forms";
                 formControlName="value"
                 class="custom-select"
               >
-                <option [ngValue]="10">0mm-1mm</option>
-                <option [ngValue]="20">0mm-2mm</option>
-                <option [ngValue]="25">0mm-2.5mm</option>
+                <option [ngValue]="20">0mm-1mm</option>
+                <option [ngValue]="40">0mm-2mm</option>
+                <option [ngValue]="50">0mm-2.5mm</option>
               </select>
             </div>
             </div>
