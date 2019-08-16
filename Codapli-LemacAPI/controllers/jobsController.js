@@ -107,7 +107,10 @@ exports.jobs_get = function (req, res) {
     let jobs = new Array();
     fs.readdirSync(`./ensayos/`).forEach(file => {
         const fileSplit = file.split('-');
-        jobs.push({ file: file, name: fileSplit[0], date: fileSplit[1], tipo: fileSplit[2] });
+        const fileDay = fileSplit[3].slice(0, 2);
+        const fileType = fileSplit[4].slice(0, -4);
+        const fileDate = fileDay+'-'+fileSplit[2]+'-'+fileSplit[1];
+        jobs.push({ file: file, name: fileSplit[0], date: fileDate, tipo: fileType });
     });
     res.send(JSON.stringify(jobs));
 

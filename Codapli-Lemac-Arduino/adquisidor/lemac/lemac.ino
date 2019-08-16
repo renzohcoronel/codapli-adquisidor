@@ -60,8 +60,8 @@ void loop() {
       serialDebug.println("Recibi un codigo");
       switch(code){               
         case SET_LDVTS:{
-                     int _lvdt0 = jsonData["lvdt0"];
-                     int _lvdt1 = jsonData["lvdt1"];                    
+                     float _lvdt0 = jsonData["lvdt0"];
+                     float _lvdt1 = jsonData["lvdt1"];                    
                      
       
                     lvdt0->setTipo(_lvdt0);
