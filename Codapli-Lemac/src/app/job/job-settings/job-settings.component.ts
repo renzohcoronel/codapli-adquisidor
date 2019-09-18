@@ -83,11 +83,11 @@ export class JobSettingsComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       celda: [0, Validators.required],
       lvdt0: this.formBuilder.group({
-        value: [25, Validators.required],
+        value: [50, Validators.required],
         isSelected: [true, Validators.required]
       }),
       lvdt1: this.formBuilder.group({
-        value: [25, Validators.required],
+        value: [50, Validators.required],
         isSelected: [true, Validators.required]
       })
     });

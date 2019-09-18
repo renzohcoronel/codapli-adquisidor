@@ -12,7 +12,6 @@ import { FormGroup } from '@angular/forms';
             <select class="form-control" id="celda" formControlName="celda" class="custom-select">
                 <option [ngValue]="0">500Kg</option>
                 <option [ngValue]="1">1000Kg</option>
-                <option [ngValue]="2">2000Kg</option>
               </select>
         </div>
       </form>

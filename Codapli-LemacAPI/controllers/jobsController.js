@@ -107,7 +107,10 @@ exports.jobs_get = function (req, res) {
     let jobs = new Array();
     fs.readdirSync(`./ensayos/`).forEach(file => {
         const fileSplit = file.split('-');
-        jobs.push({ file: file, name: fileSplit[0], date: fileSplit[1], tipo: fileSplit[2] });
+        const fileDay = fileSplit[3].slice(0, 2);
+        const fileType = fileSplit[4].slice(0, -4);
+        const fileDate = fileDay+'-'+fileSplit[2]+'-'+fileSplit[1];
+        jobs.push({ file: file, name: fileSplit[0], date: fileDate, tipo: fileType });
     });
     res.send(JSON.stringify(jobs));
 
@@ -127,7 +130,7 @@ exports.jobs_get_values = function (req, res) {
    file.forEach((line,index)=>{
 
     if(index==1){   
-        let lineArray = line.split(',');
+        let lineArray = line.split('|');
         switch (lineArray[1]) {
             case 'APERTURA_Y_CIERRE':
                 header = {
@@ -165,8 +168,8 @@ exports.jobs_get_values = function (req, res) {
                 muestra: lineArray[2]
             }
         }
-     } else if(index>1){   
-           let lineArray = line.split(',',4);  
+     } else if(index>2){   
+           let lineArray = line.split('|',4);  
             celda.push(+lineArray[0]);
             lvdt0.push(+lineArray[1]);
             lvdt1.push(+lineArray[2]);
@@ -193,7 +196,7 @@ exports.jobs_start = function (req, res) {
     port.Serial.on('data', readDataSerial);
     
     myInterval = setInterval(()=>{
-         let registro = `${last_value.celda},${last_value.lvdt0},${last_value.lvdt1},${last_value.time}${os.EOL}`;
+         let registro = `${last_value.celda}|${last_value.lvdt0}|${last_value.lvdt1}|${last_value.time}${os.EOL}`;
          fs.writeSync(file, registro);
          ensayo.values.push(last_value);
          socket.emit('arduino:graph_value', last_value);
@@ -222,20 +225,24 @@ function openFile() {
         } else {
             file = fd;
             let firstLine;
+            let thirdLine;
             let header;
             //Para no almacenar siempre todos los datos en el primer registro vasmoa almacenar los datos del trabajo
             switch (ensayo.tipoEnsayo) {
                 case 'APERTURA_Y_CIERRE':
                     firstLine = `fecha | tipo | alto | ancho | profundidad | material | temperatura | recorridoPlaca${os.EOL}`;
-                    header = `${ensayo.fecha},${ensayo.tipoEnsayo},${ensayo.alto},${ensayo.ancho},${ensayo.profundidad},${ensayo.material},${ensayo.temperatura},${ensayo.recorridoPlaca}${os.EOL}`;
+                    thirdLine = `celda | lvdt1 | lvdt2 | instante`;
+                    header = `${ensayo.fecha}|${ensayo.tipoEnsayo}|${ensayo.alto}|${ensayo.ancho}|${ensayo.profundidad}|${ensayo.material}|${ensayo.temperatura}|${ensayo.recorridoPlaca}${os.EOL}`;
                     break;
                 case 'MODULO_RIGIDEZ':
                     firstLine = `fecha | tipo | alto | ancho | profundidad | temperatura | frecuencia | carga | material | muestra${os.EOL}`;
-                    header = `${ensayo.fecha},${ensayo.tipoEnsayo},${ensayo.alto},${ensayo.ancho},${ensayo.profundidad},${ensayo.temperatura},${ensayo.frecuencia},${ensayo.carga},${ensayo.material},${ensayo.muestra}${os.EOL}`;
+                    thirdLine = `celda | lvdt1 | lvdt2 | instante`;
+                    header = `${ensayo.fecha}|${ensayo.tipoEnsayo}|${ensayo.alto}|${ensayo.ancho}|${ensayo.profundidad}|${ensayo.temperatura}|${ensayo.frecuencia}|${ensayo.carga}|${ensayo.material}|${ensayo.muestra}${os.EOL}`;
                     break;
                 case 'SEMI_PROBETA':
                     firstLine = `fecha | tipo | muestra | material | diametro | espesor | ranura | ${os.EOL}`;
-                    header = `${ensayo.fecha},${ensayo.tipoEnsayo},${ensayo.muestra},${ensayo.material},${ensayo.diametro},${ensayo.espesor},${ensayo.ranura}${os.EOL}`;
+                    thirdLine = `celda | lvdt1 | lvdt2 | instante`;
+                    header = `${ensayo.fecha}|${ensayo.tipoEnsayo}|${ensayo.muestra}|${ensayo.material}|${ensayo.diametro}|${ensayo.espesor}|${ensayo.ranura}${os.EOL}`;
                     break;
 
                 default:
@@ -244,6 +251,7 @@ function openFile() {
             }
             fs.writeSync(file, firstLine);
             fs.writeSync(file, header);
+            fs.writeSync(file, thirdLine);
         }
     });
 }
@@ -260,8 +268,8 @@ function closeFile() {
 function readDataSerial(data) {
     bufferReader += data;
     var answers = bufferReader.split('\n');
-    bufferReader = answers.pop();
-    if (answers.length > 0) {
+    bufferReader = answers[0];
+    if (answers.length > 1) {
         try {
            // console.log(answers[0]);
             let values = JSON.parse(answers[0]);
