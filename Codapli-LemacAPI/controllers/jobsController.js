@@ -231,17 +231,17 @@ function openFile() {
             switch (ensayo.tipoEnsayo) {
                 case 'APERTURA_Y_CIERRE':
                     firstLine = `fecha | tipo | alto | ancho | profundidad | material | temperatura | recorridoPlaca${os.EOL}`;
-                    thirdLine = `celda | lvdt1 | lvdt2 | instante`;
+                    thirdLine = `celda | lvdt1 | lvdt2 | instante${os.EOL}`;
                     header = `${ensayo.fecha}|${ensayo.tipoEnsayo}|${ensayo.alto}|${ensayo.ancho}|${ensayo.profundidad}|${ensayo.material}|${ensayo.temperatura}|${ensayo.recorridoPlaca}${os.EOL}`;
                     break;
                 case 'MODULO_RIGIDEZ':
                     firstLine = `fecha | tipo | alto | ancho | profundidad | temperatura | frecuencia | carga | material | muestra${os.EOL}`;
-                    thirdLine = `celda | lvdt1 | lvdt2 | instante`;
+                    thirdLine = `celda | lvdt1 | lvdt2 | instante${os.EOL}`;
                     header = `${ensayo.fecha}|${ensayo.tipoEnsayo}|${ensayo.alto}|${ensayo.ancho}|${ensayo.profundidad}|${ensayo.temperatura}|${ensayo.frecuencia}|${ensayo.carga}|${ensayo.material}|${ensayo.muestra}${os.EOL}`;
                     break;
                 case 'SEMI_PROBETA':
                     firstLine = `fecha | tipo | muestra | material | diametro | espesor | ranura | ${os.EOL}`;
-                    thirdLine = `celda | lvdt1 | lvdt2 | instante`;
+                    thirdLine = `celda | lvdt1 | lvdt2 | instante${os.EOL}`;
                     header = `${ensayo.fecha}|${ensayo.tipoEnsayo}|${ensayo.muestra}|${ensayo.material}|${ensayo.diametro}|${ensayo.espesor}|${ensayo.ranura}${os.EOL}`;
                     break;
 
