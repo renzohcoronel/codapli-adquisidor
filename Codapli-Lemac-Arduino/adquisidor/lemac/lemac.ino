@@ -35,7 +35,6 @@ unsigned long previousMillis;
 SoftwareSerial serialDebug(10, 11); //10:RX; 11:TX 
 
 void setup() {
-  analogReference(EXTERNAL);
   serialDebug.begin(115200);
   Serial.begin(115200);   
   lvdt0 = new Lvdt(A2);
@@ -136,7 +135,9 @@ void loop() {
       StaticJsonBuffer<250> jsonBuffer;
       JsonObject& root = jsonBuffer.createObject();
       root["code"] = DATA_SENSOR;
-      float celda_value = celda.get_units();
+      float celda_value = celda.get_units() *100.00;
+      int celda_value_1 = int(celda_value);
+      celda_value = celda_value_1 / 100.00;
       root["celdaSet"] = celdas[settingSelected].identificador; 
       root["celdaIndex"] = settingSelected;
       root["lvdt0Set"] = lvdt0->getTipo();
