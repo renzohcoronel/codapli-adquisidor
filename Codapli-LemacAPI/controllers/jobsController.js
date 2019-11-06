@@ -267,7 +267,7 @@ function closeFile() {
 
 function readDataSerial(data) {
     bufferReader += data;
-    var answers = bufferReader.split('\n');
+    var answers = bufferReader.split('\r\n');
     bufferReader = answers[0];
     if (answers.length > 1) {
         try {
