@@ -23,7 +23,7 @@ float Lvdt::getTipo(){
  
 float Lvdt::getValue() {
   int a = analogRead(pinAnalog);
-  float val = map(a,0,1023,tipo,0);
-  return (val - (tipo/2))/-10;
+  float val = map(a,122,1023,tipo,0);
+  return (val - (tipo/2))/10;
   //return ((analogRead(pinAnalog)*1024)/5)*constante; //Falta Vin
 };
