@@ -106,7 +106,8 @@ exports.job_get = function (req, res) {
 }
 
 exports.jobs_get = function (req, res) {
-
+    let numjob;
+    let array1 = [];
     let jobs = new Array();
     fs.readdirSync(`./ensayos/`).forEach(file => {
         const fileSplit = file.split('-');
@@ -115,7 +116,11 @@ exports.jobs_get = function (req, res) {
         const fileDate = fileDay+'-'+fileSplit[2]+'-'+fileSplit[1];
         jobs.push({ file: file, name: fileSplit[0], date: fileDate, tipo: fileType });
     });
-    res.send(JSON.stringify(jobs));
+    for (numjob = jobs.length-1; numjob >= 0 ; numjob--) {
+        array1.push(jobs[numjob]);
+    }
+    
+    res.send(JSON.stringify(array1));
 
 
 }

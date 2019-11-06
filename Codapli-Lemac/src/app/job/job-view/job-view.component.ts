@@ -43,7 +43,7 @@ import { Job } from "../../models/job";
           <div class="row" *ngIf="job">
             <ng-container [ngSwitch]="job.tipoEnsayo">
               <app-list-detail-aycf
-                [job]="job"
+                [job]="job" [appCierre]="appCierres"
                 *ngSwitchCase="'APERTURA_Y_CIERRE'"
               ></app-list-detail-aycf>
               <app-list-detail-rigidez
@@ -80,6 +80,7 @@ export class JobViewComponent implements OnInit, AfterContentInit {
   celda: Number[] = new Array();
   lvdt0: Number[] = new Array();
   lvdt1: Number[] = new Array();
+  appCierres: Number;
 
   constructor(
     private jobService: JobsService,
@@ -229,6 +230,7 @@ export class JobViewComponent implements OnInit, AfterContentInit {
           this.lvdt1.push(lvdt1[index]);
 
       });
+      this.appCierres = resp.apycierre;
       this.forceChart.update();
       this.displacementChart.update();
     });
