@@ -11,6 +11,8 @@ var documentoPDF = require('pdfkit');
 var bufferReader = '';
 var ensayo = null;
 var file;
+var contador_apertura_cierre = 0;
+var bool_media_apertura_cierre = false;
 
 var last_value = {
     time: moment(new Date()).format("hh:mm:ss"),
@@ -19,7 +21,8 @@ var last_value = {
     lvdt0: 0,
     lvdt0Set:0,
     lvdt1: 0,
-    lvdt1Set:0
+    lvdt1Set:0,
+    apertura_y_cierre:0
 }
 var myInterval;
 
@@ -123,6 +126,8 @@ exports.jobs_get_values = function (req, res) {
     let lvdt0 = [];
     let lvdt1 = [];
     let time = [];
+    let apertura_y_cierre = 0;
+    let ayp = false;
 
     console.log(req.params.fileJob);
 
@@ -143,6 +148,7 @@ exports.jobs_get_values = function (req, res) {
                     recorridoPlaca: lineArray[7]
 
                 }
+                ayp = true;
 
                 break;
             case 'MODULO_RIGIDEZ':
@@ -170,10 +176,21 @@ exports.jobs_get_values = function (req, res) {
         }
      } else if(index>2){   
            let lineArray = line.split('|',4);  
+           if(ayp){
+               if(lineArray[0] != 'APYCIERRE'){
+                celda.push(+lineArray[0]);
+                lvdt0.push(+lineArray[1]);
+                lvdt1.push(+lineArray[2]);
+                time.push(lineArray[3]);
+               } else {
+                   apertura_y_cierre = lineArray[3];
+               }
+           } else {
             celda.push(+lineArray[0]);
             lvdt0.push(+lineArray[1]);
             lvdt1.push(+lineArray[2]);
             time.push(lineArray[3]);
+           }   
         }
     });
 
@@ -184,7 +201,8 @@ exports.jobs_get_values = function (req, res) {
            lvdt0 : lvdt0 ,
            lvdt1 : lvdt1 , 
            time : time
-       }
+       },
+       apycierre: apertura_y_cierre
      
     };
      res.send(json);
@@ -208,6 +226,10 @@ exports.jobs_start = function (req, res) {
 }
 
 exports.jobs_stop = function (req, res) {
+    if(ensayo.tipoEnsayo == 'APERTURA_Y_CIERRE'){
+        let lastLine = `APYCIERRE|=|=|${contador_apertura_cierre}${os.EOL}`
+        fs.writeSync(file, lastLine);
+    }    
     closeFile();
     port.Serial.removeAllListeners( 'data' )
     clearInterval(myInterval);
@@ -231,17 +253,17 @@ function openFile() {
             switch (ensayo.tipoEnsayo) {
                 case 'APERTURA_Y_CIERRE':
                     firstLine = `fecha | tipo | alto | ancho | profundidad | material | temperatura | recorridoPlaca${os.EOL}`;
-                    thirdLine = `celda | lvdt1 | lvdt2 | instante`;
+                    thirdLine = `celda | lvdt1 | lvdt2 | instante${os.EOL}`;
                     header = `${ensayo.fecha}|${ensayo.tipoEnsayo}|${ensayo.alto}|${ensayo.ancho}|${ensayo.profundidad}|${ensayo.material}|${ensayo.temperatura}|${ensayo.recorridoPlaca}${os.EOL}`;
                     break;
                 case 'MODULO_RIGIDEZ':
                     firstLine = `fecha | tipo | alto | ancho | profundidad | temperatura | frecuencia | carga | material | muestra${os.EOL}`;
-                    thirdLine = `celda | lvdt1 | lvdt2 | instante`;
+                    thirdLine = `celda | lvdt1 | lvdt2 | instante${os.EOL}`;
                     header = `${ensayo.fecha}|${ensayo.tipoEnsayo}|${ensayo.alto}|${ensayo.ancho}|${ensayo.profundidad}|${ensayo.temperatura}|${ensayo.frecuencia}|${ensayo.carga}|${ensayo.material}|${ensayo.muestra}${os.EOL}`;
                     break;
                 case 'SEMI_PROBETA':
                     firstLine = `fecha | tipo | muestra | material | diametro | espesor | ranura | ${os.EOL}`;
-                    thirdLine = `celda | lvdt1 | lvdt2 | instante`;
+                    thirdLine = `celda | lvdt1 | lvdt2 | instante${os.EOL}`;
                     header = `${ensayo.fecha}|${ensayo.tipoEnsayo}|${ensayo.muestra}|${ensayo.material}|${ensayo.diametro}|${ensayo.espesor}|${ensayo.ranura}${os.EOL}`;
                     break;
 
@@ -261,6 +283,8 @@ function closeFile() {
     if (file) {
         fs.closeSync(file);
         ensayo = null;
+        contador_apertura_cierre = 0;
+        bool_media_apertura_cierre = false;
     }
 }
 //-------------------------------------------------------------------
@@ -280,7 +304,18 @@ function readDataSerial(data) {
                 last_value.lvdt0 = values.lvdt0;
                 last_value.lvdt0Set = values.lvdt0Set;
                 last_value.lvdt1 = values.lvdt1;      
-                last_value.lvdt1Set = values.lvdt1Set;      
+                last_value.lvdt1Set = values.lvdt1Set;
+                if(ensayo.tipoEnsayo == 'APERTURA_Y_CIERRE'){
+                    if(values.lvdt0 >= 2.4){
+                        bool_media_apertura_cierre = true;
+                    }
+
+                    if((values.lvdt0 <= -2.4)&&(bool_media_apertura_cierre)){
+                        contador_apertura_cierre = contador_apertura_cierre + 1;
+                        bool_media_apertura_cierre = false;
+                    }
+                }
+                last_value.apertura_y_cierre = contador_apertura_cierre; 
                 socket.emit('arduino:data', last_value);
             }
         } catch (error) {
