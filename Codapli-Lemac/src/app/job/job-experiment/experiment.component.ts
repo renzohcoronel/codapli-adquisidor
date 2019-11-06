@@ -45,7 +45,7 @@ import { Job } from '../../models/job';
       </div>
       <div class="row" *ngIf="job">
           <ng-container [ngSwitch]="job.tipoEnsayo">
-              <app-list-detail-aycf [job]="job" *ngSwitchCase="'APERTURA_Y_CIERRE'"></app-list-detail-aycf>
+              <app-list-detail-aycf [job]="job" [appCierre]="_appYCierre" *ngSwitchCase="'APERTURA_Y_CIERRE'"></app-list-detail-aycf>
               <app-list-detail-rigidez [job]="job" *ngSwitchCase="'MODULO_RIGIDEZ'"></app-list-detail-rigidez>
               <app-list-detail-semiprobeta [job]="job" *ngSwitchCase="'SEMI_PROBETA'"></app-list-detail-semiprobeta>
             </ng-container>
@@ -77,6 +77,7 @@ export class ExperimentComponent implements OnInit {
   _celda: number;
   _lvdt0: number;
   _lvdt1: number;
+  _appYCierre: number;
 
   constructor(private jobService: JobsService,
     private router: Router,
@@ -87,8 +88,7 @@ export class ExperimentComponent implements OnInit {
 
     this.jobService.getJob$().subscribe(response => {
       this.job = response;
-
-          this.jobService.startJob$().subscribe( response => {
+      this.jobService.startJob$().subscribe( response => {
             this.toastService.info(response.message);
           }, er => {
             console.log('Error Start Job', er);
@@ -115,6 +115,7 @@ export class ExperimentComponent implements OnInit {
       this._lvdt0 = data.lvdt0;
       this._lvdt1 = data.lvdt1;
       this._celda = data.celda;
+      this._appYCierre = data.apertura_y_cierre;
 
        // Logica de como
        if (this._celda > (data.celdaSet - 100) ) {
