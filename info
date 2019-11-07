@@ -1,0 +1,4 @@
+NOMBRE DEL SERVICIO DE LA APP SERVIDOR: appService
+PARAR EL SERVICIO: forever stopAll (parado en Codapli-LemacAPI)
+ELIMINAR EL SERVICIO: sudo forever-service delete appService 
+(estando parado en la carpeta Codapli-LemacAPI)
