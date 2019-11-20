@@ -311,11 +311,11 @@ function readDataSerial(data) {
                 last_value.lvdt1 = values.lvdt1;      
                 last_value.lvdt1Set = values.lvdt1Set;
                 if(ensayo.tipoEnsayo == 'APERTURA_Y_CIERRE'){
-                    if(values.lvdt0 >= 2.4){
+                    if(values.lvdt0 >= 0.4){
                         bool_media_apertura_cierre = true;
                     }
 
-                    if((values.lvdt0 <= -2.4)&&(bool_media_apertura_cierre)){
+                    if((values.lvdt0 <= -2.3)&&(bool_media_apertura_cierre)){
                         contador_apertura_cierre = contador_apertura_cierre + 1;
                         bool_media_apertura_cierre = false;
                     }
