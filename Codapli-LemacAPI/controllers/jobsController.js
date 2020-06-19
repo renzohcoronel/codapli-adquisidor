@@ -13,16 +13,23 @@ var ensayo = null;
 var file;
 var contador_apertura_cierre = 0;
 var bool_media_apertura_cierre = false;
+var maxandmin_values = [0, 100000, 0, 100000, 0, 100000]; 
 
 var last_value = {
     time: moment(new Date()).format("hh:mm:ss"),
     celda: 0,
     celdaSet:0,
+    celda_max:0,
+    celda_min:0,
     lvdt0: 0,
     lvdt0Set:0,
+    lvdt0_max:0,
+    lvdt0_min:0,
     lvdt1: 0,
     lvdt1Set:0,
-    apertura_y_cierre:0
+    lvdt1_max:0,
+    lvdt1_min:0,
+    apertura_y_cierre:0,
 }
 var myInterval;
 
@@ -133,6 +140,7 @@ exports.jobs_get_values = function (req, res) {
     let time = [];
     let apertura_y_cierre = 0;
     let ayp = false;
+    let max_min_values = [0, 100000, 0, 100000, 0, 100000];
 
     console.log(req.params.fileJob);
 
@@ -181,21 +189,37 @@ exports.jobs_get_values = function (req, res) {
         }
      } else if(index>2){   
            let lineArray = line.split('|',4);  
-           if(ayp){
-               if(lineArray[0] != 'APYCIERRE'){
-                celda.push(+lineArray[0]);
-                lvdt0.push(+lineArray[1]);
-                lvdt1.push(+lineArray[2]);
-                time.push(lineArray[3]);
-               } else {
-                   apertura_y_cierre = lineArray[3];
-               }
-           } else {
-            celda.push(+lineArray[0]);
-            lvdt0.push(+lineArray[1]);
-            lvdt1.push(+lineArray[2]);
-            time.push(lineArray[3]);
-           }   
+           if(lineArray[0] == 'CELDA-MAX'){
+            max_min_values[0] = lineArray[3];
+            } else if(lineArray[0] == 'CELDA-MIN'){
+                max_min_values[1] = lineArray[3];
+            }else if(lineArray[0] == 'LVDT0-MAX'){
+                max_min_values[2] = lineArray[3];
+            } else if(lineArray[0] == 'LVDT0-MIN'){
+                max_min_values[3] = lineArray[3];
+            } else if(lineArray[0] == 'LVDT1-MAX'){
+                max_min_values[4] = lineArray[3];
+            } else if(lineArray[0] == 'LVDT1-MIN'){
+                max_min_values[5] = lineArray[3];
+            } else{
+                if(ayp){
+                    if(lineArray[0] != 'APYCIERRE'){
+                     celda.push(+lineArray[0]);
+                     lvdt0.push(+lineArray[1]);
+                     lvdt1.push(+lineArray[2]);
+                     time.push(lineArray[3]);
+                    } else {
+                        apertura_y_cierre = lineArray[3];
+                    }
+                } else {
+                 celda.push(+lineArray[0]);
+                 lvdt0.push(+lineArray[1]);
+                 lvdt1.push(+lineArray[2]);
+                 time.push(lineArray[3]);
+                }
+            }
+           
+             
         }
     });
 
@@ -203,12 +227,17 @@ exports.jobs_get_values = function (req, res) {
        header : header,
        values : {
            celdas : celda , 
+           celda_max : max_min_values[0] ,
+           celda_min : max_min_values[1] ,
            lvdt0 : lvdt0 ,
+           lvdt0_max : max_min_values[2],
+           lvdt0_min : max_min_values[3],
            lvdt1 : lvdt1 , 
+           lvdt1_max : max_min_values[4],
+           lvdt1_min : max_min_values[5],
            time : time
        },
-       apycierre: apertura_y_cierre
-     
+       apycierre: apertura_y_cierre,     
     };
      res.send(json);
 
@@ -231,10 +260,22 @@ exports.jobs_start = function (req, res) {
 }
 
 exports.jobs_stop = function (req, res) {
+    let celdamax = `CELDA-MAX|=|=|${maxandmin_values[0]}${os.EOL}`;  
+    let celdamin = `CELDA-MIN|=|=|${maxandmin_values[1]}${os.EOL}`;  
+    let lvdt0max = `LVDT0-MAX|=|=|${maxandmin_values[2]}${os.EOL}`;  
+    let lvdt0min = `LVDT0-MIN|=|=|${maxandmin_values[3]}${os.EOL}`;  
+    let lvdt1max = `LVDT1-MAX|=|=|${maxandmin_values[4]}${os.EOL}`;  
+    let lvdt1min = `LVDT1-MIN|=|=|${maxandmin_values[5]}${os.EOL}`;  
+    fs.writeSync(file, celdamax);
+    fs.writeSync(file, celdamin);
+    fs.writeSync(file, lvdt0max);
+    fs.writeSync(file, lvdt0min);
+    fs.writeSync(file, lvdt1max);
+    fs.writeSync(file, lvdt1min);
     if(ensayo.tipoEnsayo == 'APERTURA_Y_CIERRE'){
-        let lastLine = `APYCIERRE|=|=|${contador_apertura_cierre}${os.EOL}`
-        fs.writeSync(file, lastLine);
-    }    
+        let openclose_line = `APYCIERRE|=|=|${contador_apertura_cierre}${os.EOL}`
+        fs.writeSync(file, openclose_line);
+    }
     closeFile();
     port.Serial.removeAllListeners( 'data' )
     clearInterval(myInterval);
@@ -254,7 +295,7 @@ function openFile() {
             let firstLine;
             let thirdLine;
             let header;
-            //Para no almacenar siempre todos los datos en el primer registro vasmoa almacenar los datos del trabajo
+            //Para no almacenar siempre todos los datos en el primer registro vamos almacenar los datos del trabajo
             switch (ensayo.tipoEnsayo) {
                 case 'APERTURA_Y_CIERRE':
                     firstLine = `fecha | tipo | alto | ancho | profundidad | material | temperatura | recorridoPlaca${os.EOL}`;
@@ -290,6 +331,7 @@ function closeFile() {
         ensayo = null;
         contador_apertura_cierre = 0;
         bool_media_apertura_cierre = false;
+        maxandmin_values = [0, 100000, 0, 100000, 0, 100000];        
     }
 }
 //-------------------------------------------------------------------
@@ -310,6 +352,30 @@ function readDataSerial(data) {
                 last_value.lvdt0Set = values.lvdt0Set;
                 last_value.lvdt1 = values.lvdt1;      
                 last_value.lvdt1Set = values.lvdt1Set;
+                if(last_value.celda > maxandmin_values[0]){
+                    maxandmin_values[0] = last_value.celda;
+                }
+                if(last_value.celda < maxandmin_values[1]){
+                    maxandmin_values[1] = last_value.celda;
+                }
+                if(last_value.lvdt0 > maxandmin_values[2]){
+                    maxandmin_values[2] = last_value.lvdt0;
+                }
+                if(last_value.lvdt0 < maxandmin_values[3]){
+                    maxandmin_values[3] = last_value.lvdt0;
+                }
+                if(last_value.lvdt1 > maxandmin_values[4]){
+                    maxandmin_values[4] = last_value.lvdt1;
+                }
+                if(last_value.lvdt1 < maxandmin_values[5]){
+                    maxandmin_values[5] = last_value.lvdt1;
+                }
+                last_value.celda_max = maxandmin_values[0];
+                last_value.celda_min = maxandmin_values[1];
+                last_value.lvdt0_max = maxandmin_values[2];
+                last_value.lvdt0_min = maxandmin_values[3];
+                last_value.lvdt1_max = maxandmin_values[4];
+                last_value.lvdt1_min = maxandmin_values[5];
                 if(ensayo.tipoEnsayo == 'APERTURA_Y_CIERRE'){
                     if(values.lvdt0 >= 0.4){
                         bool_media_apertura_cierre = true;
@@ -321,6 +387,7 @@ function readDataSerial(data) {
                     }
                 }
                 last_value.apertura_y_cierre = contador_apertura_cierre; 
+
                 socket.emit('arduino:data', last_value);
             }
         } catch (error) {
@@ -338,9 +405,9 @@ exports.removeFileJob = (req, res) => {
         if (exists) {
             console.log('File exists. Deleting now ...');
             fs.unlinkSync(filePath);
-            res.send(JSON.stringify({ message: "File remove" }));
+            res.send(JSON.stringify({ message: "File removed" }));
         } else {
-            res.status(500).send(JSON.stringify({ message: "File not exitst" }));
+            res.status(500).send(JSON.stringify({ message: "File not exists" }));
         }
     });
 }
@@ -352,7 +419,7 @@ exports.downloadFile = (req, res) => {
     console.log(fileLocation);
     fs.exists(fileLocation, (exists) => {
         if (exists) {
-            console.log('File exists. Download now ...');
+            console.log('File exists. Downloading now ...');
             res.setHeader('Content-disposition', 'attachment; filename='+file);
             res.download(fileLocation, file);
         } else {
