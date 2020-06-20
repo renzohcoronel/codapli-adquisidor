@@ -6,6 +6,7 @@ var code_message = require('./../models/code_message');
 const path = require('path');
 var port = require('./../app.js');
 var moment = require('moment');
+var SimpleLinearRegression = require('ml-regression-simple-linear');
 var documentoPDF = require('pdfkit');
 
 var bufferReader = '';
@@ -14,21 +15,26 @@ var file;
 var contador_apertura_cierre = 0;
 var bool_media_apertura_cierre = false;
 var maxandmin_values = [0, 100000, 0, 100000, 0, 100000]; 
+var curvas = ["", "", ""];
+var areas_values = [0, 0, 0];
 
 var last_value = {
     time: moment(new Date()).format("hh:mm:ss"),
-    celda: 0,
+    celda:0,
     celdaSet:0,
     celda_max:0,
     celda_min:0,
-    lvdt0: 0,
+    celda_area:0,
+    lvdt0:0,
     lvdt0Set:0,
     lvdt0_max:0,
     lvdt0_min:0,
-    lvdt1: 0,
+    lvdt0_area:0,
+    lvdt1:0,
     lvdt1Set:0,
     lvdt1_max:0,
     lvdt1_min:0,
+    lvdt1_area:0,
     apertura_y_cierre:0,
 }
 var myInterval;
@@ -140,7 +146,9 @@ exports.jobs_get_values = function (req, res) {
     let time = [];
     let apertura_y_cierre = 0;
     let ayp = false;
+    let scb = false;
     let max_min_values = [0, 100000, 0, 100000, 0, 100000];
+    let areas = [0, 0, 0];
 
     console.log(req.params.fileJob);
 
@@ -186,42 +194,49 @@ exports.jobs_get_values = function (req, res) {
                 ranura: lineArray[6],
                 muestra: lineArray[2]
             }
+            scb = true;
         }
      } else if(index>2){   
            let lineArray = line.split('|',4);  
-           if(lineArray[0] == 'CELDA-MAX'){
-            max_min_values[0] = lineArray[3];
-            } else if(lineArray[0] == 'CELDA-MIN'){
-                max_min_values[1] = lineArray[3];
-            }else if(lineArray[0] == 'LVDT0-MAX'){
-                max_min_values[2] = lineArray[3];
-            } else if(lineArray[0] == 'LVDT0-MIN'){
-                max_min_values[3] = lineArray[3];
-            } else if(lineArray[0] == 'LVDT1-MAX'){
-                max_min_values[4] = lineArray[3];
-            } else if(lineArray[0] == 'LVDT1-MIN'){
-                max_min_values[5] = lineArray[3];
-            } else{
-                if(ayp){
-                    if(lineArray[0] != 'APYCIERRE'){
-                     celda.push(+lineArray[0]);
-                     lvdt0.push(+lineArray[1]);
-                     lvdt1.push(+lineArray[2]);
-                     time.push(lineArray[3]);
+           if(lineArray[0] != 'DATOS/INST'){
+               if(lineArray[0] == 'MAX_VALOR'){
+                   max_min_values[0] = lineArray[1];
+                   max_min_values[2] = lineArray[2];
+                   max_min_values[4] = lineArray[3];
+                } else if(lineArray[0] == 'MIN_VALOR'){
+                    max_min_values[1] = lineArray[1];
+                    max_min_values[3] = lineArray[2];
+                    max_min_values[5] = lineArray[3];
+                } else {
+                    if(ayp){
+                        if(lineArray[0] != 'APYCIERRE'){
+                            celda.push(+lineArray[0]);
+                            lvdt0.push(+lineArray[1]);
+                            lvdt1.push(+lineArray[2]);
+                            time.push(lineArray[3]);
+                        } else {
+                            apertura_y_cierre = lineArray[3];
+                    }
+                } else if(scb){
+                    if(lineArray[0] != 'AREA'){
+                        celda.push(+lineArray[0]);
+                        lvdt0.push(+lineArray[1]);
+                        lvdt1.push(+lineArray[2]);
+                        time.push(lineArray[3]);
                     } else {
-                        apertura_y_cierre = lineArray[3];
+                        areas[0] = lineArray[1];
+                        areas[1] = lineArray[2];
+                        areas[2] = lineArray[3];
                     }
                 } else {
-                 celda.push(+lineArray[0]);
-                 lvdt0.push(+lineArray[1]);
-                 lvdt1.push(+lineArray[2]);
-                 time.push(lineArray[3]);
+                    celda.push(+lineArray[0]);
+                    lvdt0.push(+lineArray[1]);
+                    lvdt1.push(+lineArray[2]);
+                    time.push(lineArray[3]);
+                }
                 }
             }
-           
-             
-        }
-    });
+        }});
 
     const json = {
        header : header,
@@ -229,12 +244,15 @@ exports.jobs_get_values = function (req, res) {
            celdas : celda , 
            celda_max : max_min_values[0] ,
            celda_min : max_min_values[1] ,
+           celda_area: areas[0] ,
            lvdt0 : lvdt0 ,
            lvdt0_max : max_min_values[2],
            lvdt0_min : max_min_values[3],
+           lvdt0_area: areas[1] ,
            lvdt1 : lvdt1 , 
            lvdt1_max : max_min_values[4],
            lvdt1_min : max_min_values[5],
+           lvdt1_area: areas[2] ,
            time : time
        },
        apycierre: apertura_y_cierre,     
@@ -251,8 +269,31 @@ exports.jobs_start = function (req, res) {
          let registro = `${last_value.celda}|${last_value.lvdt0}|${last_value.lvdt1}|${last_value.time}${os.EOL}`;
          fs.writeSync(file, registro);
          ensayo.values.push(last_value);
+         if(ensayo.tipoEnsayo == 'SEMI_PROBETA'){
+            let x = [];
+            let celda_y = [];
+            let lvdt0_y = [];
+            let lvdt1_y = [];
+            let curva;
+            for(let i = 0; i < ensayo.values.length; i++){
+                let value = (i+1)*10;
+                x.push(value);
+                celda_y.push(ensayo.values[i].celda);
+                lvdt0_y.push(ensayo.values[i].lvdt0);
+                lvdt1_y.push(ensayo.values[i].lvdt1);
+            }
+            curva = new SimpleLinearRegression(x, celda_y); 
+            curvas[0] = curva.slope+"*x"+curva.intercept;
+            curva = new SimpleLinearRegression(x, lvdt0_y); 
+            curvas[1] = curva.slope+"*x"+curva.intercept;
+            curva = new SimpleLinearRegression(x, lvdt1_y); 
+            curvas[2] = curva.slope+"*x"+curva.intercept;
+            //llamado a funcion de calculo de integral definida
+            last_value.celda_area = areas_values[0];
+            last_value.lvdt0_area = areas_values[1];
+            last_value.lvdt1_area = areas_values[2];
+            }
          socket.emit('arduino:graph_value', last_value);
-
     },10000);
     
     ensayo.registrando = true;
@@ -260,21 +301,18 @@ exports.jobs_start = function (req, res) {
 }
 
 exports.jobs_stop = function (req, res) {
-    let celdamax = `CELDA-MAX|=|=|${maxandmin_values[0]}${os.EOL}`;  
-    let celdamin = `CELDA-MIN|=|=|${maxandmin_values[1]}${os.EOL}`;  
-    let lvdt0max = `LVDT0-MAX|=|=|${maxandmin_values[2]}${os.EOL}`;  
-    let lvdt0min = `LVDT0-MIN|=|=|${maxandmin_values[3]}${os.EOL}`;  
-    let lvdt1max = `LVDT1-MAX|=|=|${maxandmin_values[4]}${os.EOL}`;  
-    let lvdt1min = `LVDT1-MIN|=|=|${maxandmin_values[5]}${os.EOL}`;  
-    fs.writeSync(file, celdamax);
-    fs.writeSync(file, celdamin);
-    fs.writeSync(file, lvdt0max);
-    fs.writeSync(file, lvdt0min);
-    fs.writeSync(file, lvdt1max);
-    fs.writeSync(file, lvdt1min);
+    let data_line = `DATOS/INST|CELDA|LVDT0|LVDT1${os.EOL}`;
+    let maxvalues_line = `MAX_VALOR|${maxandmin_values[0]}|${maxandmin_values[2]}|${maxandmin_values[4]}${os.EOL}`;
+    let minvalues_line = `MIN_VALOR|${maxandmin_values[1]}|${maxandmin_values[3]}|${maxandmin_values[5]}${os.EOL}`;   
+    fs.writeSync(file, data_line);
+    fs.writeSync(file, maxvalues_line);
+    fs.writeSync(file, minvalues_line);
     if(ensayo.tipoEnsayo == 'APERTURA_Y_CIERRE'){
         let openclose_line = `APYCIERRE|=|=|${contador_apertura_cierre}${os.EOL}`
         fs.writeSync(file, openclose_line);
+    } else if(ensayo.tipoEnsayo == 'SEMI_PROBETA'){
+        let areavalues_line = `AREA|${areas_values[0]}|${areas_values[1]}|${areas_values[2]}${os.EOL}`;
+        fs.writeSync(file, areavalues_line); 
     }
     closeFile();
     port.Serial.removeAllListeners( 'data' )
@@ -331,7 +369,9 @@ function closeFile() {
         ensayo = null;
         contador_apertura_cierre = 0;
         bool_media_apertura_cierre = false;
-        maxandmin_values = [0, 100000, 0, 100000, 0, 100000];        
+        maxandmin_values = [0, 100000, 0, 100000, 0, 100000];  
+        areas_values = [0, 0, 0];
+        curvas = ["", "", ""];
     }
 }
 //-------------------------------------------------------------------
@@ -386,7 +426,10 @@ function readDataSerial(data) {
                         bool_media_apertura_cierre = false;
                     }
                 }
-                last_value.apertura_y_cierre = contador_apertura_cierre; 
+                last_value.apertura_y_cierre = contador_apertura_cierre;
+                last_value.celda_area = areas_values[0];
+                last_value.lvdt0_area = areas_values[1];
+                last_value.lvdt1_area = areas_values[2];
 
                 socket.emit('arduino:data', last_value);
             }
