@@ -42,18 +42,9 @@ import { Job } from "../../models/job";
           </div>
           <div class="row" *ngIf="job">
             <ng-container [ngSwitch]="job.tipoEnsayo">
-              <app-list-detail-aycf
-                [job]="job" [appCierre]="appCierres"
-                *ngSwitchCase="'APERTURA_Y_CIERRE'"
-              ></app-list-detail-aycf>
-              <app-list-detail-rigidez
-                [job]="job"
-                *ngSwitchCase="'MODULO_RIGIDEZ'"
-              ></app-list-detail-rigidez>
-              <app-list-detail-semiprobeta
-                [job]="job"
-                *ngSwitchCase="'SEMI_PROBETA'"
-              ></app-list-detail-semiprobeta>
+              <app-list-detail-aycf [job]="job" [maxs]="_maxs" [mins]="_mins" [appCierre]="_appYCierre" *ngSwitchCase="'APERTURA_Y_CIERRE'"></app-list-detail-aycf>
+              <app-list-detail-rigidez [job]="job" [maxs]="_maxs" [mins]="_mins" *ngSwitchCase="'MODULO_RIGIDEZ'"></app-list-detail-rigidez>
+              <app-list-detail-semiprobeta [job]="job" [maxs]="_maxs" [mins]="_mins" [areas]="_areas" *ngSwitchCase="'SEMI_PROBETA'"></app-list-detail-semiprobeta>
             </ng-container>
           </div>
           <div class="row mt-4 text-center">
@@ -81,6 +72,9 @@ export class JobViewComponent implements OnInit, AfterContentInit {
   lvdt0: Number[] = new Array();
   lvdt1: Number[] = new Array();
   appCierres: Number;
+  _maxs: object;
+  _mins: object;
+  _area: object;
 
   constructor(
     private jobService: JobsService,
@@ -220,8 +214,8 @@ export class JobViewComponent implements OnInit, AfterContentInit {
 
 
     this.jobService.getJobForFile$(this.file).subscribe(resp => {
-      console.log(resp);
-      const { time, celdas, lvdt0, lvdt1} = resp['values'];
+      console.log(resp); 
+      const { time, celdas, lvdt0, lvdt1, celda_max, celda_min, lvdt0_max, lvdt0_min, lvdt1_min, lvdt1_max, celda_area, lvdt0_area, lvdt1_area} = resp['values'];
       this.job = resp["header"];
       time.forEach((t, index) => {
           this.times.push(t);
@@ -230,6 +224,30 @@ export class JobViewComponent implements OnInit, AfterContentInit {
           this.lvdt1.push(lvdt1[index]);
 
       });
+
+      this._maxs = {
+      
+        celda: celda_max,
+        lvdt0: lvdt0_max,
+        lvdt1: lvdt1_max
+      };
+
+      this._mins = {
+      
+        celda : celda_min,
+        lvdt0 : lvdt0_min,
+        lvdt1 : lvdt1_min
+      
+      };
+
+      this._area = {
+
+        celda : celda_area,
+        lvdt0 : lvdt0_area,
+        lvdt1 : lvdt1_area
+
+      };
+
       this.appCierres = resp.apycierre;
       this.forceChart.update();
       this.displacementChart.update();

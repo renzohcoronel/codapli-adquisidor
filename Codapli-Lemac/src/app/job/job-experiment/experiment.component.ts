@@ -45,10 +45,10 @@ import { Job } from '../../models/job';
       </div>
       <div class="row" *ngIf="job">
           <ng-container [ngSwitch]="job.tipoEnsayo">
-              <app-list-detail-aycf [job]="job" [appCierre]="_appYCierre" *ngSwitchCase="'APERTURA_Y_CIERRE'"></app-list-detail-aycf>
-              <app-list-detail-rigidez [job]="job" *ngSwitchCase="'MODULO_RIGIDEZ'"></app-list-detail-rigidez>
-              <app-list-detail-semiprobeta [job]="job" *ngSwitchCase="'SEMI_PROBETA'"></app-list-detail-semiprobeta>
-            </ng-container>
+              <app-list-detail-aycf [job]="job" [maxs]="_maxs" [mins]="_mins" [appCierre]="_appYCierre" *ngSwitchCase="'APERTURA_Y_CIERRE'"></app-list-detail-aycf>
+              <app-list-detail-rigidez [job]="job" [maxs]="_maxs" [mins]="_mins" *ngSwitchCase="'MODULO_RIGIDEZ'"></app-list-detail-rigidez>
+              <app-list-detail-semiprobeta [job]="job" [maxs]="_maxs" [mins]="_mins" [areas]="_areas" *ngSwitchCase="'SEMI_PROBETA'"></app-list-detail-semiprobeta>
+          </ng-container>
       </div>
       <div class="row mt-4 text-center">
       <div class="col-md-6 offset-md-3">
@@ -78,7 +78,10 @@ export class ExperimentComponent implements OnInit {
   _lvdt0: number;
   _lvdt1: number;
   _appYCierre: number;
-
+  _maxs: object;
+  _mins: object;
+  _area: object;
+  
   constructor(private jobService: JobsService,
     private router: Router,
     private toastService: ToastrService) {
@@ -112,13 +115,38 @@ export class ExperimentComponent implements OnInit {
     }.bind(this));
 
     this.socket.on('arduino:data', function (data) {
+
       this._lvdt0 = data.lvdt0;
       this._lvdt1 = data.lvdt1;
       this._celda = data.celda;
       this._appYCierre = data.apertura_y_cierre;
 
-       // Logica de como
-       if (this._celda > (data.celdaSet - 100) ) {
+      this._maxs = {
+      
+          celda:data.celda_max,
+          lvdt0:data.data.lvdt0_max,
+          lvdt1:data.lvdt1_max
+      
+        };
+
+      this._mins = {
+      
+        celda : data.celda_min,
+        lvdt0 : data.lvdt0_min,
+        lvdt1 : data.lvdt1_min
+      
+      };
+
+      this._area = {
+
+        celda : data.celda_area,
+        lvdt0 : data.lvdt0_area,
+        lvdt1 : data.lvdt1_area
+
+      };
+
+    
+      if (this._celda > (data.celdaSet - 100) ) {
         this.alertService.alert('ATENCION CELDA PROXIMA A VALOR MAXIMO DE RESISTENCIA');
       } else {
         this.alertService.closeAlert();

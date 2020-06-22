@@ -6,16 +6,25 @@ import { Job } from '../../../models/job';
   selector: 'app-list-detail-aycf',
   template: `
   <div>
-    <p>Cantidad de Aperturas y cierre: {{appCierre}}<p>
+    <ul class="list-group">
+      <li>Valor maximo Celda de carga: {{ maxs.celda }}</li>
+      <li>Valor maximo LVDT0: {{ maxs.lvdt0 }}</li>
+      <li>Valor maximo LVDT1: {{ maxs.lvdt1 }}</li>
+      <li>Valor minimo Celda de carga: {{ mins.celda }}</li>
+      <li>Valor minimo LVDT0: {{ mins.lvdt0 }}</li>
+      <li>Valor minimo LVDT1: {{ mins.lvdt1 }}</li>
+    </ul>
   </div>
-  <ul class="list-group">
-  <li>alto : {{job.alto}}</li>
-  <li>Ancho : {{job.ancho}}</li>
-  <li>profundidad : {{job.profundidad}}</li>
-  <li>Material : {{job.material}}</li>
-  <li>Temperatura : {{job.temperatura}}</li>
-  <li>Recorrido de la placa : {{job.recorridoPlaca}}</li>
-  </ul>
+  <div >
+    <ul class="list-group">
+      <li>alto : {{job.alto}}</li>
+      <li>Ancho : {{job.ancho}}</li>
+      <li>profundidad : {{job.profundidad}}</li>
+      <li>Material : {{job.material}}</li>
+      <li>Temperatura : {{job.temperatura}}</li>
+      <li>Recorrido de la placa : {{job.recorridoPlaca}}</li>
+    </ul>
+  </div>
 
   `,
   styleUrls: ['./list-detail-aycf.component.css']
