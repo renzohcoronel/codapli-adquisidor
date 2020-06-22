@@ -16,6 +16,7 @@ var contador_apertura_cierre = 0;
 var bool_media_apertura_cierre = false;
 var maxandmin_values = [0, 100000, 0, 100000, 0, 100000]; 
 var curvas = ["", "", ""];
+var x = [];
 var areas_values = [0, 0, 0];
 
 var last_value = {
@@ -270,29 +271,20 @@ exports.jobs_start = function (req, res) {
          fs.writeSync(file, registro);
          ensayo.values.push(last_value);
          if(ensayo.tipoEnsayo == 'SEMI_PROBETA'){
-            let x = [];
-            let celda_y = [];
-            let lvdt0_y = [];
-            let lvdt1_y = [];
-            let curva;
-            for(let i = 0; i < ensayo.values.length; i++){
-                let value = (i+1)*10;
-                x.push(value);
-                celda_y.push(ensayo.values[i].celda);
-                lvdt0_y.push(ensayo.values[i].lvdt0);
-                lvdt1_y.push(ensayo.values[i].lvdt1);
+            if(ensayo.values.length > 1){
+                var l1 = 0;
+                var l2 = 0;
+                lineal_regression();
+                l1 = x[0];
+                l2 = (x.length) - 1;
+                for(let i = 0; i < 3; i++){
+                    calculate_integral(l1, l2, 10000000, i);
+                }
             }
-            curva = new SimpleLinearRegression(x, celda_y); 
-            curvas[0] = curva.slope+"*x"+curva.intercept;
-            curva = new SimpleLinearRegression(x, lvdt0_y); 
-            curvas[1] = curva.slope+"*x"+curva.intercept;
-            curva = new SimpleLinearRegression(x, lvdt1_y); 
-            curvas[2] = curva.slope+"*x"+curva.intercept;
-            //llamado a funcion de calculo de integral definida
             last_value.celda_area = areas_values[0];
             last_value.lvdt0_area = areas_values[1];
             last_value.lvdt1_area = areas_values[2];
-            }
+        }
          socket.emit('arduino:graph_value', last_value);
     },10000);
     
@@ -372,6 +364,7 @@ function closeFile() {
         maxandmin_values = [0, 100000, 0, 100000, 0, 100000];  
         areas_values = [0, 0, 0];
         curvas = ["", "", ""];
+        x = [];
     }
 }
 //-------------------------------------------------------------------
@@ -438,6 +431,44 @@ function readDataSerial(data) {
         }
         bufferReader = '';
     }
+}
+
+function lineal_regression(){
+    var celda_y = [];
+    var lvdt0_y = [];
+    var lvdt1_y = [];
+    for(let i = 0; i < ensayo.values.length; i++){  //Arreglo de valores x(tiempo) e y = f(x)
+        let value = (i+1)*10;
+        x.push(value);
+        celda_y.push(ensayo.values[i].celda);
+        lvdt0_y.push(ensayo.values[i].lvdt0);
+        lvdt1_y.push(ensayo.values[i].lvdt1);
+    }
+    curvas[0] = new SimpleLinearRegression(x, celda_y);
+    curvas[1] = new SimpleLinearRegression(x, lvdt0_y);
+    curvas[2] = new SimpleLinearRegression(x, lvdt1_y); 
+    x = [];
+}
+
+function calculate_integral(a,b,n,index){
+    if(a>b){  //Intercambio de limites de integracion
+        var temp = a;
+        a = b;
+        b = temp;
+    }
+
+    if(n<= 0){  //Control de longitud positiva
+        return false;
+    }
+
+    var i = a;
+    var h = (b-a)/n; //Base de los rectangulos
+    var suma = 0;
+    while(i<=b){
+        suma = suma + (h*curvas[index].predict(i));  //Calculo de area del rectangulo iesimo
+        i = i + h;
+    }
+    areas_values[index] = suma;  //Almaceno el area en el arreglo de integrales
 }
 
 exports.removeFileJob = (req, res) => {
