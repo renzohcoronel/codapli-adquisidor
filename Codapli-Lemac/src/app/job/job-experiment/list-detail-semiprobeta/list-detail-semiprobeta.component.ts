@@ -5,37 +5,45 @@ import { Job } from "../../../models/job";
 @Component({
   selector: "app-list-detail-semiprobeta",
   template: `
-  <div>
-    <ul class = "list-group">
-      <p>Area debajo curva Celda de carga: {{ areas.celda }}</p>
-      <p>Area debajo curva LVDT0: {{ areas.lvdt0 }}</p>
-      <p>Area debajo curva LVDT1: {{ areas.lvdt1 }}</p>
-    </ul>
-  </div>
-  <div>
+  
+  <div class = "row" >
+  <div class="col-md-4">
     <ul class="list-group">
-      <li>Valor maximo Celda de carga: {{ maxs.celda }}</li>
-      <li>Valor maximo LVDT0: {{ maxs.lvdt0 }}</li>
-      <li>Valor maximo LVDT1: {{ maxs.lvdt1 }}</li>
-      <li>Valor minimo Celda de carga: {{ mins.celda }}</li>
-      <li>Valor minimo LVDT0: {{ mins.lvdt0 }}</li>
-      <li>Valor minimo LVDT1: {{ mins.lvdt1 }}</li>
+      <li><strong>Alto: </strong>{{job.alto}}</li>
+      <li><strong>Ancho: </strong>{{job.ancho}}</li>
+      <li><strong>Profundidad: </strong>{{job.profundidad}}</li>
+      <li><strong>Material: </strong>{{job.material}}</li>
+      <li><strong>Temperatura: </strong>{{job.temperatura}}</li>
+      <li><strong>Recorrido de la placa: </strong>{{job.recorridoPlaca}}</li>
     </ul>
   </div>
-  <div>
+  <div class="col-md-4" >
     <ul class="list-group">
-      <li>Muestra : {{ job.muestra }}</li>
-      <li>Material : {{ job.material }}</li>
-      <li>Diametro : {{ job.diametro }}</li>
-      <li>Espesor : {{ job.espesor }}</li>
-      <li>Ranura : {{ job.ranura }}</li>
+      <li><strong>Valor maximo Celda de carga: </strong>{{ maxs.celda }}</li>
+      <li><strong>Valor maximo LVDT0: </strong>{{ maxs.lvdt0 }}</li>
+      <li><strong>Valor maximo LVDT1: </strong>{{ maxs.lvdt1 }}</li>
+      <li><strong>Valor minimo Celda de carga: </strong>{{ mins.celda }}</li>
+      <li><strong>Valor minimo LVDT0: </strong>{{ mins.lvdt0 }}</li>
+      <li><strong>Valor minimo LVDT1: </strong>{{ mins.lvdt1 }}</li>
     </ul>
   </div>
+    <div class="col-md-4">
+      <ul class = "list-group">
+        <li><strong>Area debajo curva Celda de carga: </strong>{{ areas.celda }}</li>
+        <li><strong>Area debajo curva LVDT0: </strong>{{ areas.lvdt0 }}</li>
+        <li><strong>Area debajo curva LVDT1: </strong>{{ areas.lvdt1 }}</li>
+      </ul>
+    </div>
+    </div>
+
   `,
   styleUrls: ["./list-detail-semiprobeta.component.css"]
 })
 export class ListDetailSemiprobetaComponent implements OnInit {
   @Input() job: Job;
+  @Input() maxs:Object;
+  @Input() mins:Object;
+  @Input() areas:Object;
   constructor() {}
 
   ngOnInit() {}

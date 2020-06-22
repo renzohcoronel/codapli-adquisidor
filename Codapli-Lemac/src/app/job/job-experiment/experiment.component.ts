@@ -80,7 +80,7 @@ export class ExperimentComponent implements OnInit {
   _appYCierre: number;
   _maxs: object;
   _mins: object;
-  _area: object;
+  _areas: object;
   
   constructor(private jobService: JobsService,
     private router: Router,
@@ -137,7 +137,7 @@ export class ExperimentComponent implements OnInit {
       
       };
 
-      this._area = {
+      this._areas = {
 
         celda : data.celda_area,
         lvdt0 : data.lvdt0_area,

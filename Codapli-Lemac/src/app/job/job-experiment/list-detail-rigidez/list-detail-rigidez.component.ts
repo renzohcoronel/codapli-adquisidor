@@ -5,27 +5,27 @@ import { Job } from '../../../models/job';
 @Component({
   selector: 'app-list-detail-rigidez',
   template: `
-  <div>
+  <div class = "row" >
+  <div class="col-md-4">
     <ul class="list-group">
-      <li>Valor maximo Celda de carga: {{ maxs.celda }}</li>
-      <li>Valor maximo LVDT0: {{ maxs.lvdt0 }}</li>
-      <li>Valor maximo LVDT1: {{ maxs.lvdt1 }}</li>
-      <li>Valor minimo Celda de carga: {{ mins.celda }}</li>
-      <li>Valor minimo LVDT0: {{ mins.lvdt0 }}</li>
-      <li>Valor minimo LVDT1: {{ mins.lvdt1 }}</li>
+      <li><strong>Alto: </strong>{{job.alto}}</li>
+      <li><strong>Ancho: </strong>{{job.ancho}}</li>
+      <li><strong>Profundidad: </strong>{{job.profundidad}}</li>
+      <li><strong>Material: </strong>{{job.material}}</li>
+      <li><strong>Temperatura: </strong>{{job.temperatura}}</li>
+      <li><strong>Recorrido de la placa: </strong>{{job.recorridoPlaca}}</li>
     </ul>
   </div>
-  <div>
-    <ul class="list-group">
-      <li>Material : {{job.material}}</li>
-      <li>Frecuencia : {{job.frecuencia}}</li>
-      <li>Alto : {{job.alto}}</li>
-      <li>Ancho : {{job.ancho}}</li>
-      <li>Profundidad : {{job.profundidad}}</li>
-      <li>Carga : {{job.carga}}</li>
-      <li>Muestra : {{job.muestra}}</li>
-      <li>Temperatura : {{job.temperatura}}</li>
-    </ul>
+  <div class="col-md-8" >
+      <ul class="list-group">
+        <li><strong>Valor maximo Celda de carga: </strong>{{ maxs.celda }}</li>
+        <li><strong>Valor maximo LVDT0: </strong>{{ maxs.lvdt0 }}</li>
+        <li><strong>Valor maximo LVDT1: </strong>{{ maxs.lvdt1 }}</li>
+        <li><strong>Valor minimo Celda de carga: </strong>{{ mins.celda }}</li>
+        <li><strong>Valor minimo LVDT0: </strong>{{ mins.lvdt0 }}</li>
+        <li><strong>Valor minimo LVDT1: </strong>{{ mins.lvdt1 }}</li>
+      </ul>
+    </div>
   </div>
 
 
@@ -35,6 +35,9 @@ import { Job } from '../../../models/job';
 export class ListDetailRigidezComponent implements OnInit {
 
   @Input() job:Job;
+  @Input() maxs:Object;
+  @Input() mins:Object;
+  @Input() areas:Object;
   constructor() { }
 
   ngOnInit() {
