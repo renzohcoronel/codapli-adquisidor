@@ -468,7 +468,8 @@ function calculate_integral(a,b,n,index){
         suma = suma + (h*curvas[index].predict(i));  //Calculo de area del rectangulo iesimo
         i = i + h;
     }
-    areas_values[index] = suma;  //Almaceno el area en el arreglo de integrales
+
+    areas_values[index] = Math.abs(suma);  //Almaceno el area en el arreglo de integrales
 }
 
 exports.removeFileJob = (req, res) => {
